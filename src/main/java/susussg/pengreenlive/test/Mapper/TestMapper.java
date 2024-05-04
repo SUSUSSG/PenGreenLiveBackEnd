@@ -6,6 +6,6 @@ import susussg.pengreenlive.test.DTO.TestDTO;
 @Mapper
 public interface TestMapper {
 
-   TestDTO selectforbiddenword();
+   TestDTO selectForbiddenword();
 
 }

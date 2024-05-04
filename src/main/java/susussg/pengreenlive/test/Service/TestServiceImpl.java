@@ -14,7 +14,7 @@ public class TestServiceImpl implements TestService {
   private final TestMapper testMapper;
 
   @Override
-  public TestDTO selectforbiddenword() {
-    return  testMapper.selectforbiddenword();
+  public TestDTO selectForbiddenword() {
+    return  testMapper.selectForbiddenword();
   }
 }

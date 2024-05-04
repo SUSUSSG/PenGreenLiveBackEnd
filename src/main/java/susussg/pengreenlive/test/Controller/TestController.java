@@ -18,9 +18,9 @@ public class TestController {
 
   @GetMapping("test")
   public String testMethod(){
-    System.out.println(testService.selectforbiddenword().getForbiddenword());
+    System.out.println(testService.selectForbiddenword().getForbiddenword());
 
-    return testService.selectforbiddenword().getForbiddenword();
+    return testService.selectForbiddenword().getForbiddenword();
   }
 
 
