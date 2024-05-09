@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="susussg.pengreenlive.broadcast.mapper.LiveRegisterMapper">
+
+    <insert id="insertBroadcast" parameterType="susussg.pengreenlive.broadcast.dto.BroadcastDTO">
+        
+    </insert>
+    <insert id="insertBroadcastProduct"  parameterType="susussg.pengreenlive.broadcast.dto.BroadcastProductDTO">
+
+    </insert>
+    <insert id="insertNotice" parameterType="susussg.pengreenlive.broadcast.dto.NoticeDTO">
+
+    </insert>
+    <insert id="insertBroadcastBenefit" parameterType="susussg.pengreenlive.broadcast.dto.BroadcastBenefitDTO">
+
+    </insert>
+    <insert id="insertFaq" parameterType="susussg.pengreenlive.broadcast.dto.FaqDTO">
+
+    </insert>
+</mapper>
