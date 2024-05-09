@@ -13,7 +13,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LiveRegisterDTO {
+public class BroadcastDTO {
     //방송
     private int broadcastSeq;
     private String channelNm;
@@ -22,21 +22,4 @@ public class LiveRegisterDTO {
     private String broadcastSummary;
     private Date broadcastScheduledTime;
     private String categoryCd;
-
-    //방송판매상품
-    private int productSeq;
-    private int discountRate;
-    private int discountPrice;
-
-    //공지사항
-    private int noticeSeq;
-    private String noticeContent;
-    //라이브혜택
-    private int benefitSeq;
-    private String benefitContent;
-    //자주묻는질문
-    private int faqSeq;
-    private String questionTitle;
-    private String questionAnswer;
-
 }
