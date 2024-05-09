@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: db
+
+---
+spring:
+  config:
+    activate:
+      on-profile: db
+    import: application-db.yml
