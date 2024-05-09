@@ -37,6 +37,8 @@ out/
 .vscode/
 ### Secret Properties ###
 application-secret.properties
+application-db.yml
+
 # Created by https://www.toptal.com/developers/gitignore/api/intellij,gradle,visualstudiocode,netbeans
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij,gradle,visualstudiocode,netbeans
 
