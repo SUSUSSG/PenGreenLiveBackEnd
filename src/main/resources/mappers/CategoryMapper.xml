@@ -7,6 +7,10 @@
     SELECT * FROM TB_PRODUCT_CATEGORY
   </select>
 
+  <select id="selectBroadcastCategoryList" resultType="susussg.pengreenlive.dashboard.DTO.BroadcastCategoryDTO">
+    SELECT * FROM TB_BROADCAST_CATEGORY
+  </select>
+
 
 
 </mapper>

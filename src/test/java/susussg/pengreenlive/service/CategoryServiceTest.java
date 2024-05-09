@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import susussg.pengreenlive.dashboard.DTO.BroadcastCategoryDTO;
 import susussg.pengreenlive.dashboard.DTO.CategoryDTO;
 import susussg.pengreenlive.dashboard.Service.CategoryService;
 
@@ -28,6 +29,12 @@ public class CategoryServiceTest {
   public void getAllCategoryTest(){
     List<CategoryDTO> categoryDTOList = categoryService.getAllCategoryList();
     log.info(categoryDTOList);
+  }
+
+  @Test
+  public void getAllBroadcastCategoryTest(){
+    List<BroadcastCategoryDTO> broadcastCategoryDTOList = categoryService.getAllBroadcastCategoryList();
+    log.info(broadcastCategoryDTOList);
   }
 
 
