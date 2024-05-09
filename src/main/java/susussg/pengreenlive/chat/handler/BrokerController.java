@@ -7,7 +7,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
-import susussg.pengreenlive.dto.MessageDto;
+import susussg.pengreenlive.chat.dto.MessageDto;
 
 
 @Slf4j
@@ -37,6 +37,8 @@ public class BrokerController {
         log.info("# roomId = {}", roomId);
         log.info("# message = {}", message);
         final String payload = message.getWriter() + "님이 입장하셨습니다.";
+        System.out.println("message.getwriter : " + message.getWriter());
+        System.out.println("payload??: " + payload);
         template.convertAndSend("/sub/room/" + roomId, payload);
     }
 
