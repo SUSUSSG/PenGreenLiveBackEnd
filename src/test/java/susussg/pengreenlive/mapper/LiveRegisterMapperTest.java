@@ -4,10 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import susussg.pengreenlive.broadcast.dto.BenefitDTO;
-import susussg.pengreenlive.broadcast.dto.BroadcastDTO;
-import susussg.pengreenlive.broadcast.dto.BroadcastProductDTO;
-import susussg.pengreenlive.broadcast.dto.NoticeDTO;
+import susussg.pengreenlive.broadcast.dto.*;
 import susussg.pengreenlive.broadcast.mapper.LiveRegisterMapper;
 
 import java.io.File;
@@ -73,6 +70,17 @@ public class LiveRegisterMapperTest {
                 .build();
 
         liveRegisterMapper.insertBenefit(benefit);
+        log.info("insert success!!!");
+    }
+
+    @Test
+    void insertFaq() {
+        FaqDTO faq = FaqDTO.builder()
+                .broadcastSeq(6)
+                .questionTitle("회원가입시 혜택이 뭔가요?")
+                .questionAnswer("따로 없습니다.")
+                .build();
+        liveRegisterMapper.insertFaq(faq);
         log.info("insert success!!!");
     }
 }

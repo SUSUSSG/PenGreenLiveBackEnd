@@ -18,6 +18,6 @@
         INSERT INTO TB_BENEFIT (BROADCAST_SEQ, BENEFIT_CONTENT) VALUES (#{broadcastSeq}, #{benefitContent})
     </insert>
     <insert id="insertFaq" parameterType="susussg.pengreenlive.broadcast.dto.FaqDTO">
-
+        INSERT INTO TB_FAQ (BROADCAST_SEQ, QUESTION_TITLE, QUESTION_ANSWER)  VALUES (#{broadcastSeq}, #{questionTitle}, #{questionAnswer})
     </insert>
 </mapper>
