@@ -9,5 +9,5 @@ public interface LiveRegisterMapper {
     int insertBroadcastProduct(BroadcastProductDTO broadcastProductDTO);
     int insertNotice(NoticeDTO noticeDTO);
     int insertFaq(FaqDTO faqDTO);
-    int insertBroadcastBenefit(BenefitDTO BenefitDTO);
+    int insertBenefit(BenefitDTO BenefitDTO);
 }

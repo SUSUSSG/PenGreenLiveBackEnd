@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import susussg.pengreenlive.broadcast.dto.BenefitDTO;
 import susussg.pengreenlive.broadcast.dto.BroadcastDTO;
 import susussg.pengreenlive.broadcast.dto.BroadcastProductDTO;
 import susussg.pengreenlive.broadcast.dto.NoticeDTO;
@@ -43,32 +44,35 @@ public class LiveRegisterMapperTest {
     @Test
     void insertBroadcastProduct() {
         BroadcastProductDTO product = BroadcastProductDTO.builder()
-                .broadcastSeq(1)
-                .productSeq(1)
-                .discountRate(1)
-                .discountPrice(1)
+                .broadcastSeq(6)
+                .productSeq(2)
+                .discountRate(10)
+                .discountPrice(1000)
                 .build();
 
-        int result = liveRegisterMapper.insertBroadcastProduct(product);
-        if(result == 1) {
-            log.info("성공");
-        } else {
-            log.error("실패");
-        }
+        liveRegisterMapper.insertBroadcastProduct(product);
+        log.info("insert success!!!");
     }
 
     @Test
     void insertNotice() {
         NoticeDTO notice = NoticeDTO.builder()
-                .broadcastSeq(1)
+                .broadcastSeq(6)
                 .noticeContent("공지입니다~~")
                 .build();
 
-        int result = liveRegisterMapper.insertNotice(notice);
-        if(result == 1) {
-            log.info("성공");
-        } else {
-            log.error("실패");
-        }
+        liveRegisterMapper.insertNotice(notice);
+        log.info("insert success!!!");
+    }
+
+    @Test
+    void insertBenefit() {
+        BenefitDTO benefit = BenefitDTO.builder()
+                .broadcastSeq(6)
+                .benefitContent("2개 구매시 한개 더 증정")
+                .build();
+
+        liveRegisterMapper.insertBenefit(benefit);
+        log.info("insert success!!!");
     }
 }

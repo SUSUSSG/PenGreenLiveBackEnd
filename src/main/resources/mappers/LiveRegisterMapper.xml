@@ -14,8 +14,8 @@
     <insert id="insertNotice" parameterType="susussg.pengreenlive.broadcast.dto.NoticeDTO">
         INSERT INTO TB_NOTICE (BROADCAST_SEQ, NOTICE_CONTENT) VALUES (#{broadcastSeq}, #{noticeContent})
     </insert>
-    <insert id="insertBroadcastBenefit" parameterType="susussg.pengreenlive.broadcast.dto.BenefitDTO">
-
+    <insert id="insertBenefit" parameterType="susussg.pengreenlive.broadcast.dto.BenefitDTO">
+        INSERT INTO TB_BENEFIT (BROADCAST_SEQ, BENEFIT_CONTENT) VALUES (#{broadcastSeq}, #{benefitContent})
     </insert>
     <insert id="insertFaq" parameterType="susussg.pengreenlive.broadcast.dto.FaqDTO">
 
