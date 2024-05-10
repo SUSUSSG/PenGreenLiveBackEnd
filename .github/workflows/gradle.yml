@@ -26,6 +26,11 @@ jobs:
       # Build the project using Gradle
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+
+        
+      # Grant execute permission for gradlew
+      - name: Grant Execute Permission for Gradlew
+        run: chmod +x ./gradlew
         
       - name: Build Project
         run: |
