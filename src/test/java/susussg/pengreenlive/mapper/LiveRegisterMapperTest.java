@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import susussg.pengreenlive.broadcast.dto.BroadcastDTO;
 import susussg.pengreenlive.broadcast.dto.BroadcastProductDTO;
+import susussg.pengreenlive.broadcast.dto.NoticeDTO;
 import susussg.pengreenlive.broadcast.mapper.LiveRegisterMapper;
 
 import java.sql.Blob;
@@ -47,6 +48,21 @@ public class LiveRegisterMapperTest {
                 .build();
 
         int result = liveRegisterMapper.insertBroadcastProduct(product);
+        if(result == 1) {
+            log.info("성공");
+        } else {
+            log.error("실패");
+        }
+    }
+
+    @Test
+    void insertNotice() {
+        NoticeDTO notice = NoticeDTO.builder()
+                .broadcastSeq(1)
+                .noticeContent("공지입니다~~")
+                .build();
+
+        int result = liveRegisterMapper.insertNotice(notice);
         if(result == 1) {
             log.info("성공");
         } else {
