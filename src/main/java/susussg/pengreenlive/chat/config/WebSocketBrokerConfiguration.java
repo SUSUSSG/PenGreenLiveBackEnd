@@ -29,19 +29,19 @@ public class WebSocketBrokerConfiguration implements WebSocketMessageBrokerConfi
     private final WebsocketBrokerInterceptor interceptor;
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws/init") //1
-            .setAllowedOrigins("*"); //2
+        registry.addEndpoint("/ws/init") //1 최초 websocket을 연결할 때 보내는 endPoint입니다.
+            .setAllowedOrigins("*");
     }
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(interceptor);
+        registration.interceptors(interceptor); //2 websocket이 연결되거나, sub/pub/send 등 client에서 메시지를 보내게 될 때 interceptor를 통해 핸들링 하게 됩니다.
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/sub"); //topic
-        registry.setApplicationDestinationPrefixes("/pub"); // /app
+        registry.enableSimpleBroker("/sub"); //3 client는 /sub/** 의 형태로 topic을 구독하게 됩니다
+        registry.setApplicationDestinationPrefixes("/pub"); // 4 메시지를 보낼때는 /pub 형식으로 보내게 됩니다.
     }
 
     @EventListener(value = ApplicationReadyEvent.class)
