@@ -73,7 +73,6 @@ jobs:
           scp -r ./build/libs/*.jar $SERVER_USER@$SERVER_HOST:/opt/susussg-backend/
           scp ./src/main/resources/application-db.yml $SERVER_USER@$SERVER_HOST:/opt/susussg-backend/config/
           scp ./src/main/resources/application-secret.properties $SERVER_USER@$SERVER_HOST:/opt/susussg-backend/config/
-          scp ./run.sh $SERVER_USER@$SERVER_HOST:/opt/susussg-backend/
 
           # Restart the application
           ssh $SERVER_USER@$SERVER_HOST 'bash -s' << 'EOF'
