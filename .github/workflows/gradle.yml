@@ -37,6 +37,7 @@ jobs:
           echo "spring:" > ./src/main/resources/application-db.yml
           echo "  datasource:" >> ./src/main/resources/application-db.yml
           echo "    driver-class-name: ${{ secrets.DRIVER_CLASS_NAME }}" >> ./src/main/resources/application-db.yml
+          echo "    url: ${{ secrets.URL }}" >> ./src/main/resources/application-db.yml
           echo "    username: ${{ secrets.USERNAME }}" >> ./src/main/resources/application-db.yml
           echo "    password: ${{ secrets.PASSWORD }}" >> ./src/main/resources/application-db.yml
         
