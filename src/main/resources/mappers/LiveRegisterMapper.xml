@@ -8,7 +8,8 @@
         VALUES (#{broadcastSeq}, #{channelNm}, #{broadcastTitle}, #{broadcastImage}, #{broadcastSummary}, #{broadcastScheduledTime}, #{categoryCd})
     </insert>
     <insert id="insertBroadcastProduct"  parameterType="susussg.pengreenlive.broadcast.dto.BroadcastProductDTO">
-
+        INSERT INTO TB_BROADCAST_PRODUCT (BROADCAST_SEQ, PRODUCT_SEQ, DISCOUNT_RATE, DISCOUNT_PRICE)
+        VALUES (#{broadcastSeq}, #{productSeq}, #{discountRate}, #{discountPrice})
     </insert>
     <insert id="insertNotice" parameterType="susussg.pengreenlive.broadcast.dto.NoticeDTO">
 

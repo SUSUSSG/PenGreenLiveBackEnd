@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import susussg.pengreenlive.broadcast.dto.BroadcastDTO;
+import susussg.pengreenlive.broadcast.dto.BroadcastProductDTO;
 import susussg.pengreenlive.broadcast.mapper.LiveRegisterMapper;
 
 import java.sql.Blob;
@@ -20,7 +21,7 @@ public class LiveRegisterMapperTest {
     @Test
     void insertBroadcast() {
         BroadcastDTO broad = BroadcastDTO.builder()
-                .broadcastSeq(3)
+                .broadcastSeq(4)
                 .channelNm("test")
                 .broadcastTitle("test")
 //                .broadcastImage("imageData")
@@ -30,6 +31,23 @@ public class LiveRegisterMapperTest {
                 .build();
         int result = liveRegisterMapper.insertBroadcast(broad);
         if (result == 1) {
+            log.info("성공");
+        } else {
+            log.error("실패");
+        }
+    }
+
+    @Test
+    void insertBroadcastProduct() {
+        BroadcastProductDTO product = BroadcastProductDTO.builder()
+                .broadcastSeq(1)
+                .productSeq(1)
+                .discountRate(1)
+                .discountPrice(1)
+                .build();
+
+        int result = liveRegisterMapper.insertBroadcastProduct(product);
+        if(result == 1) {
             log.info("성공");
         } else {
             log.error("실패");
