@@ -15,7 +15,12 @@ jobs:
       # Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v2
-
+        
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
       # Setup JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
