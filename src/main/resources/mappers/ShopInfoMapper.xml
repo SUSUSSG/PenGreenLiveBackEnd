@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="susussg.pengreenlive.dashboard.Mapper.ShopInfoMapper">
+
+  <insert id="insertShopInfo" parameterType="susussg.pengreenlive.dashboard.DTO.ShopInfoDTO">
+    INSERT INTO TB_CHANNEL (CHANNEL_SEQ, CHANNEL_NM, CHANNEL_URL, CHANNEL_IMAGE, CHANNEL_INFO)
+    VALUES (#{channelSeq}, #{channelNM}, #{channelUrl}, #{channelImage}, #{channelInfo})
+  </insert>
+
+</mapper>

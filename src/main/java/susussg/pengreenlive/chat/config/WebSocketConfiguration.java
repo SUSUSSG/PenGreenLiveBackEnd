@@ -13,11 +13,13 @@ import susussg.pengreenlive.chat.handler.MyHandler;
 public class WebSocketConfiguration implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        //myHandler : 클라이언트가 접속할 때 사용하는 URL 엔드포인트
         registry.addHandler(myHandler(), "/myHandler").setAllowedOriginPatterns("*");
     }
 
     @Bean
     public WebSocketHandler myHandler() {
+        //웹소켓 핸들러로 MyHandler 지정
         return new MyHandler();
     }
 }
