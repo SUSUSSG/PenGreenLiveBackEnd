@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Blob;
 import java.util.Date;
 
 
@@ -18,7 +17,7 @@ public class BroadcastDTO {
     private int broadcastSeq;
     private String channelNm;
     private String broadcastTitle;
-    private Blob broadcastImage;
+    private byte[] broadcastImage;
     private String broadcastSummary;
     private Date broadcastScheduledTime;
     private String categoryCd;

@@ -4,8 +4,8 @@
 <mapper namespace="susussg.pengreenlive.broadcast.mapper.LiveRegisterMapper">
 
     <insert id="insertBroadcast" parameterType="susussg.pengreenlive.broadcast.dto.BroadcastDTO">
-        INSERT INTO TB_BROADCAST (BROADCAST_SEQ, CHANNEL_NM, BROADCAST_TITLE, BROADCAST_IMAGE, BROADCAST_SUMMARY, BROADCAST_SCHEDULED_TIME, CATEGORY_CD)
-        VALUES (#{broadcastSeq}, #{channelNm}, #{broadcastTitle}, #{broadcastImage}, #{broadcastSummary}, #{broadcastScheduledTime}, #{categoryCd})
+        INSERT INTO TB_BROADCAST (CHANNEL_NM, BROADCAST_TITLE, BROADCAST_IMAGE, BROADCAST_SUMMARY, BROADCAST_SCHEDULED_TIME, CATEGORY_CD)
+        VALUES (#{channelNm}, #{broadcastTitle}, #{broadcastImage}, #{broadcastSummary}, #{broadcastScheduledTime}, #{categoryCd})
     </insert>
     <insert id="insertBroadcastProduct"  parameterType="susussg.pengreenlive.broadcast.dto.BroadcastProductDTO">
         INSERT INTO TB_BROADCAST_PRODUCT (BROADCAST_SEQ, PRODUCT_SEQ, DISCOUNT_RATE, DISCOUNT_PRICE)
@@ -14,7 +14,7 @@
     <insert id="insertNotice" parameterType="susussg.pengreenlive.broadcast.dto.NoticeDTO">
         INSERT INTO TB_NOTICE (BROADCAST_SEQ, NOTICE_CONTENT) VALUES (#{broadcastSeq}, #{noticeContent})
     </insert>
-    <insert id="insertBroadcastBenefit" parameterType="susussg.pengreenlive.broadcast.dto.BroadcastBenefitDTO">
+    <insert id="insertBroadcastBenefit" parameterType="susussg.pengreenlive.broadcast.dto.BenefitDTO">
 
     </insert>
     <insert id="insertFaq" parameterType="susussg.pengreenlive.broadcast.dto.FaqDTO">
