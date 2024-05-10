@@ -3,9 +3,19 @@
 
 <mapper namespace="susussg.pengreenlive.dashboard.Mapper.ShopInfoMapper">
 
-  <insert id="insertShopInfo" parameterType="susussg.pengreenlive.dashboard.DTO.ShopInfoDTO">
-    INSERT INTO TB_CHANNEL (CHANNEL_SEQ, CHANNEL_NM, CHANNEL_URL, CHANNEL_IMAGE, CHANNEL_INFO)
-    VALUES (#{channelSeq}, #{channelNM}, #{channelUrl}, #{channelImage}, #{channelInfo})
-  </insert>
+  <select id="getShopInfo" parameterType="java.lang.Long" resultType="susussg.pengreenlive.dashboard.DTO.ShopInfoDTO">
+    SELECT * FROM TB_CHANNEL
+    WHERE CHANNEL_SEQ = #{channelSeq}
+  </select>
+
+  <update id="updateShopInfo" parameterType="susussg.pengreenlive.dashboard.DTO.ShopInfoDTO">
+    UPDATE TB_CHANNEL
+    SET
+      CHANNEL_NM = #{channelNM},
+      CHANNEL_URL = #{channelUrl},
+      CHANNEL_IMAGE = #{channelImage},
+      CHANNEL_INFO = #{channelInfo}
+    WHERE CHANNEL_SEQ = #{channelSeq}
+  </update>
 
 </mapper>

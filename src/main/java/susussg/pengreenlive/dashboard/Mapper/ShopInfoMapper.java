@@ -6,6 +6,8 @@ import susussg.pengreenlive.dashboard.DTO.ShopInfoDTO;
 @Mapper
 public interface ShopInfoMapper {
 
-  void insertShopInfo(ShopInfoDTO shopInfoDTO);
+  void updateShopInfo(ShopInfoDTO shopInfoDTO);
+
+  ShopInfoDTO getShopInfo(Long channelSeq);
 
 }

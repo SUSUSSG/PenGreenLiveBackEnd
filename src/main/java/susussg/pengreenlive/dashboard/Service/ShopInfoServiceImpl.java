@@ -18,8 +18,13 @@ public class ShopInfoServiceImpl implements ShopInfoService {
   }
 
   @Override
+  public ShopInfoDTO getShopInfo(Long channelSeq) {
+    return shopInfoMapper.getShopInfo(channelSeq);
+  }
+
+  @Override
   @Transactional
-  public void saveShopInfo(ShopInfoDTO shopInfoDTO) {
-    shopInfoMapper.insertShopInfo(shopInfoDTO);
+  public void updateShopInfo(ShopInfoDTO shopInfoDTO) {
+    shopInfoMapper.updateShopInfo(shopInfoDTO);
   }
 }
