@@ -1,0 +1,81 @@
+name: Deploy Java Project
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    name: Deploy to Linux Server
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+      # Setup JDK 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Build the project using Gradle
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
+
+      # Grant execute permission for gradlew
+      - name: Grant Execute Permission for Gradlew
+        run: chmod +x ./gradlew
+        
+      - name: Build Project
+        run: |
+          echo "spring:" > ./src/main/resources/application-db.yml
+          echo "  datasource:" >> ./src/main/resources/application-db.yml
+          echo "    driver-class-name: ${{ secrets.DRIVER_CLASS_NAME }}" >> ./src/main/resources/application-db.yml
+          echo "    url: ${{ secrets.URL }}" >> ./src/main/resources/application-db.yml
+          echo "    username: ${{ secrets.USERNAME }}" >> ./src/main/resources/application-db.yml
+          echo "    password: ${{ secrets.PASSWORD }}" >> ./src/main/resources/application-db.yml
+        
+          echo "spring.datasource.url=${{ secrets.SPRING_DATASOURCE_URL }}" > ./src/main/resources/application-secret.properties
+          echo "spring.datasource.username=${{ secrets.SPRING_DATASOURCE_USERNAME }}" >> ./src/main/resources/application-secret.properties
+          echo "spring.datasource.password=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> ./src/main/resources/application-secret.properties
+          echo "OPENVIDU_URL=${{ secrets.OPENVIDU_URL }}" >> ./src/main/resources/application-secret.properties
+          echo "OPENVIDU_SECRET=${{ secrets.OPENVIDU_SECRET }}" >> ./src/main/resources/application-secret.properties
+
+          ./gradlew build -x test
+
+      - name: Deploy to Remote Server
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan -H $SERVER_HOST >> ~/.ssh/known_hosts
+          
+          # SSH into the server and prepare the deployment folder
+          ssh $SERVER_USER@$SERVER_HOST 'bash -s' << 'EOF'
+            sudo mkdir -p /opt/susussg-backend/config
+            sudo chown -R $USER:$USER /opt/susussg-backend
+            sudo chmod -R 755 /opt/susussg-backend
+          EOF
+          
+          # Copy files to the deployment folder
+          scp -r ./build/libs/*.jar $SERVER_USER@$SERVER_HOST:/opt/susussg-backend/
+          scp ./src/main/resources/application-db.yml $SERVER_USER@$SERVER_HOST:/opt/susussg-backend/config/
+          scp ./src/main/resources/application-secret.properties $SERVER_USER@$SERVER_HOST:/opt/susussg-backend/config/
+
+          # Restart the application
+          ssh $SERVER_USER@$SERVER_HOST 'bash -s' << 'EOF'
+            chmod +x /opt/susussg-backend/run.sh
+            /opt/susussg-backend/run.sh restart
+          EOF
