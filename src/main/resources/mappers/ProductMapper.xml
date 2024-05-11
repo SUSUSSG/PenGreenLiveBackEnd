@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="susussg.pengreenlive.dashboard.Mapper.ProductMapper">
+
+  <select id="findAllProducts" resultType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
+    SELECT
+      p.PRODUCT_SEQ,
+      p.PRODUCT_CD,
+      p.GREEN_PRODUCT_ID,
+      p.PRODUCT_NM,
+      p.LIST_PRICE,
+      p.brand,
+      p.PRODUCT_IMAGE,
+      p.CATEGORY_CD,
+      s.PRODUCT_STOCK
+    FROM
+      TB_PRODUCT p
+        LEFT JOIN TB_PRODUCT_STOCK s ON p.PRODUCT_SEQ = s.PRODUCT_SEQ
+  </select>
+
+
+</mapper>
