@@ -47,28 +47,28 @@ public class WebSocketBrokerConfiguration implements WebSocketMessageBrokerConfi
     @EventListener(value = ApplicationReadyEvent.class)
     public void addTestData() {
 
-        User user1 = new User("user1");
-        User user2 = new User("user2");
-        User user3 = new User("user3");
-        User user4 = new User("user4");
-
-        Room room1 = new Room("채팅방1");
-        Room room2 = new Room("채팅방2");
-
-        Long savedUserId1 = userService.save(user1);
-        Long savedUserId2 = userService.save(user2);
-        Long savedUserId3 = userService.save(user3);
-        Long savedUserId4 = userService.save(user4);
-
-
-        Long savedRoomId1 = roomService.save(room1);
-        Long savedRoomId2 = roomService.save(room2);
-
-        enteredRoomService.save(savedUserId1, savedRoomId1);
-        enteredRoomService.save(savedUserId2, savedRoomId1);
-        enteredRoomService.save(savedUserId3, savedRoomId1);
-
-        enteredRoomService.save(savedUserId3, savedRoomId2);
-        enteredRoomService.save(savedUserId4, savedRoomId2);
+//        User user1 = new User("user1");
+//        User user2 = new User("user2");
+//        User user3 = new User("user3");
+//        User user4 = new User("user4");
+//
+//        Room room1 = new Room("채팅방1");
+//        Room room2 = new Room("채팅방2");
+//
+//        Long savedUserId1 = userService.save(user1);
+//        Long savedUserId2 = userService.save(user2);
+//        Long savedUserId3 = userService.save(user3);
+//        Long savedUserId4 = userService.save(user4);
+//
+//
+//        Long savedRoomId1 = roomService.save(room1);
+//        Long savedRoomId2 = roomService.save(room2);
+//
+//        enteredRoomService.save(savedUserId1, savedRoomId1);
+//        enteredRoomService.save(savedUserId2, savedRoomId1);
+//        enteredRoomService.save(savedUserId3, savedRoomId1);
+//
+//        enteredRoomService.save(savedUserId3, savedRoomId2);
+//        enteredRoomService.save(savedUserId4, savedRoomId2);
     }
 }

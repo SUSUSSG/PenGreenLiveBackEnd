@@ -42,4 +42,11 @@ public class BrokerController {
         messageDto.setMessage(messageDto.getWriter() + "님이 방을 떠났습니다.");
         template.convertAndSend("/sub/room/" + roomId, messageDto);  // MessageDto 객체 전체를 전송
     }
+    // BrokerController.java에 메시지 타입으로 NOTICE를 처리하는 메소드 추가
+    @MessageMapping("/room/{roomId}/notice")
+    public void broadcastNotice(@DestinationVariable(value = "roomId") String roomId, MessageDto message) {
+        log.info("# notice = {}", message);
+        template.convertAndSend("/sub/room/" + roomId + "/notice", message);  // 모든 구독자에게 공지사항 전송
+    }
+
 }

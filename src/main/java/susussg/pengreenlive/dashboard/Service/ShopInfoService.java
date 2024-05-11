@@ -4,6 +4,8 @@ import susussg.pengreenlive.dashboard.DTO.ShopInfoDTO;
 
 public interface ShopInfoService {
 
-  void saveShopInfo(ShopInfoDTO shopInfoDTO);
+  ShopInfoDTO getShopInfo(Long channelSeq);
+
+  void updateShopInfo(ShopInfoDTO shopInfoDTO);
 
 }
