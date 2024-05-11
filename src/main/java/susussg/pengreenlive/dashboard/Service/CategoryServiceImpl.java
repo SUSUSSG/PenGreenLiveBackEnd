@@ -12,7 +12,7 @@ import susussg.pengreenlive.dashboard.Mapper.CategoryMapper;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class CategorySerivceImpl implements CategoryService {
+public class CategoryServiceImpl implements CategoryService {
 
   @Autowired
   private final CategoryMapper categoryMapper;
