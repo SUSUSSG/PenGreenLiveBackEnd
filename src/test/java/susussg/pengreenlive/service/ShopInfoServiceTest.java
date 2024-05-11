@@ -23,20 +23,35 @@ public class ShopInfoServiceTest {
   }
 
   @Test
-  public void testSaveShopInfo() throws IOException {
+  public void getShopInfoTest() {
+
+    Long channelSeq = 1L;
+    ShopInfoDTO result = shopInfoService.getShopInfo(channelSeq);
+
+    if (result != null) {
+      log.info("상점 정보 조회 성공. Retrieved data: {}", result);
+    } else {
+      log.error("상점 정보 조회 실패: {}", channelSeq);
+    }
+
+  }
+
+  @Test
+  public void testUpdateShopInfo() throws IOException {
 
     File file = new File("C:/Users/kuy06/OneDrive/Desktop/c2.jpg");
     byte[] imageData = Files.readAllBytes(file.toPath());
 
     ShopInfoDTO shopInfoDTO = new ShopInfoDTO();
-    shopInfoDTO.setChannelNM("TestShop2");
-    shopInfoDTO.setChannelUrl("www.test2.com");
+    shopInfoDTO.setChannelSeq(1L);
+    shopInfoDTO.setChannelNM("UpdatedTestShop");
+    shopInfoDTO.setChannelUrl("www.updatedtest.com");
     shopInfoDTO.setChannelImage(imageData);
-    shopInfoDTO.setChannelInfo("infotest2");
+    shopInfoDTO.setChannelInfo("Updated info");
 
-    shopInfoService.saveShopInfo(shopInfoDTO);
+    shopInfoService.updateShopInfo(shopInfoDTO);
 
-    log.info("Shop info saved successfully.");
-
+    log.info("상점정보 변경 성공");
   }
+
 }
