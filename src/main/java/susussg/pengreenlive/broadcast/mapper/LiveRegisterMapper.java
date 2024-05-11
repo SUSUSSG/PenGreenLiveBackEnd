@@ -12,5 +12,5 @@ public interface LiveRegisterMapper {
     int insertNotice(NoticeDTO noticeDTO);
     int insertFaq(FaqDTO faqDTO);
     int insertBenefit(BenefitDTO BenefitDTO);
-    List<ChannelSalesProductDTO> selectChannelSalesProduct(long vendorSeq);
+    List<ChannelSalesProductDTO> selectChannelSalesProduct(long vendorId);
 }

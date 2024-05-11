@@ -26,6 +26,6 @@
         SELECT P.PRODUCT_SEQ, PRODUCT_CD, PRODUCT_NM
         FROM TB_PRODUCT P
                  LEFT JOIN TB_CHANNEL_SALES_PRODUCT C ON P.PRODUCT_SEQ = C.PRODUCT_SEQ
-        WHERE VENDOR_SEQ = #{vendorSeq};
+        WHERE VENDOR_SEQ = #{vendorId};
     </select>
 </mapper>
