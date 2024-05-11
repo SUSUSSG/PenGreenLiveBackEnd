@@ -25,7 +25,7 @@ public class ShopInfoServiceTest {
   @Test
   public void getShopInfoTest() {
 
-    Long channelSeq = 1L; // 이 값은 데이터베이스에 존재하는 유효한 값으로 가정
+    Long channelSeq = 1L;
     ShopInfoDTO result = shopInfoService.getShopInfo(channelSeq);
 
     if (result != null) {

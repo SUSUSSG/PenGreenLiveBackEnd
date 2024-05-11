@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import susussg.pengreenlive.dashboard.DTO.ShopInfoDTO;
 import susussg.pengreenlive.dashboard.Mapper.ShopInfoMapper;
-import susussg.pengreenlive.dashboard.Service.ShopInfoService;
 
 @Service
 public class ShopInfoServiceImpl implements ShopInfoService {
