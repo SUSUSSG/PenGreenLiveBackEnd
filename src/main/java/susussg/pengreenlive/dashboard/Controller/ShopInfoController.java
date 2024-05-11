@@ -27,7 +27,6 @@ public class ShopInfoController {
   }
 
   @GetMapping("/shop/{channelSeq}")
-  @CrossOrigin(origins = "http://localhost:5173")
   public ResponseEntity<?> getShopInfo(@PathVariable Long channelSeq) {
     try {
       ShopInfoDTO shopInfo = shopInfoService.getShopInfo(channelSeq);
@@ -42,31 +41,32 @@ public class ShopInfoController {
   }
 
   @PutMapping("/shop-modify/{channelSeq}")
-  @CrossOrigin(origins = "http://localhost:5173")
   public ResponseEntity<?> updateShopInfo(@PathVariable Long channelSeq,
       @RequestParam("nickname") String nickname,
       @RequestParam("shoplink") String shoplink,
       @RequestParam("description") String description,
-      @RequestParam("image") MultipartFile image) {
-    try {
-      ShopInfoDTO shopInfoDTO = ShopInfoDTO.builder()
-          .channelSeq(channelSeq)
-          .channelNM(nickname)
-          .channelUrl(shoplink)
-          .channelInfo(description)
-          .build();
+      @RequestParam(value = "image", required = false) MultipartFile image) {
 
-      if (!image.isEmpty()) {
-        byte[] imageBytes = image.getBytes();
-        shopInfoDTO.setChannelImage(imageBytes); // 이미지를 byte[] 형태로 DTO에 설정
-      }
-
-      shopInfoService.updateShopInfo(shopInfoDTO);
-      return ResponseEntity.ok().body("Shop info updated successfully.");
-    } catch (IOException e) {
-      return ResponseEntity.badRequest().body("이미지 파일 처리 중 오류 발생: " + e.getMessage());
-    } catch (Exception e) {
-      return ResponseEntity.badRequest().body("Error updating shop info: " + e.getMessage());
+    ShopInfoDTO existingShopInfo = shopInfoService.getShopInfo(channelSeq);
+    if (existingShopInfo == null) {
+      return ResponseEntity.notFound().build();
     }
+
+    if (image != null && !image.isEmpty()) {
+      try {
+        byte[] imageBytes = image.getBytes();
+        existingShopInfo.setChannelImage(imageBytes);
+      } catch (IOException e) {
+        return ResponseEntity.badRequest().body("이미지 파일 처리 중 오류 발생: " + e.getMessage());
+      }
+    }
+
+    existingShopInfo.setChannelNM(nickname);
+    existingShopInfo.setChannelUrl(shoplink);
+    existingShopInfo.setChannelInfo(description);
+
+    shopInfoService.updateShopInfo(existingShopInfo);
+    return ResponseEntity.ok().body("Shop info updated successfully.");
   }
+
 }
