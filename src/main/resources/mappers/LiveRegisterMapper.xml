@@ -28,4 +28,7 @@
                  LEFT JOIN TB_CHANNEL_SALES_PRODUCT C ON P.PRODUCT_SEQ = C.PRODUCT_SEQ
         WHERE VENDOR_SEQ = #{vendorId};
     </select>
+    <select id="selectChannelName" parameterType="long" resultType="java.lang.String">
+        SELECT CHANNEL_NM FROM TB_CHANNEL WHERE VENDOR_SEQ = #{vendorId};
+    </select>
 </mapper>

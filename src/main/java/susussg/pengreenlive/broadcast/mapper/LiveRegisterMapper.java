@@ -7,10 +7,12 @@ import java.util.List;
 
 @Mapper
 public interface LiveRegisterMapper {
+    String selectChannelName(long vendorId);
     int insertBroadcast(BroadcastDTO broadcastDTO);
     int insertBroadcastProduct(BroadcastProductDTO broadcastProductDTO);
     int insertNotice(NoticeDTO noticeDTO);
     int insertFaq(FaqDTO faqDTO);
     int insertBenefit(BenefitDTO BenefitDTO);
     List<ChannelSalesProductDTO> selectChannelSalesProduct(long vendorId);
+
 }

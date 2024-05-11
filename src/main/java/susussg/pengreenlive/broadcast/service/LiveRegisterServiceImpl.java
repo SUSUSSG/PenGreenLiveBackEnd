@@ -21,6 +21,16 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
     @Autowired
     private final LiveRegisterMapper liveRegisterMapper;
 
+    @Override
+    @Transactional
+    public String getChannelName(long vendorId) {
+        String channelName = liveRegisterMapper.selectChannelName(vendorId);
+        if (channelName.isEmpty()) {
+            throw new RuntimeException("channel name emplty");
+        } else {
+            return channelName;
+        }
+    }
 
     @Override
     @Transactional

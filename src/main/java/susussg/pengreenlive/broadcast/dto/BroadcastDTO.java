@@ -15,6 +15,7 @@ import java.util.Date;
 public class BroadcastDTO {
     //방송
     private long broadcastSeq;
+    private String vendorSeq;
     private String channelNm;
     private String broadcastTitle;
     private byte[] broadcastImage;

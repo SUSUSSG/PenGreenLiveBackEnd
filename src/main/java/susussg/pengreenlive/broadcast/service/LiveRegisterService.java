@@ -5,6 +5,7 @@ import susussg.pengreenlive.broadcast.dto.*;
 import java.util.List;
 
 public interface LiveRegisterService {
+    String getChannelName(long vendorId);
     void saveBroadcast(BroadcastDTO broadcastDTO);
     void saveBroadcastProduct(BroadcastProductDTO broadcastProductDTO);
     void saveNotice(NoticeDTO noticeDTO);

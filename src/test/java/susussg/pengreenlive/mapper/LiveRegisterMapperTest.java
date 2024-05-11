@@ -22,6 +22,12 @@ public class LiveRegisterMapperTest {
     private LiveRegisterMapper liveRegisterMapper;
 
     @Test
+    void selectChannelName() {
+        String channelNm = liveRegisterMapper.selectChannelName(2);
+        log.info(channelNm);
+    }
+
+    @Test
     void insertBroadcast() throws IOException {
 
         File file = new File("/Users/jinii/Downloads/가전제품-노트북.png");
