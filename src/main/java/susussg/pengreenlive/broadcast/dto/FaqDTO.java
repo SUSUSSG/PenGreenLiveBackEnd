@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FaqDTO {
-    private int broadcastSeq;
-    private int faqSeq;
+    private long broadcastSeq;
+    private long faqSeq;
     private String questionTitle;
     private String questionAnswer;
 }

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.Blob;
 import java.util.Date;
+import java.util.List;
 
 @SpringBootTest
 @Log4j2
@@ -82,5 +83,11 @@ public class LiveRegisterMapperTest {
                 .build();
         liveRegisterMapper.insertFaq(faq);
         log.info("insert success!!!");
+    }
+
+    @Test
+    void selectChannelSalesProduct() {
+        List<ChannelSalesProductDTO> products = liveRegisterMapper.selectChannelSalesProduct(2);
+        products.stream().forEach(System.out::println);
     }
 }

@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class BroadcastDTO {
     //방송
-    private int broadcastSeq;
+    private long broadcastSeq;
     private String channelNm;
     private String broadcastTitle;
     private byte[] broadcastImage;

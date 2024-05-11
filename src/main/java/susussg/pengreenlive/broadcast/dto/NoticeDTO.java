@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NoticeDTO {
-    private int broadcastSeq;
-    private int noticeSeq;
+    private long broadcastSeq;
+    private long noticeSeq;
     private String noticeContent;
 }

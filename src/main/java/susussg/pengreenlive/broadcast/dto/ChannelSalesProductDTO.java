@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BenefitDTO {
-    private long broadcastSeq;
-    private long benefitSeq;
-    private String benefitContent;
+public class ChannelSalesProductDTO {
+    private long productSeq;
+    private String productCd;
+    private String productNm;
+    private int listPrice;
+    private long vendorSeq;
 }

@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BroadcastProductDTO {
-    private int broadcastSeq;
-    private int productSeq;
+    private long broadcastSeq;
+    private long productSeq;
     private int discountRate;
     private int discountPrice;
 }
