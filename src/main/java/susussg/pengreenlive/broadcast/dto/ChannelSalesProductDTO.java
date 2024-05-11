@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChannelSalesProductDTO {
     private long productSeq;
+    private byte[] productImage;
     private String productCd;
     private String productNm;
     private int listPrice;
