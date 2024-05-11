@@ -5,10 +5,10 @@ import susussg.pengreenlive.broadcast.dto.*;
 import java.util.List;
 
 public interface LiveRegisterService {
-    void registerBroadcast(BroadcastDTO broadcastDTO);
-    void registerBroadcastProduct(BroadcastProductDTO broadcastProductDTO);
-    void registerNotice(NoticeDTO noticeDTO);
-    void registerFaq(FaqDTO faqDTO);
-    void registerBenefit(BenefitDTO benefitDTO);
+    void saveBroadcast(BroadcastDTO broadcastDTO);
+    void saveBroadcastProduct(BroadcastProductDTO broadcastProductDTO);
+    void saveNotice(NoticeDTO noticeDTO);
+    void saveFaq(FaqDTO faqDTO);
+    void saveBenefit(BenefitDTO benefitDTO);
     List<ChannelSalesProductDTO> getChannelSalesProductAll(long vendorId);
 }

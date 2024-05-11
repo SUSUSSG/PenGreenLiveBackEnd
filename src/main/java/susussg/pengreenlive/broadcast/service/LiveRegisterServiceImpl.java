@@ -24,7 +24,7 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
 
     @Override
     @Transactional
-    public void registerBroadcast(BroadcastDTO broadcastDTO) {
+    public void saveBroadcast(BroadcastDTO broadcastDTO) {
         int result = liveRegisterMapper.insertBroadcast(broadcastDTO);
         if (result != 1) {
             throw new RuntimeException("broadcast insert failed");
@@ -33,7 +33,7 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
 
     @Override
     @Transactional
-    public void registerBroadcastProduct(BroadcastProductDTO broadcastProductDTO) {
+    public void saveBroadcastProduct(BroadcastProductDTO broadcastProductDTO) {
         int result = liveRegisterMapper.insertBroadcastProduct(broadcastProductDTO);
         if (result != 1) {
             throw new RuntimeException("broadcastProduct insert failed");
@@ -42,7 +42,7 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
 
     @Override
     @Transactional
-    public void registerNotice(NoticeDTO noticeDTO) {
+    public void saveNotice(NoticeDTO noticeDTO) {
         int result = liveRegisterMapper.insertNotice(noticeDTO);
         if (result != 1) {
             throw new RuntimeException("notice insert failed");
@@ -51,7 +51,7 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
 
     @Override
     @Transactional
-    public void registerFaq(FaqDTO faqDTO) {
+    public void saveFaq(FaqDTO faqDTO) {
         int result = liveRegisterMapper.insertFaq(faqDTO);
         if (result != 1) {
             throw new RuntimeException("faq insert failed");
@@ -60,7 +60,7 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
 
     @Override
     @Transactional
-    public void registerBenefit(BenefitDTO benefitDTO) {
+    public void saveBenefit(BenefitDTO benefitDTO) {
         int result = liveRegisterMapper.insertBenefit(benefitDTO);
         if (result != 1) {
             throw new RuntimeException("benefit insert failed");
