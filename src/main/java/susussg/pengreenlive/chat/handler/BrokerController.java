@@ -33,17 +33,27 @@ public class BrokerController {
     public void sendMessage(@DestinationVariable(value = "roomId") String roomId,
         MessageDto message, SimpMessageHeaderAccessor accessor) {
         // 세션에 하드코딩된 값 추가
-        accessor.getSessionAttributes().put("userUUID", "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6");
+        // 테스트 시 주석처리 되지 않은 역할로 채팅 진입
+        accessor.getSessionAttributes().put("userUUID", "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6"); // userUUID 추가
+//        accessor.getSessionAttributes().put("vendorSeq", 1); // vendorSeq 추가
 
         String userUUID = (String) accessor.getSessionAttributes().get("userUUID");
         String userNm = (String) accessor.getSessionAttributes().get("userNm");
+        Integer vendorSeq = (Integer) accessor.getSessionAttributes().get("vendorSeq");
 
         if (userNm == null) {
             userNm = userService.getUserNmByUUID(userUUID);
             accessor.getSessionAttributes().put("userNm", userNm);
         }
 
-        message.setWriter(userNm);
+        if (vendorSeq != null) {
+            String channelNm = userService.getChannelNmByVendorSeq(vendorSeq);
+            accessor.getSessionAttributes().put("channelNm", channelNm);
+            message.setWriter(channelNm);
+        } else {
+            message.setWriter(userNm);
+        }
+
         log.info("# roomId = {}", roomId);
         log.info("# message = {}", message);
 
@@ -59,6 +69,7 @@ public class BrokerController {
 
         template.convertAndSend("/sub/room/" + roomId, message);
     }
+
 
     @MessageMapping("/room/{roomId}/entered")
     public void entered(@DestinationVariable(value = "roomId") String roomId, MessageDto message) {
