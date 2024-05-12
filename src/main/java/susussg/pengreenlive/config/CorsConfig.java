@@ -14,10 +14,10 @@ public class CorsConfig {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")  // 모든 URL 패턴
-            .allowedOrigins("http://localhost:5173")  // Vue.js 서버의 URL과 포트
+            .allowedOriginPatterns("*")  // Vue.js 서버의 URL과 포트
             .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")  // 모든 HTTP 메소드 허용
             .allowedHeaders("*")  // 모든 헤더 허용
-            .allowCredentials(true)  // 쿠키 및 인증 정보 포함 허용
+            .allowCredentials(false)  // 쿠키 및 인증 정보 포함 허용
             .maxAge(3600);  // 3600초 동안 pre-flight(사전 전송 검사) 결과 캐시
       }
     };
