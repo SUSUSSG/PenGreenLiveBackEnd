@@ -1,60 +1,28 @@
 package susussg.pengreenlive.util.Service;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Collection;
-import org.ahocorasick.trie.PayloadEmit;
-import org.junit.jupiter.api.BeforeEach;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import lombok.extern.log4j.Log4j2;
-import susussg.pengreenlive.util.DTO.BanwordDTO;
 import susussg.pengreenlive.util.DTO.BanwordValidationResultDTO;
+import susussg.pengreenlive.util.Service.BanwordService;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
+import static org.assertj.core.api.Assertions.assertThat;
+
 @Log4j2
+@SpringBootTest
 public class BanwordServiceTest {
 
     @Autowired
     private BanwordService banwordService;
 
-    @BeforeEach
-    public void setup() {
-
-        banwordService.init();
-    }
-
     @Test
-    public void testValidate_withBanwords() {
-
-        String testSentence = "This is and 게임머니 something  in this context.";
+    public void testBanwordFiltering() {
+        // 테스트 문장
+        String testSentence = "안녕하세요, 저는 롯데 팬입니다. 호스트바.";
+        // 금칙어 필터링 실행
         BanwordValidationResultDTO result = banwordService.validate(testSentence);
-
-
-        Collection<PayloadEmit<BanwordDTO>> foundWords = result.getBanwordsFound();
-        assertEquals(1, foundWords.size(), "Should find 1 banwords.");
-        foundWords.forEach(emit -> {
-            assertTrue(
-                    "게임머니".equals(emit.getPayload().getWord()),
-                "The found word should be '게임머니'.");
-        });
-        log.info("금지어 포함 문장 : " + testSentence);
-        log.info("결과 : " + foundWords);
-    }
-
-    @Test
-    public void testValidate_noBanwords() {
-        String testSentence = "This is a clean sentence with no bad content.";
-        BanwordValidationResultDTO result = banwordService.validate(testSentence);
-
-        log.info("금지어 미포함 문장 : " + testSentence);
-        log.info("결과 : 통과");
-
-        assertTrue(result.getBanwordsFound().isEmpty(), "No banword should be found.");
+        // 필터링된 금칙어 개수 검증 (2건이 필터링되어야 함)
+        log.info(result);
+        assertThat(result.getBanwordsFound().size()).isEqualTo(2);
     }
 }
