@@ -22,6 +22,7 @@ public class BanwordService {
     private PayloadTrie<BanwordDTO> banwordTrie;
     private List<ForbiddenWordDTO> defaultForbiddenWords;
 
+    private static int currentBroadcastSeq = 6;
     @PostConstruct
     public void init() {
         loadDefaultForbiddenWords();
@@ -29,7 +30,7 @@ public class BanwordService {
     }
     private void buildBanwordTrie() {
         List<ForbiddenWordDTO> allForbiddenWords = new ArrayList<>(defaultForbiddenWords);
-        List<ForbiddenWordDTO> individualForbiddenWords = forbiddenWordService.getIndividualForbiddenWordList(6); // 예시로 6번 방송.
+        List<ForbiddenWordDTO> individualForbiddenWords = forbiddenWordService.getIndividualForbiddenWordList(currentBroadcastSeq); // 예시로 6번 방송.
         allForbiddenWords.addAll(individualForbiddenWords);
 
         PayloadTrie.PayloadTrieBuilder<BanwordDTO> trieBuilder = PayloadTrie.<BanwordDTO>builder();
