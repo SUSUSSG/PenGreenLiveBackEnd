@@ -1,13 +1,20 @@
 package susussg.pengreenlive.chat.handler;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import susussg.pengreenlive.chat.dto.MessageDto;
 import susussg.pengreenlive.user.Service.UserService;
 import susussg.pengreenlive.user.Service.UserServiceImpl;
@@ -29,19 +36,51 @@ public class BrokerController {
         log.info("### test method {}", accessor);
     }
 
+    // 사용 중인 숫자를 관리하는 Set
+    private final Set<Integer> usedNumbers = new HashSet<>();
+
     @MessageMapping("/room/{roomId}")
     public void sendMessage(@DestinationVariable(value = "roomId") String roomId,
         MessageDto message, SimpMessageHeaderAccessor accessor) {
+
         // 세션에 하드코딩된 값 추가
         // 테스트 시 주석처리 되지 않은 역할로 채팅 진입
-        accessor.getSessionAttributes().put("userUUID", "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6"); // userUUID 추가
+//        accessor.getSessionAttributes().put("userUUID", "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6"); // userUUID 추가
 //        accessor.getSessionAttributes().put("vendorSeq", 1); // vendorSeq 추가
 
         String userUUID = (String) accessor.getSessionAttributes().get("userUUID");
         String userNm = (String) accessor.getSessionAttributes().get("userNm");
         Integer vendorSeq = (Integer) accessor.getSessionAttributes().get("vendorSeq");
 
-        if (userNm == null) {
+        if (userUUID == null && vendorSeq == null) {
+            if (userNm == null) {
+                // 사전에 설정한 닉네임 리스트
+                List<String> nicknameList = Arrays.asList("행복한펭귄", "심심한펭귄", "슬픈펭귄", "기쁜펭귄",
+                    "노래하는펭귄", "배부른펭귄", "물고기먹는펭귄", "슈슈슉펭귄", "잠자는펭귄", "헤엄치는펭귄", "황제펭귄", "날개짓하는펭귄",
+                    "뛰어다니는펭귄", "눈사람만드는펭귄", "물고기잡는펭귄", "빙하위를걷는펭귄", "무지개색펭귄", "눈싸움하는펭귄", "코딩하는펭귄",
+                    "졸린펭귄", "잠오는펭귄", "산책하는펭귄", "코노가는펭귄", "한강펭귄", "게으른펭귄", "물고기사냥하는펭귄", "햇살쨍쨍펭귄",
+                    "하늘나는펭귄", "놀고있는펭귄", "나펭귄아니다", "커피마시는펭귄");
+
+                // 랜덤으로 닉네임 선택
+                Random random = new Random();
+                int randomIndex = random.nextInt(nicknameList.size());
+                String randomNickname = nicknameList.get(randomIndex);
+
+                // 사용 중이지 않은 숫자 생성
+                int randomNumber;
+                do {
+                    randomNumber = random.nextInt(1000);
+                } while (usedNumbers.contains(randomNumber));
+
+                // 사용한 숫자 Set에 추가
+                usedNumbers.add(randomNumber);
+
+                // 닉네임과 숫자 조합하여 유저 이름 생성
+                userNm = randomNickname + "_" + String.format("%03d", randomNumber);
+
+                accessor.getSessionAttributes().put("userNm", userNm);
+            }
+        } else if (userNm == null) {
             userNm = userService.getUserNmByUUID(userUUID);
             accessor.getSessionAttributes().put("userNm", userNm);
         }
@@ -93,5 +132,18 @@ public class BrokerController {
         log.info("# notice = {}", message);
         template.convertAndSend("/sub/room/" + roomId + "/notice", message);  // 모든 구독자에게 공지사항 전송
     }
+
+    //세션 종료 시 usedNumbers에서 제거
+//    @EventListener
+//    public void handleSessionDisconnect(SessionDisconnectEvent event) {
+//        String userNm = (String) event.getSession().getAttributes().get("userNm");
+//        if (userNm != null) {
+//            String[] parts = userNm.split("_");
+//            if (parts.length == 2) {
+//                int number = Integer.parseInt(parts[1]);
+//                usedNumbers.remove(number);
+//            }
+//        }
+//    }
 
 }
