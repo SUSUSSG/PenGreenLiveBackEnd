@@ -19,5 +19,21 @@
         LEFT JOIN TB_PRODUCT_STOCK s ON p.PRODUCT_SEQ = s.PRODUCT_SEQ
   </select>
 
+  <insert id="insertProduct" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
+    INSERT INTO TB_PRODUCT (PRODUCT_SEQ, PRODUCT_CD, GREEN_PRODUCT_ID, PRODUCT_NM, LIST_PRICE, BRAND, PRODUCT_IMAGE, CATEGORY_CD)
+    VALUES (#{productSeq},#{productCd}, #{greenProductId}, #{productNm}, #{listPrice}, #{brand}, #{productImage}, #{categoryCd});
+  </insert>
+
+  <insert id="insertProductStock" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
+    INSERT INTO TB_PRODUCT_STOCK (PRODUCT_SEQ, PRODUCT_STOCK)
+    VALUES (#{productSeq}, #{productStock});
+  </insert>
+
+<!--  <select id="selectAllProductCodes" resultType="susussg.pengreenlive.dashboard.DTO.ProductDTO">-->
+<!--    SELECT productCd, productName-->
+<!--    FROM TB_PRODUCT-->
+<!--    ORDER BY productCd-->
+<!--  </select>-->
+
 
 </mapper>
