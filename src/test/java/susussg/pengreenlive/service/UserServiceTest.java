@@ -27,7 +27,7 @@ public class UserServiceTest {
     public void testGetChannelNmByVendorSeq() {
         int vendorSeq = 1;
 
-        String channelNm = userService.getChannelNmByVendorSeq(1);
+        String channelNm = userService.getChannelNmByVendorSeq(vendorSeq);
         log.info(channelNm);
     }
 }
