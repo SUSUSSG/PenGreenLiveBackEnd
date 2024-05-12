@@ -23,4 +23,11 @@ public class UserServiceTest {
         String userNm = userService.getUserNmByUUID(testUUID);
         log.info(userNm);
     }
+    @Test
+    public void testGetChannelNmByVendorSeq() {
+        int vendorSeq = 1;
+
+        String channelNm = userService.getChannelNmByVendorSeq(1);
+        log.info(channelNm);
+    }
 }
