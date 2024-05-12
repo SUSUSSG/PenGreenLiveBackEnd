@@ -13,9 +13,13 @@ public class ForbiddenWordServiceImpl implements ForbiddenWordService {
     @Autowired
     ForbiddenWordMapper forbiddenWordMapper;
 
-
     @Override
     public List<ForbiddenWordDTO> getDefaultForbiddenWordList() {
         return forbiddenWordMapper.selectDefaultForbiddenWordList();
+    }
+
+    @Override
+    public List<ForbiddenWordDTO> getIndividualForbiddenWordList(int broadcastSeq) {
+        return forbiddenWordMapper.selectIndividualForbiddenWordList(broadcastSeq);
     }
 }

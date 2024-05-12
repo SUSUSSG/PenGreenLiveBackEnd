@@ -8,4 +8,6 @@ import susussg.pengreenlive.util.DTO.ForbiddenWordDTO;
 public interface ForbiddenWordMapper {
 
     List<ForbiddenWordDTO> selectDefaultForbiddenWordList();
+
+    List<ForbiddenWordDTO> selectIndividualForbiddenWordList(int broadcastSeq);
 }
