@@ -1,14 +1,23 @@
 package susussg.pengreenlive.chat.handler;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import susussg.pengreenlive.chat.dto.MessageDto;
+import susussg.pengreenlive.user.Service.UserService;
+import susussg.pengreenlive.user.Service.UserServiceImpl;
 import susussg.pengreenlive.util.DTO.BanwordValidationResultDTO;
 import susussg.pengreenlive.util.Service.BanwordService;
 
@@ -18,16 +27,72 @@ import susussg.pengreenlive.util.Service.BanwordService;
 public class BrokerController {
 
     private final SimpMessagingTemplate template;
+    private final UserService userService;
+    private final BanwordService banwordService;
 
-    @Autowired
-    private BanwordService banwordService;
+
     @MessageMapping("/test")
     public void test(SimpMessageHeaderAccessor accessor) {
         log.info("### test method {}", accessor);
     }
 
+    // 사용 중인 숫자를 관리하는 Set
+    private final Set<Integer> usedNumbers = new HashSet<>();
+
     @MessageMapping("/room/{roomId}")
-    public void sendMessage(@DestinationVariable(value = "roomId") String roomId, MessageDto message) {
+    public void sendMessage(@DestinationVariable(value = "roomId") String roomId,
+        MessageDto message, SimpMessageHeaderAccessor accessor) {
+
+        // 세션에 하드코딩된 값 추가
+        // 테스트 시 주석처리 되지 않은 역할로 채팅 진입
+//        accessor.getSessionAttributes().put("userUUID", "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6"); // userUUID 추가
+//        accessor.getSessionAttributes().put("vendorSeq", 1); // vendorSeq 추가
+
+        String userUUID = (String) accessor.getSessionAttributes().get("userUUID");
+        String userNm = (String) accessor.getSessionAttributes().get("userNm");
+        Integer vendorSeq = (Integer) accessor.getSessionAttributes().get("vendorSeq");
+
+        if (userUUID == null && vendorSeq == null) {
+            if (userNm == null) {
+                // 사전에 설정한 닉네임 리스트
+                List<String> nicknameList = Arrays.asList("행복한펭귄", "심심한펭귄", "슬픈펭귄", "기쁜펭귄",
+                    "노래하는펭귄", "배부른펭귄", "물고기먹는펭귄", "슈슈슉펭귄", "잠자는펭귄", "헤엄치는펭귄", "황제펭귄", "날개짓하는펭귄",
+                    "뛰어다니는펭귄", "눈사람만드는펭귄", "물고기잡는펭귄", "빙하위를걷는펭귄", "무지개색펭귄", "눈싸움하는펭귄", "코딩하는펭귄",
+                    "졸린펭귄", "잠오는펭귄", "산책하는펭귄", "코노가는펭귄", "한강펭귄", "게으른펭귄", "물고기사냥하는펭귄", "햇살쨍쨍펭귄",
+                    "하늘나는펭귄", "놀고있는펭귄", "나펭귄아니다", "갯벌사는펭귄", "커피마시는펭귄");
+
+                // 랜덤으로 닉네임 선택
+                Random random = new Random();
+                int randomIndex = random.nextInt(nicknameList.size());
+                String randomNickname = nicknameList.get(randomIndex);
+
+                // 사용 중이지 않은 숫자 생성
+                int randomNumber;
+                do {
+                    randomNumber = random.nextInt(1000);
+                } while (usedNumbers.contains(randomNumber));
+
+                // 사용한 숫자 Set에 추가
+                usedNumbers.add(randomNumber);
+
+                // 닉네임과 숫자 조합하여 유저 이름 생성
+                userNm = randomNickname + "_" + String.format("%03d", randomNumber);
+
+                accessor.getSessionAttributes().put("userNm", userNm);
+            }
+        } else if (userNm == null) {
+            userNm = userService.getUserNmByUUID(userUUID);
+            accessor.getSessionAttributes().put("userNm", userNm);
+        }
+
+        if (vendorSeq != null) {
+            String channelNm = userService.getChannelNmByVendorSeq(vendorSeq);
+            accessor.getSessionAttributes().put("channelNm", channelNm);
+            message.setWriter(channelNm);
+        } else {
+            message.setWriter(userNm);
+        }
+
         log.info("# roomId = {}", roomId);
         log.info("# message = {}", message);
 
@@ -36,7 +101,8 @@ public class BrokerController {
 
         // Banword가 발견되면 메시지 대체
         if (!validationResult.getBanwordsFound().isEmpty()) {
-            String filteredMessage = message.getMessage().replaceAll(validationResult.getOriginalText(), "비속어가 포함된 채팅입니다.");
+            String filteredMessage = message.getMessage()
+                .replaceAll(validationResult.getOriginalText(), "비속어가 포함된 채팅입니다.");
             message.setMessage(filteredMessage);
         }
 
@@ -45,7 +111,7 @@ public class BrokerController {
 
 
     @MessageMapping("/room/{roomId}/entered")
-    public void entered(@DestinationVariable(value = "roomId") String roomId, MessageDto message){
+    public void entered(@DestinationVariable(value = "roomId") String roomId, MessageDto message) {
         log.info("# roomId = {}", roomId);
         log.info("# message = {}", message);
         message.setMessage(message.getWriter() + "님이 입장하셨습니다.");
@@ -58,11 +124,26 @@ public class BrokerController {
         messageDto.setMessage(messageDto.getWriter() + "님이 방을 떠났습니다.");
         template.convertAndSend("/sub/room/" + roomId, messageDto);  // MessageDto 객체 전체를 전송
     }
+
     // BrokerController.java에 메시지 타입으로 NOTICE를 처리하는 메소드 추가
     @MessageMapping("/room/{roomId}/notice")
-    public void broadcastNotice(@DestinationVariable(value = "roomId") String roomId, MessageDto message) {
+    public void broadcastNotice(@DestinationVariable(value = "roomId") String roomId,
+        MessageDto message) {
         log.info("# notice = {}", message);
         template.convertAndSend("/sub/room/" + roomId + "/notice", message);  // 모든 구독자에게 공지사항 전송
     }
+
+    //세션 종료 시 usedNumbers에서 제거
+//    @EventListener
+//    public void handleSessionDisconnect(SessionDisconnectEvent event) {
+//        String userNm = (String) event.getSession().getAttributes().get("userNm");
+//        if (userNm != null) {
+//            String[] parts = userNm.split("_");
+//            if (parts.length == 2) {
+//                int number = Integer.parseInt(parts[1]);
+//                usedNumbers.remove(number);
+//            }
+//        }
+//    }
 
 }
