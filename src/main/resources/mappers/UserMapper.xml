@@ -7,4 +7,8 @@
     SELECT USER_NM FROM susussg.TB_USER WHERE USER_UUID like #{uuid}
   </select>
 
+  <select id="selectChannelNmByVendorSeq" parameterType="int" resultType="String">
+    SELECT CHANNEL_NM FROM susussg.TB_CHANNEL WHERE VENDOR_SEQ like #{vendorSeq}
+  </select>
+
 </mapper>

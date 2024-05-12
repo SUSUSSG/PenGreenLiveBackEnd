@@ -7,4 +7,6 @@ public interface UserMapper {
 
     String selectUserNmByUUID(String uuid);
 
+    String selectChannelNmByVendorSeq(int vendorSeq);
+
 }
