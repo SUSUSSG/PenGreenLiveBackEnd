@@ -22,7 +22,12 @@ public class ForbiddenWordTest {
     @Test
     public void getDefaultForbiddenWordListTest() {
         List<ForbiddenWordDTO> forbiddenWordList = forbiddenWordService.getDefaultForbiddenWordList();
-        log.info(forbiddenWordList);
+        log.info("Default forbiddenword list : " + forbiddenWordList);
     }
-
+    @Test
+    public void getIndividualForbiddenWordListTest() {
+        int broadcastSeq = 6;
+        List<ForbiddenWordDTO> forbiddenWordList = forbiddenWordService.getIndividualForbiddenWordList(broadcastSeq);
+        log.info("Individual forbiddenword list : " + forbiddenWordList);
+    }
 }
