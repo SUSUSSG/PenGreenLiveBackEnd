@@ -25,7 +25,7 @@ public void afterConnectionEstablished(WebSocketSession session) throws Exceptio
     final String enteredMessage = String.format("{\"message\":\"%s님이 입장하셨습니다.\", \"writer\":\"System\"}", sessionId);
 
     sessions.put(sessionId, session);
-    sendMessage(sessionId, new TextMessage(enteredMessage));
+//    sendMessage(sessionId, new TextMessage(enteredMessage));
 }
 
 
