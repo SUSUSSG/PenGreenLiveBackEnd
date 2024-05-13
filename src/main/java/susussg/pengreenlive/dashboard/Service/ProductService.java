@@ -11,4 +11,6 @@ public interface ProductService {
 
   List<ProductDTO> getAllCategoryCodes();
 
+  List<ProductDTO> findProductsByVendor(Long venderSeq);
+
 }

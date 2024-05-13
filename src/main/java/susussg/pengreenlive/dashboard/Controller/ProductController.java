@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,13 @@ public class ProductController {
     return ResponseEntity.ok(products);
   }
 
-  @PostMapping("/register")
+  @GetMapping("/product-list/{vendorSeq}")
+  public ResponseEntity<List<ProductDTO>> getProductsByVendor(@PathVariable Long vendorSeq) {
+    List<ProductDTO> products = productService.findProductsByVendor(vendorSeq);
+    return ResponseEntity.ok(products);
+  }
+
+  @PostMapping("/products")
   public ResponseEntity<String> registerProduct(@RequestBody ProductDTO productDTO) {
     try {
       if (productService.registerProduct(productDTO)) {
@@ -42,10 +49,5 @@ public class ProductController {
     }
   }
 
-  @GetMapping("/codes")
-  public ResponseEntity<List<ProductDTO>> getCategoryCodes() {
-    List<ProductDTO> productCategoryCodes = productService.getAllCategoryCodes();
-    return ResponseEntity.ok(productCategoryCodes);
-  }
 
 }
