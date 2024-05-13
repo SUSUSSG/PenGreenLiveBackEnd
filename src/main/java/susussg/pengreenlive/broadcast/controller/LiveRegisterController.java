@@ -35,9 +35,9 @@ public class LiveRegisterController {
 
     // 방송 등록
     @PostMapping("/live-register")
-    public ResponseEntity<String> registerBroadcast(
+    public ResponseEntity<?> registerBroadcast(
             @RequestParam(value = "image", required = false) MultipartFile broadcastImage,
-            @RequestBody BroadcastRegistrationRequest request) {
+            @RequestBody BroadcastRegistrationRequestDTO request) {
         String channelName = liveRegisterService.getChannelName(vendorId); // 판매자 정보
 
         BroadcastDTO broadcastDTO = BroadcastDTO.builder()
@@ -59,36 +59,45 @@ public class LiveRegisterController {
 
         liveRegisterService.saveBroadcast(broadcastDTO);
 
-        BroadcastProductDTO broadcastProductDTO = BroadcastProductDTO.builder()
-                .broadcastSeq(broadcastDTO.getBroadcastSeq())
-                .productSeq(request.getProductSeq())
-                .discountRate(request.getDiscountRate())
-                .discountPrice(request.getDiscountPrice())
-                .build();
+        request.getRegisteredProducts().forEach(productInfo -> {
+            BroadcastProductDTO productDTO = BroadcastProductDTO.builder()
+                    .broadcastSeq(broadcastDTO.getBroadcastSeq())
+                    .productSeq(productInfo.getProductSeq())
+                    .discountRate(productInfo.getDiscountRate())
+                    .discountPrice(productInfo.getDiscountPrice())
+                    .build();
+            liveRegisterService.saveBroadcastProduct(productDTO);
+            log.info("BroadcastProductDTO: " + productDTO.toString());
+        });
 
-        NoticeDTO noticeDTO = NoticeDTO.builder()
-                .broadcastSeq(broadcastDTO.getBroadcastSeq())
-                .noticeContent(request.getNoticeContent())
-                .build();
+        request.getNotices().forEach(notice -> {
+            NoticeDTO noticeDTO = NoticeDTO.builder()
+                    .broadcastSeq(broadcastDTO.getBroadcastSeq())
+                    .noticeContent(notice)
+                    .build();
+            liveRegisterService.saveNotice(noticeDTO);
+        });
 
-        BenefitDTO benefitDTO = BenefitDTO.builder()
-                .broadcastSeq(broadcastDTO.getBroadcastSeq())
-                .benefitContent(request.getBenefitContent())
-                .build();
+        request.getBenefits().forEach(benefit -> {
+            BenefitDTO benefitDTO = BenefitDTO.builder()
+                    .broadcastSeq(broadcastDTO.getBroadcastSeq())
+                    .benefitContent(benefit)
+                    .build();
+            liveRegisterService.saveBenefit(benefitDTO);
+        });
 
-        FaqDTO faqDTO = FaqDTO.builder()
-                .broadcastSeq(broadcastDTO.getBroadcastSeq())
-                .questionTitle(request.getQuestionTitle())
-                .questionAnswer(request.getQuestionAnswer())
-                .build();
+        request.getQa().forEach(qaInfo -> {
+            FaqDTO faqDTO = FaqDTO.builder()
+                    .broadcastSeq(broadcastDTO.getBroadcastSeq())
+                    .questionTitle(qaInfo.getQuestionTitle())
+                    .questionAnswer(qaInfo.getQuestionAnswer())
+                    .build();
+            liveRegisterService.saveFaq(faqDTO);
+        });
 
-        liveRegisterService.saveBroadcastProduct(broadcastProductDTO);
-        liveRegisterService.saveNotice(noticeDTO);
-        liveRegisterService.saveBenefit(benefitDTO);
-        liveRegisterService.saveFaq(faqDTO);
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.ok().body("방송 정보가 성공적으로 등록되었습니다.");
     }
+
 
     //채널별 상품 목록
     @GetMapping("/channel-sales-product")
