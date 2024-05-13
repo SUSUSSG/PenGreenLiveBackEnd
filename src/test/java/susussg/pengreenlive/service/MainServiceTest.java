@@ -15,6 +15,7 @@ import susussg.pengreenlive.util.Service.ForbiddenWordService;
 @SpringBootTest
 @Log4j2
 public class MainServiceTest {
+
     @Autowired
     MainService mainService;
 
@@ -23,5 +24,17 @@ public class MainServiceTest {
     public void getMainCarouselsTest() {
 
         log.info("getMainCarousel list : " + mainService.getMainCarousels());
+    }
+
+    @Test
+    public void getScheduledBroadcasts() {
+        String catregoryCd = "BCT-CTG-001";
+        log.info("getMainCarousel list : " + mainService.getScheduledBroadcasts(catregoryCd));
+    }
+
+    @Test
+    public void getLiveChanceCarousels() {
+        String catregoryCd = "BCT-CTG-001";
+        log.info("getMainCarousel list : " + mainService.getLiveChanceCarousels(catregoryCd));
     }
 }
