@@ -19,6 +19,25 @@
         LEFT JOIN TB_PRODUCT_STOCK s ON p.PRODUCT_SEQ = s.PRODUCT_SEQ
   </select>
 
+  <select id="findProductsByVendor" resultType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
+    SELECT
+      p.PRODUCT_SEQ,
+      p.PRODUCT_CD,
+      p.GREEN_PRODUCT_ID,
+      p.PRODUCT_NM,
+      p.LIST_PRICE,
+      p.BRAND,
+      p.PRODUCT_IMAGE,
+      p.CATEGORY_CD,
+      s.PRODUCT_STOCK
+    FROM
+      TB_PRODUCT p
+        LEFT JOIN TB_PRODUCT_STOCK s ON p.PRODUCT_SEQ = s.PRODUCT_SEQ
+        INNER JOIN TB_CHANNEL_SALES_PRODUCT csp ON p.PRODUCT_SEQ = csp.PRODUCT_SEQ
+    WHERE
+      csp.VENDOR_SEQ = #{venderSeq}
+  </select>
+
   <insert id="insertProduct" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
     INSERT INTO TB_PRODUCT (PRODUCT_SEQ, PRODUCT_CD, GREEN_PRODUCT_ID, PRODUCT_NM, LIST_PRICE, BRAND, PRODUCT_IMAGE, CATEGORY_CD)
     VALUES (#{productSeq},#{productCd}, #{greenProductId}, #{productNm}, #{listPrice}, #{brand}, #{productImage}, #{categoryCd});

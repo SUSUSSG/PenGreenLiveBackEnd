@@ -41,5 +41,10 @@ public class ProductServiceImpl implements ProductService{
     return productMapper.selectAllCategoryCodes();
   }
 
+  @Override
+  public List<ProductDTO> findProductsByVendor(Long venderSeq) {
+    return productMapper.findProductsByVendor(venderSeq);
+  }
+
 
 }
