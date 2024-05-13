@@ -9,4 +9,11 @@ public interface ProductMapper {
 
   List<ProductDTO> findAllProducts();
 
+  List<ProductDTO> findProductsByVendor(Long venderSeq);
+
+  void insertProduct(ProductDTO product);
+
+  void insertProductStock(Long productSeq, int productStock);
+
+  List<ProductDTO> selectAllCategoryCodes();
 }
