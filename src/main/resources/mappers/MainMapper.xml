@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="susussg.pengreenlive.main.Mapper.MainMapper">
+
+<!--  <select id="selectMainCarousel" resultType="susussg.pengreenlive.main.DTO.MainCarouselDTO">-->
+<!--    SELECT-->
+<!--      BROADCAST_TITLE, BROADCAST_IMAGE, BROADCAST_SUMMARY-->
+<!--    FROM-->
+<!--      susussg.TB_BROADCAST-->
+<!--    WHERE-->
+<!--      BROADCAST_SCHEDULED_TIME > NOW();-->
+<!--  </select>-->
+
+  <resultMap id="mainCarouselMap" type="susussg.pengreenlive.main.DTO.MainCarouselDTO">
+    <id property="broadcastSeq" column="BROADCAST_SEQ"/>
+    <result property="broadcastTitle" column="BROADCAST_TITLE"/>
+    <result property="broadcastImage" column="BROADCAST_IMAGE"/>
+    <result property="broadcastSummary" column="BROADCAST_SUMMARY"/>
+    <collection property="products" ofType="susussg.pengreenlive.main.DTO.MainCarouselProductDTO">
+      <result property="productImage" column="PRODUCT_IMAGE"/>
+      <result property="productNm" column="PRODUCT_NM"/>
+      <result property="discountPrice" column="DISCOUNT_PRICE"/>
+    </collection>
+  </resultMap>
+
+  <select id="selectMainCarousels" resultMap="mainCarouselMap">
+    SELECT
+      b.BROADCAST_SEQ,
+      b.BROADCAST_TITLE,
+      b.BROADCAST_IMAGE,
+      b.BROADCAST_SUMMARY,
+      p.PRODUCT_IMAGE,
+      p.PRODUCT_NM,
+      bp.DISCOUNT_PRICE
+    FROM
+      TB_BROADCAST b
+        LEFT JOIN
+      TB_BROADCAST_PRODUCT bp ON b.BROADCAST_SEQ = bp.BROADCAST_SEQ
+        LEFT JOIN
+      TB_PRODUCT p ON bp.PRODUCT_SEQ = p.PRODUCT_SEQ
+  </select>
+</mapper>
