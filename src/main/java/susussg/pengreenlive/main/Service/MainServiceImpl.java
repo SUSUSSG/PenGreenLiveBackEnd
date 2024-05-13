@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import susussg.pengreenlive.main.DTO.LiveChanceCarouselDTO;
 import susussg.pengreenlive.main.DTO.MainCarouselDTO;
 import susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO;
 import susussg.pengreenlive.main.Mapper.MainMapper;
@@ -22,5 +23,10 @@ public class MainServiceImpl implements MainService {
     @Override
     public List<ScheduledBroadcastDTO> getScheduledBroadcasts(String categoryCd) {
         return mainMapper.selectScheduledBroadcasts(categoryCd);
+    }
+
+    @Override
+    public List<LiveChanceCarouselDTO> getLiveChanceCarousels(String categoryCd) {
+        return mainMapper.selectLiveChanceCarousels(categoryCd);
     }
 }
