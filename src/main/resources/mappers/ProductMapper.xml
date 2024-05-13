@@ -29,11 +29,10 @@
     VALUES (#{productSeq}, #{productStock});
   </insert>
 
-<!--  <select id="selectAllProductCodes" resultType="susussg.pengreenlive.dashboard.DTO.ProductDTO">-->
-<!--    SELECT productCd, productName-->
-<!--    FROM TB_PRODUCT-->
-<!--    ORDER BY productCd-->
-<!--  </select>-->
+  <select id="selectAllCategoryCodes" resultType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
+    SELECT CATEGORY_CD
+    FROM TB_PRODUCT_CATEGORY
+  </select>
 
 
 </mapper>

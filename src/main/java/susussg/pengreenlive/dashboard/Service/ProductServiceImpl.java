@@ -37,8 +37,8 @@ public class ProductServiceImpl implements ProductService{
   }
 
   @Override
-  public List<ProductDTO> getAllProductCodes() {
-    return productMapper.selectAllProductCodes();
+  public List<ProductDTO> getAllCategoryCodes() {
+    return productMapper.selectAllCategoryCodes();
   }
 
 

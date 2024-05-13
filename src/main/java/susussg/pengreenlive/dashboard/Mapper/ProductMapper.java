@@ -13,5 +13,5 @@ public interface ProductMapper {
 
   void insertProductStock(Long productSeq, int productStock);
 
-  List<ProductDTO> selectAllProductCodes();
+  List<ProductDTO> selectAllCategoryCodes();
 }

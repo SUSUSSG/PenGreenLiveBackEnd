@@ -9,6 +9,6 @@ public interface ProductService {
 
   boolean registerProduct(ProductDTO productDTO);
 
-  List<ProductDTO> getAllProductCodes();
+  List<ProductDTO> getAllCategoryCodes();
 
 }
