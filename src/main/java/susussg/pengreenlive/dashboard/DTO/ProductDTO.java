@@ -13,12 +13,12 @@ public class ProductDTO {
 
   private Long productSeq;
   private String productCd;
-  private String greenProductCd;
+  private String greenProductId;
   private String productNm;
   private int listPrice;
   private String brand;
-  private String productImage;
+  private byte[] productImage;
   private String categoryCd;
-  private String productStock;
+  private int productStock;
 
 }

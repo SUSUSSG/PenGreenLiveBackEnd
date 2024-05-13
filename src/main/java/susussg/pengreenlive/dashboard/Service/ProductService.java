@@ -7,4 +7,10 @@ public interface ProductService {
 
   List<ProductDTO> findAllProducts();
 
+  boolean registerProduct(ProductDTO productDTO);
+
+  List<ProductDTO> getAllCategoryCodes();
+
+  List<ProductDTO> findProductsByVendor(Long venderSeq);
+
 }
