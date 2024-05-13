@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import susussg.pengreenlive.dashboard.DTO.ProductDTO;
 import susussg.pengreenlive.dashboard.Service.ProductService;
@@ -37,9 +38,9 @@ public class ProductController {
   }
 
   @PostMapping("/products")
-  public ResponseEntity<String> registerProduct(@RequestBody ProductDTO productDTO) {
+  public ResponseEntity<String> registerProduct(@RequestBody ProductDTO productDTO, @RequestParam Long vendorSeq, @RequestParam Long channelSeq) {
     try {
-      if (productService.registerProduct(productDTO)) {
+      if (productService.registerProduct(productDTO, vendorSeq, channelSeq)) {
         return ResponseEntity.ok("Product successfully registered");
       } else {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to register product");

@@ -24,15 +24,15 @@ public class ProductServiceImpl implements ProductService{
 
   @Override
   @Transactional
-  public boolean registerProduct(ProductDTO productDTO) {
+  public boolean registerProduct(ProductDTO productDTO, Long vendorSeq, Long channelSeq) {
     try {
-
       productMapper.insertProduct(productDTO);
       productMapper.insertProductStock(productDTO.getProductSeq(), productDTO.getProductStock());
+      productMapper.insertChannelSalesProduct(productDTO.getProductSeq(), vendorSeq, channelSeq);
       return true;
     } catch (Exception e) {
       e.printStackTrace();
-      throw new RuntimeException("상품 등록 실패", e);
+      throw new RuntimeException("Product registration failed", e);
     }
   }
 

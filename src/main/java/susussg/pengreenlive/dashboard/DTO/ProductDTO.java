@@ -20,5 +20,7 @@ public class ProductDTO {
   private byte[] productImage;
   private String categoryCd;
   private int productStock;
+  private Long venderSeq;
+  private Long channelSeq;
 
 }
