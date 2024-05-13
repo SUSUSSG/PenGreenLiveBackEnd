@@ -1,21 +1,17 @@
-package susussg.pengreenlive.order.domain;
+package susussg.pengreenlive.order.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
-@Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "TB_ORDER")
-public class Order {
-
-    @Id @GeneratedValue
-    @Column(name="order_seq")
-    long id;
-
+@Data
+@Getter
+@Setter
+public class OrderFormDTO {
+    long orderSeq;
     String userUUID;
     long productSeq;
     int orderQty;
