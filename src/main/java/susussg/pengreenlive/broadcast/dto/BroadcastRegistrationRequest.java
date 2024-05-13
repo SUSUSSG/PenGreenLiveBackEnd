@@ -8,7 +8,7 @@ import java.util.Date;
 @Data
 public class BroadcastRegistrationRequest {
     private String broadcastTitle;
-    private MultipartFile broadcastImage;
+//    private MultipartFile broadcastImage;
     private String broadcastSummary;
     private Date broadcastScheduledTime;
     private String categoryCd; // 상품테이블 pk 가져와야 함

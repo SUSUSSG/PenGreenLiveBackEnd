@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import susussg.pengreenlive.broadcast.dto.*;
 import susussg.pengreenlive.broadcast.service.LiveRegisterService;
 
@@ -34,17 +35,27 @@ public class LiveRegisterController {
 
     // 방송 등록
     @PostMapping("/live-register")
-    public ResponseEntity<Void> registerBroadcast(@RequestBody BroadcastRegistrationRequest request) throws IOException {
+    public ResponseEntity<String> registerBroadcast(
+            @RequestParam(value = "image", required = false) MultipartFile broadcastImage,
+            @RequestBody BroadcastRegistrationRequest request) {
         String channelName = liveRegisterService.getChannelName(vendorId); // 판매자 정보
 
         BroadcastDTO broadcastDTO = BroadcastDTO.builder()
                 .channelNm(channelName)
                 .broadcastTitle(request.getBroadcastTitle())
-                .broadcastImage(request.getBroadcastImage().getBytes())
                 .broadcastSummary(request.getBroadcastSummary())
                 .broadcastScheduledTime(request.getBroadcastScheduledTime())
                 .categoryCd(request.getCategoryCd())
                 .build();
+
+        if (broadcastImage != null && !broadcastImage.isEmpty()) {
+            try {
+                byte[] imageBytes = broadcastImage.getBytes();
+                broadcastDTO.setBroadcastImage(imageBytes);
+            } catch (IOException e) {
+                return ResponseEntity.badRequest().body("이미지 파일 처리 중 오류 발생: " + e.getMessage());
+            }
+        }
 
         liveRegisterService.saveBroadcast(broadcastDTO);
 
