@@ -30,19 +30,19 @@ public class LiveRegisterMapperTest {
     @Test
     void insertBroadcast() throws IOException {
 
-        File file = new File("/Users/jinii/Downloads/가전제품-노트북.png");
+        File file = new File("/Users/jinii/Downloads/패션-티셔츠.png");
         byte[] imageData = Files.readAllBytes(file.toPath());
 
         BroadcastDTO broad = BroadcastDTO.builder()
-                .channelNm("test")
-                .broadcastTitle("test")
+                .channelNm("test4")
+                .broadcastTitle("test4")
                 .broadcastImage(imageData)
-                .broadcastSummary("test")
+                .broadcastSummary("test4")
                 .broadcastScheduledTime(new Date(2024, 10, 11))
-                .categoryCd("BCT-CTG-005")
+                .categoryCd("BCT-CTG-003")
                 .build();
         liveRegisterMapper.insertBroadcast(broad);
-        log.info("insert success!!!");
+        log.info("result!!!!!" + broad.getBroadcastSeq());
     }
 
     @Test

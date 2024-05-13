@@ -29,7 +29,7 @@ public class LiveRegisterController {
     // 방송 등록
     @PostMapping("/live-register")
     public ResponseEntity<Void> registerBroadcast(@RequestBody BroadcastRegistrationRequest request) throws IOException {
-        String channelName = liveRegisterService.getChannelName(vendorId);
+        String channelName = liveRegisterService.getChannelName(vendorId); // 판매자 정보
 
         BroadcastDTO broadcastDTO = BroadcastDTO.builder()
                 .channelNm(channelName)
@@ -40,30 +40,31 @@ public class LiveRegisterController {
                 .categoryCd(request.getCategoryCd())
                 .build();
 
+        liveRegisterService.saveBroadcast(broadcastDTO);
+
         BroadcastProductDTO broadcastProductDTO = BroadcastProductDTO.builder()
-                .broadcastSeq(request.getBroadcastSeq())
+                .broadcastSeq(broadcastDTO.getBroadcastSeq())
                 .productSeq(request.getProductSeq())
                 .discountRate(request.getDiscountRate())
                 .discountPrice(request.getDiscountPrice())
                 .build();
 
         NoticeDTO noticeDTO = NoticeDTO.builder()
-                .broadcastSeq(request.getBroadcastSeq())
+                .broadcastSeq(broadcastDTO.getBroadcastSeq())
                 .noticeContent(request.getNoticeContent())
                 .build();
 
         BenefitDTO benefitDTO = BenefitDTO.builder()
-                .broadcastSeq(request.getBroadcastSeq())
+                .broadcastSeq(broadcastDTO.getBroadcastSeq())
                 .benefitContent(request.getBenefitContent())
                 .build();
 
         FaqDTO faqDTO = FaqDTO.builder()
-                .broadcastSeq(request.getBroadcastSeq())
+                .broadcastSeq(broadcastDTO.getBroadcastSeq())
                 .questionTitle(request.getQuestionTitle())
                 .questionAnswer(request.getQuestionAnswer())
                 .build();
 
-        liveRegisterService.saveBroadcast(broadcastDTO);
         liveRegisterService.saveBroadcastProduct(broadcastProductDTO);
         liveRegisterService.saveNotice(noticeDTO);
         liveRegisterService.saveBenefit(benefitDTO);

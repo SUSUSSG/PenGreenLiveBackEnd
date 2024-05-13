@@ -7,7 +7,6 @@ import java.util.Date;
 
 @Data
 public class BroadcastRegistrationRequest {
-    private long broadcastSeq; // 이 부분이 추가된 broadcastSeq
     private String broadcastTitle;
     private MultipartFile broadcastImage;
     private String broadcastSummary;
