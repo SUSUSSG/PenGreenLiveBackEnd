@@ -8,6 +8,7 @@ import java.util.List;
 @Mapper
 public interface LiveRegisterMapper {
     String selectChannelName(long vendorId);
+    List<BroadcastCategoryDTO> selectAllCategory();
     int insertBroadcast(BroadcastDTO broadcastDTO);
     int insertBroadcastProduct(BroadcastProductDTO broadcastProductDTO);
     int insertNotice(NoticeDTO noticeDTO);

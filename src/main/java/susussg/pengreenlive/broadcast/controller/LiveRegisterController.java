@@ -25,6 +25,12 @@ public class LiveRegisterController {
     //판매자 고유번호
     long vendorId = 2;
 
+    // 방송 카테고리 목록 불러오기
+    @GetMapping("/broadcast-category")
+    public ResponseEntity<List<BroadcastCategoryDTO>> showBroadcastCategory() {
+        List<BroadcastCategoryDTO> categoryList = liveRegisterService.getAllCategory();
+        return ResponseEntity.ok().body(categoryList);
+    }
 
     // 방송 등록
     @PostMapping("/live-register")

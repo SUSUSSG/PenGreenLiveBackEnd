@@ -10,7 +10,6 @@ import susussg.pengreenlive.broadcast.mapper.LiveRegisterMapper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.sql.Blob;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +24,12 @@ public class LiveRegisterMapperTest {
     void selectChannelName() {
         String channelNm = liveRegisterMapper.selectChannelName(2);
         log.info(channelNm);
+    }
+
+    @Test
+    void selectAllCategory() {
+        List<BroadcastCategoryDTO> categoryList = liveRegisterMapper.selectAllCategory();
+        categoryList.stream().forEach(c -> log.info(c));
     }
 
     @Test

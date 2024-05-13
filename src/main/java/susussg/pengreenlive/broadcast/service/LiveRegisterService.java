@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface LiveRegisterService {
     String getChannelName(long vendorId);
+    List<BroadcastCategoryDTO> getAllCategory();
     void saveBroadcast(BroadcastDTO broadcastDTO);
     void saveBroadcastProduct(BroadcastProductDTO broadcastProductDTO);
     void saveNotice(NoticeDTO noticeDTO);

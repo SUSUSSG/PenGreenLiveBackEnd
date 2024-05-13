@@ -34,6 +34,17 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
 
     @Override
     @Transactional
+    public List<BroadcastCategoryDTO> getAllCategory() {
+        List<BroadcastCategoryDTO> categoryList = liveRegisterMapper.selectAllCategory();
+        if (categoryList.isEmpty()) {
+            throw new RuntimeException("cateogry  emplty");
+        } else {
+            return categoryList;
+        }
+    }
+
+    @Override
+    @Transactional
     public void saveBroadcast(BroadcastDTO broadcastDTO) {
         int result = liveRegisterMapper.insertBroadcast(broadcastDTO);
         if (result != 1) {
