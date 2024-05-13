@@ -40,7 +40,7 @@ public class ShopInfoController {
     }
   }
 
-  @PutMapping("/shop-modify/{channelSeq}")
+  @PutMapping("/shop/{channelSeq}")
   public ResponseEntity<?> updateShopInfo(@PathVariable Long channelSeq,
       @RequestParam("nickname") String nickname,
       @RequestParam("shoplink") String shoplink,
