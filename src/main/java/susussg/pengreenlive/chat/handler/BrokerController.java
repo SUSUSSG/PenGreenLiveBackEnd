@@ -115,14 +115,14 @@ public class BrokerController {
         log.info("# roomId = {}", roomId);
         log.info("# message = {}", message);
         message.setMessage(message.getWriter() + "님이 입장하셨습니다.");
-        template.convertAndSend("/sub/room/" + roomId, message);  // MessageDto 객체 전체를 전송
+//        template.convertAndSend("/sub/room/" + roomId, message);  // MessageDto 객체 전체를 전송
     }
 
     @MessageMapping("/room/{roomId}/leave")
     public void leave(@DestinationVariable(value = "roomId") String roomId, MessageDto messageDto) {
         log.info("# leave method called");
         messageDto.setMessage(messageDto.getWriter() + "님이 방을 떠났습니다.");
-        template.convertAndSend("/sub/room/" + roomId, messageDto);  // MessageDto 객체 전체를 전송
+//        template.convertAndSend("/sub/room/" + roomId, messageDto);  // MessageDto 객체 전체를 전송
     }
 
     // BrokerController.java에 메시지 타입으로 NOTICE를 처리하는 메소드 추가
