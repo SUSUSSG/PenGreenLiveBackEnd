@@ -37,4 +37,14 @@ public class MainServiceImpl implements MainService {
     public List<LiveChanceCarouselDTO> getLiveChanceCarousels(String categoryCd) {
         return mainMapper.selectLiveChanceCarousels(categoryCd);
     }
+    @Override
+    @Transactional
+    public boolean addNotificationChannel(String userUuid, Long channelSeq) {
+        Integer count = mainMapper.checkNotificationChannelExists(userUuid, channelSeq);
+        if (count == null || count == 0) {
+            mainMapper.insertNotificationChannel(userUuid, channelSeq);
+            return true;
+        }
+        return false;
+    }
 }

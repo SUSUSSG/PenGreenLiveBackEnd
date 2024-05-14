@@ -12,4 +12,6 @@ public interface MainService {
 
     List<ScheduledBroadcastDTO> getScheduledBroadcasts(String categoryCd, LocalDate scheduledDate);
     List<LiveChanceCarouselDTO> getLiveChanceCarousels(String categoryCd);
+    boolean addNotificationChannel(String userUuid, Long channelSeq);
+
 }

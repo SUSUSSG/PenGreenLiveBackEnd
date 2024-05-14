@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import susussg.pengreenlive.main.DTO.LiveChanceCarouselDTO;
@@ -51,5 +52,19 @@ public class MainController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(broadcasts);
+    }
+
+    @PostMapping("/notification-channel")
+    public ResponseEntity<String> addNotificationChannel(
+        @RequestParam("UUID") String userUuid,
+        @RequestParam("channelSeq") Long channelSeq) {
+        log.info("call addNotificationChannel");
+
+        boolean added = mainService.addNotificationChannel(userUuid, channelSeq);
+        if (added) {
+            return ResponseEntity.ok("구독 완료");
+        } else {
+            return ResponseEntity.status(409).body("이미 구독중입니다.");
+        }
     }
 }
