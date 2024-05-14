@@ -71,5 +71,15 @@ public class ProductServiceImpl implements ProductService{
     }
   }
 
+  @Override
+  public void deleteProduct(Long vendorSeq, Long productSeq) {
+    try {
+      productMapper.deleteChannelSalesProduct(vendorSeq, productSeq);
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new RuntimeException("Product deletion from vendor's sales channel failed", e);
+    }
+  }
+
 
 }

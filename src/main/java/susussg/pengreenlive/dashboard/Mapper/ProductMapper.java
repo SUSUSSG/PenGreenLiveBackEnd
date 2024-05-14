@@ -23,4 +23,6 @@ public interface ProductMapper {
   void updateProduct(ProductDTO productDTO);
 
   void updateProductStock(@Param("productSeq") Long productSeq, @Param("productStock") int productStock);
+
+  void deleteChannelSalesProduct(Long vendorSeq, Long productSeq);
 }
