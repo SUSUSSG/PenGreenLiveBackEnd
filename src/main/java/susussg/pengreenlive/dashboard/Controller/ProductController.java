@@ -66,6 +66,7 @@ public class ProductController {
   @PutMapping("/{productSeq}")
   public ResponseEntity<String> updateProduct(@PathVariable Long productSeq, @RequestBody ProductDTO productDTO) {
     try {
+      System.out.println("Updating product with productSeq: " + productSeq);
       productService.updateProduct(productSeq, productDTO);
       return ResponseEntity.ok("Product successfully updated");
     } catch (Exception e) {
