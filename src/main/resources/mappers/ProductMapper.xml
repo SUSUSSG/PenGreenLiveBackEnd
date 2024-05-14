@@ -76,5 +76,10 @@
     WHERE PRODUCT_SEQ = #{productSeq};
   </update>
 
+  <delete id="deleteChannelSalesProduct" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
+    DELETE FROM TB_CHANNEL_SALES_PRODUCT
+    WHERE VENDOR_SEQ = #{vendorSeq} AND PRODUCT_SEQ = #{productSeq};
+  </delete>
+
 
 </mapper>

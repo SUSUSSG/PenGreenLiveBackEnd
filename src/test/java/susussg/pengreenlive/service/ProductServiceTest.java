@@ -108,5 +108,15 @@ public class ProductServiceTest {
     log.info("상점정보 변경 성공" + productDTO );
   }
 
+  @Test
+  public void testDeleteProduct() {
+    // 상품 삭제
+    productService.deleteProduct(1L, 25L);
+
+    // 삭제 확인
+    List<ProductDTO> products = productService.findProductsByVendor(1L);
+
+  }
+
 
 }

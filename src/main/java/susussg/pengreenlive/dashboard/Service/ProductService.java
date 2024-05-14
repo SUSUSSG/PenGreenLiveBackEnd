@@ -15,4 +15,6 @@ public interface ProductService {
 
   void updateProduct(Long productSeq, ProductDTO productDTO);
 
+  void deleteProduct(Long vendorSeq, Long productSeq);
+
 }
