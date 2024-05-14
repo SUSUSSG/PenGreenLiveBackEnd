@@ -32,6 +32,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.modelmapper:modelmapper:3.2.0'
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
 
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

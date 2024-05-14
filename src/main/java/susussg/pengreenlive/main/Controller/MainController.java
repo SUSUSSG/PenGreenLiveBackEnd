@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import susussg.pengreenlive.config.aop.TimeTrace;
 import susussg.pengreenlive.main.DTO.LiveChanceCarouselDTO;
 import susussg.pengreenlive.main.DTO.MainCarouselDTO;
 import susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO;
@@ -30,7 +31,7 @@ public class MainController {
         log.info("call getMainCarousels");
         return mainService.getMainCarousels();
     }
-
+    @TimeTrace
     @GetMapping("/schedule")
     public ResponseEntity<List<ScheduledBroadcastDTO>> getScheduledBroadcasts(
         @RequestParam(value = "categoryCd", required = false) String categoryCd,
