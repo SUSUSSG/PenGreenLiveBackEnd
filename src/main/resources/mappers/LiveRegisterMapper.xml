@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="susussg.pengreenlive.broadcast.mapper.LiveRegisterMapper">
+
+    <select id="selectAllCategory" resultType="susussg.pengreenlive.broadcast.dto.BroadcastCategoryDTO" >
+        SELECT CATEGORY_CD, CATEGORY_NM FROM TB_BROADCAST_CATEGORY
+    </select>
+    <insert id="insertBroadcast" parameterType="susussg.pengreenlive.broadcast.dto.BroadcastDTO" useGeneratedKeys="true" keyProperty="broadcastSeq">
+        INSERT INTO TB_BROADCAST (CHANNEL_NM, BROADCAST_TITLE, BROADCAST_IMAGE, BROADCAST_SUMMARY, BROADCAST_SCHEDULED_TIME, CATEGORY_CD)
+        VALUES (#{channelNm}, #{broadcastTitle}, #{broadcastImage}, #{broadcastSummary}, #{broadcastScheduledTime}, #{categoryCd})
+    </insert>
+    <insert id="insertBroadcastProduct"  parameterType="susussg.pengreenlive.broadcast.dto.BroadcastProductDTO">
+        INSERT INTO TB_BROADCAST_PRODUCT (BROADCAST_SEQ, PRODUCT_SEQ, DISCOUNT_RATE, DISCOUNT_PRICE)
+        VALUES (#{broadcastSeq}, #{productSeq}, #{discountRate}, #{discountPrice})
+    </insert>
+    <insert id="insertNotice" parameterType="susussg.pengreenlive.broadcast.dto.NoticeDTO">
+        INSERT INTO TB_NOTICE (BROADCAST_SEQ, NOTICE_CONTENT) VALUES (#{broadcastSeq}, #{noticeContent})
+    </insert>
+    <insert id="insertBenefit" parameterType="susussg.pengreenlive.broadcast.dto.BenefitDTO">
+        INSERT INTO TB_BENEFIT (BROADCAST_SEQ, BENEFIT_CONTENT) VALUES (#{broadcastSeq}, #{benefitContent})
+    </insert>
+    <insert id="insertFaq" parameterType="susussg.pengreenlive.broadcast.dto.FaqDTO">
+        INSERT INTO TB_FAQ (BROADCAST_SEQ, QUESTION_TITLE, QUESTION_ANSWER)  VALUES (#{broadcastSeq}, #{questionTitle}, #{questionAnswer})
+    </insert>
+
+<!--    채널 판매중 상품 목록 가져오기-->
+    <select id="selectChannelSalesProduct" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.ChannelSalesProductDTO">
+        SELECT P.PRODUCT_SEQ, PRODUCT_CD, PRODUCT_NM, PRODUCT_IMAGE, LIST_PRICE
+        FROM TB_PRODUCT P
+                 LEFT JOIN TB_CHANNEL_SALES_PRODUCT C ON P.PRODUCT_SEQ = C.PRODUCT_SEQ
+        WHERE VENDOR_SEQ = #{vendorId};
+    </select>
+    <select id="selectChannelName" parameterType="long" resultType="java.lang.String">
+        SELECT CHANNEL_NM FROM TB_CHANNEL WHERE VENDOR_SEQ = #{vendorId};
+    </select>
+</mapper>
