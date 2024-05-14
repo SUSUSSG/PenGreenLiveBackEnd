@@ -16,4 +16,7 @@ public interface LiveRegisterMapper {
     int insertBenefit(BenefitDTO BenefitDTO);
     List<ChannelSalesProductDTO> selectChannelSalesProduct(long vendorId);
 
+    // 방송 예정 정보
+    List<UpcomingBroadcastInfoDTO> selectUpcomingBroadcastInfo(long vendorId);
+
 }
