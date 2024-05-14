@@ -38,9 +38,9 @@
       csp.VENDOR_SEQ = #{venderSeq}
   </select>
 
-  <insert id="insertProduct" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
-    INSERT INTO TB_PRODUCT (PRODUCT_SEQ, PRODUCT_CD, GREEN_PRODUCT_ID, PRODUCT_NM, LIST_PRICE, BRAND, PRODUCT_IMAGE, CATEGORY_CD)
-    VALUES (#{productSeq},#{productCd}, #{greenProductId}, #{productNm}, #{listPrice}, #{brand}, #{productImage}, #{categoryCd});
+  <insert id="insertProduct" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO" useGeneratedKeys="true" keyProperty="productSeq">
+    INSERT INTO TB_PRODUCT (PRODUCT_CD, GREEN_PRODUCT_ID, PRODUCT_NM, LIST_PRICE, BRAND, PRODUCT_IMAGE, CATEGORY_CD)
+    VALUES (#{productCd}, #{greenProductCd}, #{productNm}, #{listPrice}, #{brand}, #{productImage}, #{categoryCd});
   </insert>
 
   <insert id="insertProductStock" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
@@ -54,7 +54,7 @@
   </insert>
 
   <select id="selectAllCategoryCodes" resultType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
-    SELECT CATEGORY_CD
+    SELECT CATEGORY_CD, CATEGORY_NM
     FROM TB_PRODUCT_CATEGORY
   </select>
 

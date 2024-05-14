@@ -65,13 +65,13 @@ public class ProductServiceTest {
       byte[] imageData = Files.readAllBytes(file.toPath());
 
       ProductDTO productDTO = ProductDTO.builder()
-          .productSeq(15L)
+          .productSeq(17L)
           .productCd("PRD-200")
           .greenProductId("tempgreenproduct")
           .categoryCd(category)
           .productNm("추가 테스트상품15")
-          .listPrice(22222)
-          .productStock(222)
+          .listPrice(5000)
+          .productStock(100)
           .brand("testbrand")
           .productImage(imageData)
           .build();

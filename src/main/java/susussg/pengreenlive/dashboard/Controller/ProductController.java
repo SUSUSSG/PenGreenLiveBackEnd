@@ -41,13 +41,25 @@ public class ProductController {
   public ResponseEntity<String> registerProduct(@RequestBody ProductDTO productDTO, @RequestParam Long vendorSeq, @RequestParam Long channelSeq) {
     try {
       if (productService.registerProduct(productDTO, vendorSeq, channelSeq)) {
+        log.info("vendorSeq" + vendorSeq);
+        log.info("channelSeq" + channelSeq);
         return ResponseEntity.ok("Product successfully registered");
       } else {
+        log.info("vendorSeq" + vendorSeq);
+        log.info("channelSeq" + channelSeq);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to register product");
       }
     } catch (Exception e) {
+      log.info("vendorSeq" + vendorSeq);
+      log.info("channelSeq" + channelSeq);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during product registration: " + e.getMessage());
     }
+  }
+
+  @GetMapping("/categorycodes")
+  public ResponseEntity<List<ProductDTO>> getCategoryCodes() {
+    List<ProductDTO> productCategoryCodes = productService.getAllCategoryCodes();
+    return ResponseEntity.ok(productCategoryCodes);
   }
 
 

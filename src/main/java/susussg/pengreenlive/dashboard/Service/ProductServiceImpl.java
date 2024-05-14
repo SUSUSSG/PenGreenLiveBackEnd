@@ -1,6 +1,7 @@
 package susussg.pengreenlive.dashboard.Service;
 
 import jakarta.transaction.Transactional;
+import java.util.Base64;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +27,14 @@ public class ProductServiceImpl implements ProductService{
   @Transactional
   public boolean registerProduct(ProductDTO productDTO, Long vendorSeq, Long channelSeq) {
     try {
+      if (productDTO.getBase64Image() != null) {
+        byte[] imageBytes = Base64.getDecoder().decode(productDTO.getBase64Image());
+        productDTO.setProductImage(imageBytes);
+      }
       productMapper.insertProduct(productDTO);
-      productMapper.insertProductStock(productDTO.getProductSeq(), productDTO.getProductStock());
-      productMapper.insertChannelSalesProduct(productDTO.getProductSeq(), vendorSeq, channelSeq);
+      Long productSeq = productDTO.getProductSeq();
+      productMapper.insertProductStock(productSeq , productDTO.getProductStock());
+      productMapper.insertChannelSalesProduct(productSeq , vendorSeq, channelSeq);
       return true;
     } catch (Exception e) {
       e.printStackTrace();
