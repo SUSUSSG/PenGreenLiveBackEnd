@@ -57,7 +57,7 @@ public class ProductServiceTest {
   @Test
   public void addProductTest() throws IOException {
 
-    String category="BCT-CTG-003";
+    String category="PCT-CTG-003";
 
     try {
       File file = new File("C:/Users/kuy06/OneDrive/Desktop/c2.jpg");
@@ -65,18 +65,18 @@ public class ProductServiceTest {
       byte[] imageData = Files.readAllBytes(file.toPath());
 
       ProductDTO productDTO = ProductDTO.builder()
-          .productSeq(13L)
-          .productCd("PRD-100")
+          .productSeq(17L)
+          .productCd("PRD-200")
           .greenProductId("tempgreenproduct")
           .categoryCd(category)
-          .productNm("추가 테스트상품1")
-          .listPrice(22222)
-          .productStock(222)
+          .productNm("추가 테스트상품15")
+          .listPrice(5000)
+          .productStock(100)
           .brand("testbrand")
           .productImage(imageData)
           .build();
 
-      productService.registerProduct(productDTO);
+      productService.registerProduct(productDTO,1L,1L);
       log.info("Product registered: {}", productDTO);
     } catch (IOException e) {
       log.error("Error reading image file", e);

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="susussg.pengreenlive.broadcast.mapper.BroadcastStatisticsMapper">
+
+    <!-- 좋아요 수 1 증가 -->
+    <update id="updateLikesCount">
+        UPDATE TB_BROADCAST_STATISTICS
+        SET LIKES_COUNT = LIKES_COUNT + 1
+        WHERE BROADCAST_SEQ = #{broadcastSeq}
+    </update>
+
+    <!-- 좋아요 수 1 감소 -->
+    <update id="decrementLikesCount">
+        UPDATE TB_BROADCAST_STATISTICS
+        SET LIKES_COUNT = LIKES_COUNT - 1
+        WHERE BROADCAST_SEQ = #{broadcastSeq}
+    </update>
+
+    <!-- 평균 시청자 수 업데이트 -->
+    <update id="updateAverageViewerCount">
+        UPDATE TB_BROADCAST_STATISTICS
+        SET AVG_VIEWER_COUNT = #{averageViewerCount}
+        WHERE BROADCAST_SEQ = #{broadcastSeq}
+    </update>
+
+    <!-- 최대 시청자 수 업데이트 -->
+    <update id="updateMaxViewerCount">
+        UPDATE TB_BROADCAST_STATISTICS
+        SET MAX_VIEWER_COUNT = #{maxViewerCount}
+        WHERE BROADCAST_SEQ = #{broadcastSeq}
+    </update>
+
+    <!-- 방송 통계 레코드 삽입 -->
+    <insert id="insertBroadcastStatistics" parameterType="susussg.pengreenlive.broadcast.dto.BroadcastStatistics">
+        INSERT INTO TB_BROADCAST_STATISTICS (
+            BROADCAST_SEQ,
+            AVG_VIEWER_COUNT,
+            MAX_VIEWER_COUNT,
+            LIKES_COUNT,
+            AVG_PURCHASE_AMOUNT,
+            AVG_VIEWING_TIME,
+            BROADCAST_DURATION,
+            AVG_PRODUCT_CLICKS,
+            TOTAL_SALES_AMOUNT,
+            TOTAL_SALES_QTY
+        ) VALUES (
+                     #{broadcastSeq},
+                     #{avgViewerCount},
+                     #{maxViewerCount},
+                     #{likesCount},
+                     #{avgPurchaseAmount},
+                     #{avgViewingTime},
+                     #{broadcastDuration},
+                     #{avgProductClicks},
+                     #{totalSalesAmount},
+                     #{totalSalesQty}
+                 )
+    </insert>
+
+    <!-- ID로 방송 통계 레코드 조회 -->
+    <select id="findById" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.BroadcastStatistics">
+        SELECT * FROM TB_BROADCAST_STATISTICS WHERE BROADCAST_SEQ = #{broadcastSeq}
+    </select>
+
+</mapper>
