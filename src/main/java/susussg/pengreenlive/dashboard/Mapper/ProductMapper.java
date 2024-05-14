@@ -19,4 +19,10 @@ public interface ProductMapper {
   void insertChannelSalesProduct(@Param("productSeq") Long productSeq, @Param("vendorSeq") Long vendorSeq, @Param("channelSeq") Long channelSeq);
 
   List<ProductDTO> selectAllCategoryCodes();
+
+  void updateProduct(ProductDTO productDTO);
+
+  void updateProductStock(@Param("productSeq") Long productSeq, @Param("productStock") int productStock);
+
+  void deleteChannelSalesProduct(Long vendorSeq, Long productSeq);
 }

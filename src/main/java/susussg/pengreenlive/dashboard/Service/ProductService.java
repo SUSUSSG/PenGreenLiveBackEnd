@@ -13,4 +13,8 @@ public interface ProductService {
 
   List<ProductDTO> findProductsByVendor(Long venderSeq);
 
+  void updateProduct(Long productSeq, ProductDTO productDTO);
+
+  void deleteProduct(Long vendorSeq, Long productSeq);
+
 }

@@ -5,9 +5,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,6 +62,27 @@ public class ProductController {
   public ResponseEntity<List<ProductDTO>> getCategoryCodes() {
     List<ProductDTO> productCategoryCodes = productService.getAllCategoryCodes();
     return ResponseEntity.ok(productCategoryCodes);
+  }
+
+  @PutMapping("/{productSeq}")
+  public ResponseEntity<String> updateProduct(@PathVariable Long productSeq, @RequestBody ProductDTO productDTO) {
+    try {
+      System.out.println("Updating product with productSeq: " + productSeq);
+      productService.updateProduct(productSeq, productDTO);
+      return ResponseEntity.ok("Product successfully updated");
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body("Failed to update product: " + e.getMessage());
+    }
+  }
+
+  @DeleteMapping("/{vendorSeq}/{productSeq}")
+  public ResponseEntity<String> deleteProduct(@PathVariable Long vendorSeq, @PathVariable Long productSeq) {
+    try {
+      productService.deleteProduct(vendorSeq, productSeq);
+      return ResponseEntity.ok("상품삭제에 성공했습니다.");
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body("상품 삭제에 실패했습니다 " + e.getMessage());
+    }
   }
 
 
