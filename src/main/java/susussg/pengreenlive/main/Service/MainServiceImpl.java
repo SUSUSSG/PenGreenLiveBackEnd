@@ -47,4 +47,15 @@ public class MainServiceImpl implements MainService {
         }
         return false;
     }
+
+    @Override
+    @Transactional
+    public boolean removeNotificationChannel(String userUuid, Long channelSeq) {
+        Integer count = mainMapper.checkNotificationChannelExists(userUuid, channelSeq);
+        if (count != null && count > 0) {
+            mainMapper.deleteNotificationChannel(userUuid, channelSeq);
+            return true;
+        }
+        return false;
+    }
 }

@@ -15,4 +15,6 @@ public interface MainMapper {
     List<LiveChanceCarouselDTO> selectLiveChanceCarousels(String categoryCd);
     int insertNotificationChannel(@Param("userUuid") String userUuid, @Param("channelSeq") Long channelSeq);
     Integer checkNotificationChannelExists(@Param("userUuid") String userUuid, @Param("channelSeq") Long channelSeq);
+    int deleteNotificationChannel(@Param("userUuid") String userUuid, @Param("channelSeq") Long channelSeq);
+
 }

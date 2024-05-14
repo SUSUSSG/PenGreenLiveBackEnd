@@ -109,4 +109,10 @@
     INSERT INTO TB_NOTIFICATION_CHANNEL (USER_UUID, CHANNEL_SEQ)
     VALUES (#{userUuid}, #{channelSeq})
   </insert>
+
+  <delete id="deleteNotificationChannel" parameterType="map">
+    DELETE FROM TB_NOTIFICATION_CHANNEL
+    WHERE USER_UUID = #{userUuid}
+      AND CHANNEL_SEQ = #{channelSeq}
+  </delete>
 </mapper>

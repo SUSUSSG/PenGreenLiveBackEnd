@@ -67,4 +67,18 @@ public class MainController {
             return ResponseEntity.status(409).body("이미 구독중입니다.");
         }
     }
+
+    @PostMapping("/notification-channel/remove")
+    public ResponseEntity<String> removeNotificationChannel(
+        @RequestParam("UUID") String userUuid,
+        @RequestParam("channelSeq") Long channelSeq) {
+        log.info("call removeNotificationChannel");
+
+        boolean removed = mainService.removeNotificationChannel(userUuid, channelSeq);
+        if (removed) {
+            return ResponseEntity.ok("구독 취소 완료");
+        } else {
+            return ResponseEntity.status(404).body("구독 정보가 없습니다.");
+        }
+    }
 }
