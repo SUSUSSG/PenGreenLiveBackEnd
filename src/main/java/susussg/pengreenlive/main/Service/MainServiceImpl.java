@@ -58,4 +58,10 @@ public class MainServiceImpl implements MainService {
         }
         return false;
     }
+
+    @Override
+    public boolean checkNotificationChannelExists(String userUuid, Long channelSeq) {
+        Integer count = mainMapper.checkNotificationChannelExists(userUuid, channelSeq);
+        return count != null && count > 0;
+    }
 }

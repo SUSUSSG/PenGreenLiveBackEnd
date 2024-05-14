@@ -79,4 +79,13 @@ public class MainController {
             return ResponseEntity.status(404).body("구독 정보가 없습니다.");
         }
     }
+
+    @GetMapping("/notification-channel")
+    public ResponseEntity<Boolean> checkNotificationChannelExists(
+        @RequestParam("channelSeq") Long channelSeq) {
+        log.info("call checkNotificationChannelExists");
+
+        boolean exists = mainService.checkNotificationChannelExists(userUUID, channelSeq);
+        return ResponseEntity.ok(exists);
+    }
 }

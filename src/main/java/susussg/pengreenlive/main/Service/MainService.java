@@ -14,6 +14,7 @@ public interface MainService {
     List<LiveChanceCarouselDTO> getLiveChanceCarousels(String categoryCd);
     boolean addNotificationChannel(String userUuid, Long channelSeq);
     boolean removeNotificationChannel(String userUuid, Long channelSeq);
+    boolean checkNotificationChannelExists(String userUuid, Long channelSeq);
 
 
 }
