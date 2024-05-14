@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -21,4 +22,5 @@ public class BroadcastRegistrationRequestDTO {
     private List<String> notices;
     private List<FaqDTO> qa;
     private List<String> benefits;
+    private String image;
 }

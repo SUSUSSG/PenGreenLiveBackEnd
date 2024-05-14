@@ -3,6 +3,7 @@ package susussg.pengreenlive.broadcast.controller;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,6 +11,7 @@ import susussg.pengreenlive.broadcast.dto.*;
 import susussg.pengreenlive.broadcast.service.LiveRegisterService;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -34,10 +36,8 @@ public class LiveRegisterController {
     }
 
     // 방송 등록
-    @PostMapping("/live-register")
-    public ResponseEntity<?> registerBroadcast(
-            @RequestParam(value = "image", required = false) MultipartFile broadcastImage,
-            @RequestBody BroadcastRegistrationRequestDTO request) {
+    @PostMapping(value = "/live-register")
+    public ResponseEntity<String> registerBroadcast(@RequestBody BroadcastRegistrationRequestDTO request) {
         String channelName = liveRegisterService.getChannelName(vendorId); // 판매자 정보
 
         BroadcastDTO broadcastDTO = BroadcastDTO.builder()
@@ -48,12 +48,13 @@ public class LiveRegisterController {
                 .categoryCd(request.getCategoryCd())
                 .build();
 
-        if (broadcastImage != null && !broadcastImage.isEmpty()) {
+        if (request.getImage() != null) {
             try {
-                byte[] imageBytes = broadcastImage.getBytes();
+                byte[] imageBytes = Base64.getDecoder().decode(request.getImage());
                 broadcastDTO.setBroadcastImage(imageBytes);
-            } catch (IOException e) {
-                return ResponseEntity.badRequest().body("이미지 파일 처리 중 오류 발생: " + e.getMessage());
+            } catch (Exception e) {
+                String errorMessage = "이미지 파일 처리 중 오류 발생: " + e.getMessage();
+                return ResponseEntity.badRequest().body(errorMessage);
             }
         }
 
@@ -67,7 +68,6 @@ public class LiveRegisterController {
                     .discountPrice(productInfo.getDiscountPrice())
                     .build();
             liveRegisterService.saveBroadcastProduct(productDTO);
-            log.info("BroadcastProductDTO: " + productDTO.toString());
         });
 
         request.getNotices().forEach(notice -> {
