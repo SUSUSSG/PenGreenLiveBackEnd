@@ -58,4 +58,23 @@
     FROM TB_PRODUCT_CATEGORY
   </select>
 
+  <update id="updateProduct" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
+    UPDATE TB_PRODUCT
+    SET PRODUCT_CD = #{productCd},
+        GREEN_PRODUCT_ID = #{greenProductCd},
+        PRODUCT_NM = #{productNm},
+        LIST_PRICE = #{listPrice},
+        BRAND = #{brand},
+        PRODUCT_IMAGE = #{productImage},
+        CATEGORY_CD = #{categoryCd}
+    WHERE PRODUCT_SEQ = #{productSeq};
+  </update>
+
+  <update id="updateProductStock" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
+    UPDATE TB_PRODUCT_STOCK
+    SET PRODUCT_STOCK = #{productStock}
+    WHERE PRODUCT_SEQ = #{productSeq};
+  </update>
+
+
 </mapper>

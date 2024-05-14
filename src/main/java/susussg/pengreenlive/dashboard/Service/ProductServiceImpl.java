@@ -52,5 +52,21 @@ public class ProductServiceImpl implements ProductService{
     return productMapper.findProductsByVendor(venderSeq);
   }
 
+  @Override
+  public void updateProduct(Long productSeq, ProductDTO productDTO) {
+    try {
+      if (productDTO.getBase64Image() != null) {
+        byte[] imageBytes = Base64.getDecoder().decode(productDTO.getBase64Image());
+        productDTO.setProductImage(imageBytes);
+      }
+      productDTO.setProductSeq(productSeq);
+      productMapper.updateProduct(productDTO);
+      productMapper.updateProductStock(productSeq, productDTO.getProductStock());
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new RuntimeException("Product update failed", e);
+    }
+  }
+
 
 }
