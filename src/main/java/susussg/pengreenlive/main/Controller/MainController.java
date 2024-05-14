@@ -35,7 +35,6 @@ public class MainController {
         log.info("call schedule");
 
         List<ScheduledBroadcastDTO> broadcasts = mainService.getScheduledBroadcasts(categoryCd, scheduledDate);
-        log.info(broadcasts.toString());
         if (broadcasts.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -47,7 +46,6 @@ public class MainController {
         log.info("call getLiveChanceCarousels");
 
         List<LiveChanceCarouselDTO> broadcasts = mainService.getLiveChanceCarousels(categoryCd);
-        log.info(broadcasts.toString());
         if (broadcasts.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
