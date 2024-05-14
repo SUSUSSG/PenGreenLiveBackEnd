@@ -101,4 +101,10 @@ public class LiveRegisterMapperTest {
         List<ChannelSalesProductDTO> products = liveRegisterMapper.selectChannelSalesProduct(2);
         products.stream().forEach(System.out::println);
     }
+
+    @Test
+    void selectPreBroadcastInfo() {
+        List<UpcomingBroadcastInfoDTO> infoList = liveRegisterMapper.selectUpcomingBroadcastInfo(2);
+        infoList.forEach(info -> log.info(String.valueOf(info.getBroadcastSeq())));
+    }
 }
