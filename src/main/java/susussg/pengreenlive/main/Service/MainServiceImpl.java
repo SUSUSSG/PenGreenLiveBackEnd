@@ -1,6 +1,9 @@
 package susussg.pengreenlive.main.Service;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +23,15 @@ public class MainServiceImpl implements MainService {
         return mainMapper.selectMainCarousels();
     }
 
+
     @Override
-    public List<ScheduledBroadcastDTO> getScheduledBroadcasts(String categoryCd) {
-        return mainMapper.selectScheduledBroadcasts(categoryCd);
+    public List<ScheduledBroadcastDTO> getScheduledBroadcasts(String categoryCd, LocalDate scheduledDate) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("categoryCd", categoryCd);
+        params.put("scheduledDate", scheduledDate);
+        return mainMapper.selectScheduledBroadcasts(params);
     }
+
 
     @Override
     public List<LiveChanceCarouselDTO> getLiveChanceCarousels(String categoryCd) {
