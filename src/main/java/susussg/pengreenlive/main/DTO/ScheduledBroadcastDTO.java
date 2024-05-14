@@ -25,4 +25,6 @@ public class ScheduledBroadcastDTO {
     private byte[] channelImage;
     private String channelNm;
     private int channelSeq;
+    private String productNm;
+    private byte[] productImage;
 }

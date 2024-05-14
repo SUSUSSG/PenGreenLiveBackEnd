@@ -32,38 +32,43 @@
       TB_PRODUCT p ON bp.PRODUCT_SEQ = p.PRODUCT_SEQ
   </select>
 
-  <select id="selectScheduledBroadcasts" parameterType="String" resultType="susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO">
+  <select id="selectScheduledBroadcasts" parameterType="map" resultType="susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO">
     SELECT
-      BC.BROADCAST_SEQ,
-      BC.BROADCAST_SCHEDULED_TIME,
-      BC.BROADCAST_TITLE,
-      BC.BROADCAST_IMAGE,
-      BC.BROADCAST_SUMMARY,
-      BF.BENEFIT_CONTENT,
-      BP.DISCOUNT_PRICE,
-      BP.DISCOUNT_RATE,
-      PD.LIST_PRICE,
-      CH.CHANNEL_IMAGE,
-      CH.CHANNEL_NM,
-      CH.CHANNEL_SEQ
+    BC.BROADCAST_SEQ,
+    BC.BROADCAST_SCHEDULED_TIME,
+    BC.BROADCAST_TITLE,
+    BC.BROADCAST_IMAGE,
+    BC.BROADCAST_SUMMARY,
+    BF.BENEFIT_CONTENT,
+    BP.DISCOUNT_PRICE,
+    BP.DISCOUNT_RATE,
+    PD.LIST_PRICE,
+    PD.PRODUCT_NM,
+    PD.PRODUCT_IMAGE,
+    CH.CHANNEL_IMAGE,
+    CH.CHANNEL_NM,
+    CH.CHANNEL_SEQ
     FROM
-      TB_BROADCAST BC
-      JOIN TB_BROADCAST_CATEGORY BCT ON BC.CATEGORY_CD = BCT.CATEGORY_CD
-      JOIN TB_BENEFIT BF ON BC.BROADCAST_SEQ = BF.BROADCAST_SEQ
-      JOIN (
-        SELECT *,
-          ROW_NUMBER() OVER (PARTITION BY BROADCAST_SEQ ORDER BY PRODUCT_SEQ) AS rn
-        FROM TB_BROADCAST_PRODUCT
-      ) BP ON BC.BROADCAST_SEQ = BP.BROADCAST_SEQ AND BP.rn = 1
-      JOIN TB_PRODUCT PD ON BP.PRODUCT_SEQ = PD.PRODUCT_SEQ
-      JOIN TB_CHANNEL CH ON BC.CHANNEL_NM = CH.CHANNEL_NM
+    TB_BROADCAST BC
+    JOIN TB_BROADCAST_CATEGORY BCT ON BC.CATEGORY_CD = BCT.CATEGORY_CD
+    JOIN TB_BENEFIT BF ON BC.BROADCAST_SEQ = BF.BROADCAST_SEQ
+    JOIN (
+    SELECT *,
+    ROW_NUMBER() OVER (PARTITION BY BROADCAST_SEQ ORDER BY PRODUCT_SEQ) AS rn
+    FROM TB_BROADCAST_PRODUCT
+    ) BP ON BC.BROADCAST_SEQ = BP.BROADCAST_SEQ AND BP.rn = 1
+    JOIN TB_PRODUCT PD ON BP.PRODUCT_SEQ = PD.PRODUCT_SEQ
+    JOIN TB_CHANNEL CH ON BC.CHANNEL_NM = CH.CHANNEL_NM
     WHERE
-      BC.BROADCAST_SCHEDULED_TIME > NOW()
-      <if test="categoryCd != null and categoryCd != ''">
-        AND BCT.CATEGORY_CD LIKE #{categoryCd}
-      </if>
+    1=1
+    <if test="scheduledDate != null">
+      AND DATE(BC.BROADCAST_SCHEDULED_TIME) = DATE(#{scheduledDate})
+    </if>
+    <if test="categoryCd != null and categoryCd != ''">
+      AND BCT.CATEGORY_CD LIKE #{categoryCd}
+    </if>
     ORDER BY
-      BC.BROADCAST_SCHEDULED_TIME;
+    BC.BROADCAST_SCHEDULED_TIME;
   </select>
 
   <select id="selectLiveChanceCarousels" parameterType="String" resultType="susussg.pengreenlive.main.DTO.LiveChanceCarouselDTO">
@@ -94,4 +99,22 @@
     ORDER BY
       BC.BROADCAST_SCHEDULED_TIME;
   </select>
+
+  <select id="checkNotificationChannelExists" parameterType="map" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+    FROM TB_NOTIFICATION_CHANNEL
+    WHERE USER_UUID = #{userUuid}
+      AND CHANNEL_SEQ = #{channelSeq}
+  </select>
+
+  <insert id="insertNotificationChannel" parameterType="map">
+    INSERT INTO TB_NOTIFICATION_CHANNEL (USER_UUID, CHANNEL_SEQ)
+    VALUES (#{userUuid}, #{channelSeq})
+  </insert>
+
+  <delete id="deleteNotificationChannel" parameterType="map">
+    DELETE FROM TB_NOTIFICATION_CHANNEL
+    WHERE USER_UUID = #{userUuid}
+      AND CHANNEL_SEQ = #{channelSeq}
+  </delete>
 </mapper>
