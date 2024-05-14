@@ -2,15 +2,11 @@ package susussg.pengreenlive.broadcast.controller;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import susussg.pengreenlive.broadcast.dto.*;
 import susussg.pengreenlive.broadcast.service.LiveRegisterService;
 
-import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 
@@ -106,5 +102,11 @@ public class LiveRegisterController {
         return ResponseEntity.ok().body(channelSalesProducts);
     }
 
+    // 방송 예정 목록
+    @GetMapping("/upcoming-broadcasts")
+    public ResponseEntity<List<UpcomingBroadcastInfoDTO>> fetchUpcomingBroadcasts() {
+        List<UpcomingBroadcastInfoDTO> upcomingBroadcastInfo = liveRegisterService.getUpcomingBroadcastInfo(vendorId);
+        return ResponseEntity.ok().body(upcomingBroadcastInfo);
+    }
 
 }
