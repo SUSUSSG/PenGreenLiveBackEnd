@@ -30,13 +30,13 @@ public class LiveRegisterController {
 
     // 방송 카테고리 목록 불러오기
     @GetMapping("/broadcast-category")
-    public ResponseEntity<List<BroadcastCategoryDTO>> showBroadcastCategory() {
+    public ResponseEntity<List<BroadcastCategoryDTO>> fetchBroadcastCategory() {
         List<BroadcastCategoryDTO> categoryList = liveRegisterService.getAllCategory();
         return ResponseEntity.ok().body(categoryList);
     }
 
     // 방송 등록
-    @PostMapping(value = "/live-register")
+    @PostMapping(value = "/register-broadcast")
     public ResponseEntity<String> registerBroadcast(@RequestBody BroadcastRegistrationRequestDTO request) {
         String channelName = liveRegisterService.getChannelName(vendorId); // 판매자 정보
 
@@ -101,9 +101,10 @@ public class LiveRegisterController {
 
     //채널별 상품 목록
     @GetMapping("/channel-sales-product")
-    public ResponseEntity<List<ChannelSalesProductDTO>> showProduct() {
+    public ResponseEntity<List<ChannelSalesProductDTO>> fetchChannelSalesProduct() {
         List<ChannelSalesProductDTO> channelSalesProducts = liveRegisterService.getChannelSalesProductAll(vendorId);
         return ResponseEntity.ok().body(channelSalesProducts);
     }
+
 
 }
