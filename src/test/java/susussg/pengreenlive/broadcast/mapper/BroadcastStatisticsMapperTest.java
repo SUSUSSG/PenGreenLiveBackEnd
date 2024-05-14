@@ -56,6 +56,7 @@ public class BroadcastStatisticsMapperTest {
                 100,
                 200,
                 50,
+                50,
                 10000L,
                 30,
                 60,
@@ -72,6 +73,7 @@ public class BroadcastStatisticsMapperTest {
         assertEquals(100, result.getAvgViewerCount());
         assertEquals(200, result.getMaxViewerCount());
         assertEquals(50, result.getLikesCount());
+        assertEquals(50, result.getViewsCount());
         assertEquals(10000L, result.getAvgPurchaseAmount());
         assertEquals(30, result.getAvgViewingTime());
         assertEquals(60, result.getBroadcastDuration());

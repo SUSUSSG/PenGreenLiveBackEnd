@@ -21,9 +21,10 @@ public class BroadcastStatisticsServiceTest {
     @Test
     public void testInsertBroadcastStatistics() {
         BroadcastStatistics broadcastStatistics = new BroadcastStatistics(
-                6L,
+                7L,
                 100,
                 200,
+                50,
                 50,
                 10000L,
                 30,
@@ -35,11 +36,12 @@ public class BroadcastStatisticsServiceTest {
 
         broadcastStatisticsService.insertBroadcastStatistics(broadcastStatistics);
 
-        BroadcastStatistics result = broadcastStatisticsService.findById(6L);
+        BroadcastStatistics result = broadcastStatisticsService.findById(7L);
         assertNotNull(result);
-        assertEquals(6L, result.getBroadcastSeq());
+        assertEquals(7L, result.getBroadcastSeq());
         assertEquals(100, result.getAvgViewerCount());
         assertEquals(200, result.getMaxViewerCount());
+        assertEquals(50, result.getViewsCount());
         assertEquals(50, result.getLikesCount());
         assertEquals(10000L, result.getAvgPurchaseAmount());
         assertEquals(30, result.getAvgViewingTime());

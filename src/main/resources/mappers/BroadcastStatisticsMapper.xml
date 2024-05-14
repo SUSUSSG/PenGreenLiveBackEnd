@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="susussg.pengreenlive.broadcast.mapper.BroadcastStatisticsMapper">
 
-    <!-- 좋아요 수 1 증가 -->
+    <!-- 좋아요 수 증가 -->
     <update id="updateLikesCount">
         UPDATE TB_BROADCAST_STATISTICS
         SET LIKES_COUNT = LIKES_COUNT + 1
         WHERE BROADCAST_SEQ = #{broadcastSeq}
     </update>
 
-    <!-- 좋아요 수 1 감소 -->
+    <!-- 좋아요 수 감소 -->
     <update id="decrementLikesCount">
         UPDATE TB_BROADCAST_STATISTICS
         SET LIKES_COUNT = LIKES_COUNT - 1
@@ -30,6 +30,13 @@
         WHERE BROADCAST_SEQ = #{broadcastSeq}
     </update>
 
+    <!-- 시청자 수 업데이트 -->
+    <update id="updateViewersCount">
+        UPDATE TB_BROADCAST_STATISTICS
+        SET VIEWERS_COUNT = #{viewersCount}
+        WHERE BROADCAST_SEQ = #{broadcastSeq}
+    </update>
+
     <!-- 방송 통계 레코드 삽입 -->
     <insert id="insertBroadcastStatistics" parameterType="susussg.pengreenlive.broadcast.dto.BroadcastStatistics">
         INSERT INTO TB_BROADCAST_STATISTICS (
@@ -42,7 +49,8 @@
             BROADCAST_DURATION,
             AVG_PRODUCT_CLICKS,
             TOTAL_SALES_AMOUNT,
-            TOTAL_SALES_QTY
+            TOTAL_SALES_QTY,
+            VIEWS_COUNT
         ) VALUES (
                      #{broadcastSeq},
                      #{avgViewerCount},
@@ -53,7 +61,8 @@
                      #{broadcastDuration},
                      #{avgProductClicks},
                      #{totalSalesAmount},
-                     #{totalSalesQty}
+                     #{totalSalesQty},
+                     #{viewsCount}
                  )
     </insert>
 
