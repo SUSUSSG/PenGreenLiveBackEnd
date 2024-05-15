@@ -54,6 +54,9 @@ dependencies {
 	//ahocorasick for forbiddenword
 	implementation 'org.ahocorasick:ahocorasick:0.6.3'
 
+	//image compression
+	implementation 'net.coobird:thumbnailator:0.4.14'
+
 }
 
 tasks.named('test') {
