@@ -13,4 +13,7 @@ public interface LiveRegisterService {
     void saveFaq(FaqDTO faqDTO);
     void saveBenefit(BenefitDTO benefitDTO);
     List<ChannelSalesProductDTO> getChannelSalesProductAll(long vendorId);
+
+    // 방송 예정 정보
+    List<UpcomingBroadcastInfoDTO> getUpcomingBroadcastInfo(long vendorId);
 }

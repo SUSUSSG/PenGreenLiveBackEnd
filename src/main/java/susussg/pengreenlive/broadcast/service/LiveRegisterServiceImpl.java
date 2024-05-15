@@ -113,4 +113,10 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
             return productList;
         }
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UpcomingBroadcastInfoDTO> getUpcomingBroadcastInfo(long vendorId) {
+        return liveRegisterMapper.selectUpcomingBroadcastInfo(vendorId);
+    }
 }
