@@ -7,10 +7,14 @@ public interface ProductService {
 
   List<ProductDTO> findAllProducts();
 
-  boolean registerProduct(ProductDTO productDTO);
+  boolean registerProduct(ProductDTO productDTO, Long vendorSeq, Long channelSeq);
 
   List<ProductDTO> getAllCategoryCodes();
 
   List<ProductDTO> findProductsByVendor(Long venderSeq);
+
+  void updateProduct(Long productSeq, ProductDTO productDTO);
+
+  void deleteProduct(Long vendorSeq, Long productSeq);
 
 }

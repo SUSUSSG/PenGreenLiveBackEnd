@@ -1,12 +1,15 @@
 package susussg.pengreenlive.dashboard.Service;
 
 import jakarta.transaction.Transactional;
+import java.util.Base64;
 import java.util.List;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import susussg.pengreenlive.dashboard.DTO.ProductDTO;
 import susussg.pengreenlive.dashboard.Mapper.ProductMapper;
 
+@Log4j2
 @Service
 public class ProductServiceImpl implements ProductService{
 
@@ -24,15 +27,20 @@ public class ProductServiceImpl implements ProductService{
 
   @Override
   @Transactional
-  public boolean registerProduct(ProductDTO productDTO) {
+  public boolean registerProduct(ProductDTO productDTO, Long vendorSeq, Long channelSeq) {
     try {
-
+      if (productDTO.getBase64Image() != null) {
+        byte[] imageBytes = Base64.getDecoder().decode(productDTO.getBase64Image());
+        productDTO.setProductImage(imageBytes);
+      }
       productMapper.insertProduct(productDTO);
-      productMapper.insertProductStock(productDTO.getProductSeq(), productDTO.getProductStock());
+      Long productSeq = productDTO.getProductSeq();
+      productMapper.insertProductStock(productSeq , productDTO.getProductStock());
+      productMapper.insertChannelSalesProduct(productSeq , vendorSeq, channelSeq);
       return true;
     } catch (Exception e) {
       e.printStackTrace();
-      throw new RuntimeException("상품 등록 실패", e);
+      throw new RuntimeException("Product registration failed", e);
     }
   }
 
@@ -44,6 +52,33 @@ public class ProductServiceImpl implements ProductService{
   @Override
   public List<ProductDTO> findProductsByVendor(Long venderSeq) {
     return productMapper.findProductsByVendor(venderSeq);
+  }
+
+  @Override
+  public void updateProduct(Long productSeq, ProductDTO productDTO) {
+    try {
+      if (productDTO.getBase64Image() != null) {
+        byte[] imageBytes = Base64.getDecoder().decode(productDTO.getBase64Image());
+        productDTO.setProductImage(imageBytes);
+      }
+
+      productDTO.setProductSeq(productSeq);
+      productMapper.updateProduct(productDTO);
+      productMapper.updateProductStock(productSeq, productDTO.getProductStock());
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new RuntimeException("Product update failed", e);
+    }
+  }
+
+  @Override
+  public void deleteProduct(Long vendorSeq, Long productSeq) {
+    try {
+      productMapper.deleteChannelSalesProduct(vendorSeq, productSeq);
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new RuntimeException("Product deletion from vendor's sales channel failed", e);
+    }
   }
 
 
