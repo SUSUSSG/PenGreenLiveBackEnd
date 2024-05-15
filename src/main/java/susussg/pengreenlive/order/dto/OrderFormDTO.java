@@ -1,7 +1,6 @@
 package susussg.pengreenlive.order.dto;
 
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +20,7 @@ public class OrderFormDTO {
     int orderPayedPrice;
     long broadcastSeq;
     String deliveryStatus;
-    boolean reivewYn;
+    boolean reviewYn;
     long vendorSeq;
     long channelSeq;
 }

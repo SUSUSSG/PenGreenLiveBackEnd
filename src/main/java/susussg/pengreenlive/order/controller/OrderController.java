@@ -1,4 +1,4 @@
-package susussg.pengreenlive.order;
+package susussg.pengreenlive.order.controller;
 
 
 import lombok.RequiredArgsConstructor;
