@@ -48,4 +48,10 @@ public class BroadcastStatisticsServiceImpl implements BroadcastStatisticsServic
     public BroadcastStatistics findById(long broadcastSeq) {
         return broadcastStatisticsMapper.findById(broadcastSeq);
     }
+
+    @Override
+    @Transactional
+    public void updateBroadcastStatistics(long broadcastId, BroadcastStatistics statistics) {
+        broadcastStatisticsMapper.updateBroadcastStatistics(broadcastId, statistics);
+    }
 }

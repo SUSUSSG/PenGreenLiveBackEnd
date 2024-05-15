@@ -1,5 +1,6 @@
 package susussg.pengreenlive.broadcast.controller;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,7 @@ import susussg.pengreenlive.broadcast.service.BroadcastStatisticsService;
 
 @RestController
 @RequestMapping("/broadcasts/statistics")
+@Log4j2
 public class BroadcastStatisticsController {
     @Autowired
     private BroadcastStatisticsService broadcastStatisticsService;
@@ -81,6 +83,21 @@ public class BroadcastStatisticsController {
     @PatchMapping("/{broadcastSeq}/max-viewer")
     public ResponseEntity<Void> updateMaxViewerCount(@PathVariable("broadcastSeq") long broadcastSeq, @RequestParam int maxViewerCount) {
         broadcastStatisticsService.updateMaxViewerCount(broadcastSeq, maxViewerCount);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 평균 시청자, 최고 시청자, 방송 진행 시간을 업데이트합니다.
+     * @param broadcastSeq
+     * @param statistics
+     * @return
+     */
+    @PatchMapping("/{broadcastSeq}")
+    public ResponseEntity<Void> updateBroadcastStatistics(
+            @PathVariable("broadcastSeq") long broadcastSeq,
+            @RequestBody BroadcastStatistics statistics) {
+        broadcastStatisticsService.updateBroadcastStatistics(broadcastSeq, statistics);
+        log.info(statistics.toString());
         return ResponseEntity.ok().build();
     }
 }

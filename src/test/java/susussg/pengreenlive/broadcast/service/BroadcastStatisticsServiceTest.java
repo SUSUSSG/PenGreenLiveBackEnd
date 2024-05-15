@@ -81,4 +81,21 @@ public class BroadcastStatisticsServiceTest {
         assertNotNull(result);
         assertEquals(250, result.getMaxViewerCount());
     }
+
+    @Test
+    public void testUpdateBroadcastStatistics() {
+        BroadcastStatistics broadcastStatistics = new BroadcastStatistics();
+        broadcastStatistics.setBroadcastSeq(6L);
+        broadcastStatistics.setAvgViewerCount(150);
+        broadcastStatistics.setMaxViewerCount(250);
+        broadcastStatistics.setBroadcastDuration(3600);
+
+        broadcastStatisticsService.updateBroadcastStatistics(6L, broadcastStatistics);
+
+        BroadcastStatistics result = broadcastStatisticsService.findById(6L);
+        assertNotNull(result);
+        assertEquals(150, result.getAvgViewerCount());
+        assertEquals(250, result.getMaxViewerCount());
+        assertEquals(3600, result.getBroadcastDuration());
+    }
 }

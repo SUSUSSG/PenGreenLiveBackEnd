@@ -71,4 +71,13 @@
         SELECT * FROM TB_BROADCAST_STATISTICS WHERE BROADCAST_SEQ = #{broadcastSeq}
     </select>
 
+    <!-- 방송 통계 테이블 업데이트 -->
+    <update id="updateBroadcastStatistics" parameterType="susussg.pengreenlive.broadcast.dto.BroadcastStatistics">
+        UPDATE TB_BROADCAST_STATISTICS
+        SET MAX_VIEWER_COUNT = #{statistics.maxViewerCount},
+            AVG_VIEWER_COUNT = #{statistics.avgViewerCount},
+            BROADCAST_DURATION = #{statistics.broadcastDuration}
+        WHERE broadcast_seq = #{broadcastId}
+    </update>
+
 </mapper>
