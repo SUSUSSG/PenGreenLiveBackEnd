@@ -20,4 +20,38 @@
       o.USER_UUID = #{userUuid}
   </select>
 
+  <select id="findUnreviewedOrdersByUser" resultType="susussg.pengreenlive.order.dto.ReviewDTO">
+    SELECT
+      o.ORDER_DATE,
+      o.ORDER_PRODUCT_PRICE,
+      o.ORDER_PAYED_PRICE,
+      o.DELIVERY_STATUS,
+      o.REVIEW_YN,
+      p.PRODUCT_NM
+#       p.PRODUCT_IMAGE
+    FROM
+      TB_ORDER o
+        JOIN
+      TB_PRODUCT p ON o.PRODUCT_SEQ = p.PRODUCT_SEQ
+    WHERE
+      o.USER_UUID = #{userUuid} AND o.REVIEW_YN = 0
+  </select>
+
+  <select id="findReviewedOrdersByUser" resultType="susussg.pengreenlive.order.dto.ReviewDTO">
+    SELECT
+      o.ORDER_DATE,
+      o.ORDER_PRODUCT_PRICE,
+      o.ORDER_PAYED_PRICE,
+      o.DELIVERY_STATUS,
+      o.REVIEW_YN,
+      p.PRODUCT_NM
+#       p.PRODUCT_IMAGE
+    FROM
+      TB_ORDER o
+        JOIN
+      TB_PRODUCT p ON o.PRODUCT_SEQ = p.PRODUCT_SEQ
+    WHERE
+      o.USER_UUID = #{userUuid} AND o.REVIEW_YN = 1
+  </select>
+
 </mapper>

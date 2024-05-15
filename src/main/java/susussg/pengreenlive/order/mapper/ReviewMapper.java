@@ -10,4 +10,8 @@ public interface ReviewMapper {
 
   List<ReviewDTO> findOrdersByUser(@Param("userUuid") String userUuid);
 
+  List<ReviewDTO> findUnreviewedOrdersByUser(@Param("userUuid") String userUuid);
+
+  List<ReviewDTO> findReviewedOrdersByUser(@Param("userUuid") String userUuid);
+
 }

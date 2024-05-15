@@ -8,4 +8,7 @@ public interface ReviewService {
 
   List<ReviewDTO> findOrdersByUser(String userUuid);
 
+  List<ReviewDTO> findUnreviewedOrdersByUser(String userUuid);
+
+  List<ReviewDTO> findReviewedOrdersByUser(String userUuid);
 }
