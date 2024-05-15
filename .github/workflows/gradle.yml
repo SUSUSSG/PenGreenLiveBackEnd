@@ -64,6 +64,7 @@ jobs:
           echo "ncloud.s3.endpoint=kr.object.ncloudstorage.com" >> ./src/main/resources/application-secret.properties
 
 
+
           ./gradlew build -x test
 
       - name: Deploy to Remote Server

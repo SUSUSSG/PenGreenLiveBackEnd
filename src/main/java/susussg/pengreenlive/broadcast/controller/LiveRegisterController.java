@@ -2,15 +2,11 @@ package susussg.pengreenlive.broadcast.controller;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import susussg.pengreenlive.broadcast.dto.*;
 import susussg.pengreenlive.broadcast.service.LiveRegisterService;
 
-import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 
@@ -30,13 +26,13 @@ public class LiveRegisterController {
 
     // 방송 카테고리 목록 불러오기
     @GetMapping("/broadcast-category")
-    public ResponseEntity<List<BroadcastCategoryDTO>> showBroadcastCategory() {
+    public ResponseEntity<List<BroadcastCategoryDTO>> fetchBroadcastCategory() {
         List<BroadcastCategoryDTO> categoryList = liveRegisterService.getAllCategory();
         return ResponseEntity.ok().body(categoryList);
     }
 
     // 방송 등록
-    @PostMapping(value = "/live-register")
+    @PostMapping(value = "/register-broadcast")
     public ResponseEntity<String> registerBroadcast(@RequestBody BroadcastRegistrationRequestDTO request) {
         String channelName = liveRegisterService.getChannelName(vendorId); // 판매자 정보
 
@@ -101,9 +97,16 @@ public class LiveRegisterController {
 
     //채널별 상품 목록
     @GetMapping("/channel-sales-product")
-    public ResponseEntity<List<ChannelSalesProductDTO>> showProduct() {
+    public ResponseEntity<List<ChannelSalesProductDTO>> fetchChannelSalesProduct() {
         List<ChannelSalesProductDTO> channelSalesProducts = liveRegisterService.getChannelSalesProductAll(vendorId);
         return ResponseEntity.ok().body(channelSalesProducts);
+    }
+
+    // 방송 예정 목록
+    @GetMapping("/upcoming-broadcasts")
+    public List<UpcomingBroadcastInfoDTO> fetchUpcomingBroadcasts() {
+        log.info("방송 준비 컨트롤러 호출");
+        return liveRegisterService.getUpcomingBroadcastInfo(vendorId);
     }
 
 }

@@ -34,4 +34,30 @@
     <select id="selectChannelName" parameterType="long" resultType="java.lang.String">
         SELECT CHANNEL_NM FROM TB_CHANNEL WHERE VENDOR_SEQ = #{vendorId};
     </select>
+    <select id="selectUpcomingBroadcastInfo" resultType="susussg.pengreenlive.broadcast.dto.UpcomingBroadcastInfoDTO" parameterType="long">
+        SELECT bp.BROADCAST_SEQ,
+               bp.PRODUCT_SEQ,
+               p.PRODUCT_NM,
+               p.LIST_PRICE,
+               bp.DISCOUNT_RATE,
+               bp.DISCOUNT_PRICE,
+               b.BROADCAST_TITLE,
+               b.BROADCAST_SCHEDULED_TIME,
+               b.BROADCAST_IMAGE,
+               p.PRODUCT_IMAGE
+        FROM TB_BROADCAST_PRODUCT bp
+                 JOIN TB_PRODUCT p ON bp.PRODUCT_SEQ = p.PRODUCT_SEQ
+                 JOIN(SELECT BROADCAST_SEQ, MAX(DISCOUNT_PRICE) AS MAX_DISCOUNT_PRICE
+                      FROM TB_BROADCAST_PRODUCT
+                      GROUP BY BROADCAST_SEQ) max_discount ON bp.BROADCAST_SEQ = max_discount.BROADCAST_SEQ
+                 JOIN TB_BROADCAST b ON bp.BROADCAST_SEQ = b.BROADCAST_SEQ
+                 JOIN TB_CHANNEL c ON b.CHANNEL_NM = c.CHANNEL_NM
+        WHERE bp.DISCOUNT_PRICE = max_discount.MAX_DISCOUNT_PRICE
+          AND bp.PRODUCT_SEQ = (SELECT MIN(PRODUCT_SEQ)
+                                FROM TB_BROADCAST_PRODUCT
+                                WHERE BROADCAST_SEQ = bp.BROADCAST_SEQ
+                                  AND DISCOUNT_PRICE = max_discount.MAX_DISCOUNT_PRICE)
+          AND b.BROADCAST_YN IS NULL
+          AND c.VENDOR_SEQ = #{vendorId}
+    </select>
 </mapper>
