@@ -57,6 +57,13 @@ jobs:
           echo "spring.session.redis.namespace=${{ secrets.SPRING_SESSION_REDIS_NAMESPACE }}" >> ./src/main/resources/application-secret.properties
           echo "server.servlet.session.cookie.secure=true" >> ./src/main/resources/application-secret.properties
           echo "server.servlet.session.cookie.same-site=none" >> ./src/main/resources/application-secret.properties
+          echo "ncloud.s3.access-key=${{secrets.NCLOUD_S3_ACCESS_KEY}}" >> ./src/main/resources/application-secret.properties
+          echo "ncloud.s3.secret-key=${{secrets.NCLOUD_S3_SECRET_KEY}}" >> ./src/main/resources/application-secret.properties
+          echo "ncloud.s3.region=ap-northeast-2" >> ./src/main/resources/application-secret.properties
+          echo "ncloud.s3.bucket-name=${{secrets.NCLOUD_S3_BUCKET_NAME}}" >> ./src/main/resources/application-secret.properties
+          echo "ncloud.s3.endpoint=kr.object.ncloudstorage.com" >> ./src/main/resources/application-secret.properties
+
+
 
           ./gradlew build -x test
 
