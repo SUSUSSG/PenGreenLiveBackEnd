@@ -54,8 +54,12 @@ dependencies {
 	//ahocorasick for forbiddenword
 	implementation 'org.ahocorasick:ahocorasick:0.6.3'
 
-	//image compression
+	//image compression[3
 	implementation 'net.coobird:thumbnailator:0.4.14'
+
+	//S3 bucket access
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.306'
+
 
 }
 
