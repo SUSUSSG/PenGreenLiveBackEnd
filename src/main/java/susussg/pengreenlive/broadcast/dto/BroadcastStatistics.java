@@ -12,6 +12,7 @@ public class BroadcastStatistics {
     int avgViewerCount;
     int maxViewerCount;
     int likesCount;
+    int viewsCount;
     long avgPurchaseAmount;
     int avgViewingTime;
     int broadcastDuration;
