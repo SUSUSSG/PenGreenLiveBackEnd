@@ -21,6 +21,8 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
     @Autowired
     private final LiveRegisterMapper liveRegisterMapper;
 
+    private final BroadcastStatisticsService broadcastStatisticsService;
+
     @Override
     @Transactional
     public String getChannelName(long vendorId) {
@@ -47,6 +49,20 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
     @Transactional
     public void saveBroadcast(BroadcastDTO broadcastDTO) {
         int result = liveRegisterMapper.insertBroadcast(broadcastDTO);
+        BroadcastStatistics broadcastStatistics = BroadcastStatistics.builder()
+                        .broadcastSeq(broadcastDTO.getBroadcastSeq())
+                                .broadcastDuration(0)
+                                        .avgProductClicks(0)
+                                                .avgViewerCount(0)
+                                                        .avgViewingTime(0)
+                                                                .likesCount(0)
+                                                                        .maxViewerCount(0)
+                                                                                .avgPurchaseAmount(0)
+                                                                                        .totalSalesAmount(0)
+                                                                                                .totalSalesQty(0)
+                                                                                                        .viewsCount(0)
+                                                                                                                .build();
+        broadcastStatisticsService.insertBroadcastStatistics(broadcastStatistics);
         if (result != 1) {
             throw new RuntimeException("broadcast insert failed");
         }

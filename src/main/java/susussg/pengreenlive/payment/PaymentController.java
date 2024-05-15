@@ -25,14 +25,14 @@ import java.util.Base64;
 @RestController
 @RequestMapping("/api/payments")
 public class PaymentController {
-
     private final PaymentService paymentService;
 
     // 결제 금액 검증
     @PostMapping("/verify")
     public ResponseEntity<?> verifyPaymentRequest(@RequestBody verifyPaymentDTO paymentRequest, HttpSession session) {
         try {
-            verifyPaymentDTO payment = (verifyPaymentDTO) session.getAttribute(paymentRequest.getOrderId());
+            Object payment = session.getAttribute(paymentRequest.getOrderId());
+
             if (payment.equals(paymentRequest.getAmount())) {
                 return ResponseEntity.ok().body("approved");
             }
@@ -51,9 +51,9 @@ public class PaymentController {
     public ResponseEntity<?> holdPaymentInformation(@RequestBody verifyPaymentDTO paymentRequest, HttpSession session) {
         try {
             session.setAttribute(paymentRequest.getOrderId(), paymentRequest.getAmount());
-            return ResponseEntity.ok().body("ok");
+            return ResponseEntity.ok().body("success");
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
+            return ResponseEntity.internalServerError().body("failed");
         }
     }
 

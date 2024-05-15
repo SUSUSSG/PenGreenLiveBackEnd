@@ -50,6 +50,13 @@ jobs:
           echo "spring.datasource.password=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> ./src/main/resources/application-secret.properties
           echo "OPENVIDU_URL=${{ secrets.OPENVIDU_URL }}" >> ./src/main/resources/application-secret.properties
           echo "OPENVIDU_SECRET=${{ secrets.OPENVIDU_SECRET }}" >> ./src/main/resources/application-secret.properties
+          echo "spring.cache.type=${{ secrets.CACHE_TYPE }}" >> ./src/main/resources/application-secret.properties
+          echo "spring.data.redis.host=${{ secrets.DATA_REDIS_HOST }}" >> ./src/main/resources/application-secret.properties
+          echo "spring.data.redis.port=${{ secrets.SPRING_DATA_REDIS_PORT }}" >> ./src/main/resources/application-secret.properties
+          echo "spring.data.redis.password=${{ secrets.SPRING_DATA_REDIS_PASSWORD }}" >> ./src/main/resources/application-secret.properties
+          echo "spring.session.redis.namespace=${{ secrets.SPRING_SESSION_REDIS_NAMESPACE }}" >> ./src/main/resources/application-secret.properties
+          echo "server.servlet.session.cookie.secure=true" >> ./src/main/resources/application-secret.properties
+          echo "server.servlet.session.cookie.same-site=none" >> ./src/main/resources/application-secret.properties
 
           ./gradlew build -x test
 

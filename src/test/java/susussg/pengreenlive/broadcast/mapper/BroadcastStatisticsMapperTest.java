@@ -1,11 +1,8 @@
 package susussg.pengreenlive.broadcast.mapper;
 
 import org.junit.jupiter.api.Test;
-import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 import susussg.pengreenlive.broadcast.dto.BroadcastStatistics;
 
@@ -49,12 +46,14 @@ public class BroadcastStatisticsMapperTest {
         int maxViewerCount = 200;
         broadcastStatisticsMapper.updateMaxViewerCount(broadcastSeq, maxViewerCount);
     }
+
     @Test
     public void testInsertBroadcastStatistics() {
         BroadcastStatistics broadcastStatistics = new BroadcastStatistics(
                 7L,
                 100,
                 200,
+                50,
                 50,
                 10000L,
                 30,
@@ -72,11 +71,29 @@ public class BroadcastStatisticsMapperTest {
         assertEquals(100, result.getAvgViewerCount());
         assertEquals(200, result.getMaxViewerCount());
         assertEquals(50, result.getLikesCount());
+        assertEquals(50, result.getViewsCount());
         assertEquals(10000L, result.getAvgPurchaseAmount());
         assertEquals(30, result.getAvgViewingTime());
         assertEquals(60, result.getBroadcastDuration());
         assertEquals(15, result.getAvgProductClicks());
         assertEquals(500000L, result.getTotalSalesAmount());
         assertEquals(20, result.getTotalSalesQty());
+    }
+
+    @Test
+    public void testUpdateBroadcastStatistics() {
+        BroadcastStatistics broadcastStatistics = new BroadcastStatistics();
+        broadcastStatistics.setBroadcastSeq(6L);
+        broadcastStatistics.setAvgViewerCount(150);
+        broadcastStatistics.setMaxViewerCount(250);
+        broadcastStatistics.setBroadcastDuration(3600);
+
+        broadcastStatisticsMapper.updateBroadcastStatistics(6L, broadcastStatistics);
+
+        BroadcastStatistics result = broadcastStatisticsMapper.findById(6L);
+        assertNotNull(result);
+        assertEquals(150, result.getAvgViewerCount());
+        assertEquals(250, result.getMaxViewerCount());
+        assertEquals(3600, result.getBroadcastDuration());
     }
 }
