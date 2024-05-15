@@ -27,8 +27,8 @@
       o.ORDER_PAYED_PRICE,
       o.DELIVERY_STATUS,
       o.REVIEW_YN,
-      p.PRODUCT_NM
-#       p.PRODUCT_IMAGE
+      p.PRODUCT_NM,
+      p.PRODUCT_IMAGE
     FROM
       TB_ORDER o
         JOIN
@@ -44,8 +44,8 @@
       o.ORDER_PAYED_PRICE,
       o.DELIVERY_STATUS,
       o.REVIEW_YN,
-      p.PRODUCT_NM
-#       p.PRODUCT_IMAGE
+      p.PRODUCT_NM,
+      p.PRODUCT_IMAGE
     FROM
       TB_ORDER o
         JOIN

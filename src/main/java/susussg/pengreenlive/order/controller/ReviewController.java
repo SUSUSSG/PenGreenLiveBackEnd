@@ -21,9 +21,21 @@ public class ReviewController {
     this.reviewService = reviewService;
   }
 
-  @GetMapping("/unreviewed-orders/{userUuid}")
+  @GetMapping("/orders/{userUuid}")
   public ResponseEntity<List<ReviewDTO>> getOrdersByUser(@PathVariable String userUuid) {
     List<ReviewDTO> orders = reviewService.findOrdersByUser(userUuid);
+    return ResponseEntity.ok(orders);
+  }
+
+  @GetMapping("/unreviewed-orders/{userUuid}")
+  public ResponseEntity<List<ReviewDTO>> getUnreviewedOrdersByUser(@PathVariable String userUuid) {
+    List<ReviewDTO> orders = reviewService.findUnreviewedOrdersByUser(userUuid);
+    return ResponseEntity.ok(orders);
+  }
+
+  @GetMapping("/reviewed-orders/{userUuid}")
+  public ResponseEntity<List<ReviewDTO>> getReviewedOrdersByUser(@PathVariable String userUuid) {
+    List<ReviewDTO> orders = reviewService.findReviewedOrdersByUser(userUuid);
     return ResponseEntity.ok(orders);
   }
 
