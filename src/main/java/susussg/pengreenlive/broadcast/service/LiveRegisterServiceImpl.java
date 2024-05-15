@@ -99,9 +99,8 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UpcomingBroadcastInfoDTO> getUpcomingBroadcastInfo(long vendorId) {
-        List<UpcomingBroadcastInfoDTO> broadcastInfoList = liveRegisterMapper.selectUpcomingBroadcastInfo(vendorId);
-//        broadcastInfoList.forEach(info -> log.info(info.getBroadcastSeq()));
-        return broadcastInfoList;
+        return liveRegisterMapper.selectUpcomingBroadcastInfo(vendorId);
     }
 }
