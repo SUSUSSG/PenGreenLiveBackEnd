@@ -14,4 +14,6 @@ public interface ReviewMapper {
 
   List<ReviewDTO> findReviewedOrdersByUser(@Param("userUuid") String userUuid);
 
+  void insertReview(ReviewDTO reviewDTO);
+
 }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import susussg.pengreenlive.order.dto.ReviewDTO;
 import susussg.pengreenlive.order.service.ReviewService;
@@ -37,6 +39,16 @@ public class ReviewController {
   public ResponseEntity<List<ReviewDTO>> getReviewedOrdersByUser(@PathVariable String userUuid) {
     List<ReviewDTO> orders = reviewService.findReviewedOrdersByUser(userUuid);
     return ResponseEntity.ok(orders);
+  }
+
+  @PostMapping("/reviews")
+  public ResponseEntity<String> addReview(@RequestBody ReviewDTO reviewDTO) {
+    try {
+      reviewService.addReview(reviewDTO);
+      return ResponseEntity.ok("리뷰 등록이 완료되었습니다.");
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body("리뷰등록에 실패했습니다: " + e.getMessage());
+    }
   }
 
 

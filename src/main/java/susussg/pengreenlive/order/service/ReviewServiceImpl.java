@@ -32,4 +32,9 @@ public class ReviewServiceImpl implements ReviewService {
   public List<ReviewDTO> findReviewedOrdersByUser(String userUuid) {
     return reviewMapper.findReviewedOrdersByUser(userUuid);
   }
+
+  @Override
+  public void addReview(ReviewDTO reviewDTO) {
+    reviewMapper.insertReview(reviewDTO);
+  }
 }
