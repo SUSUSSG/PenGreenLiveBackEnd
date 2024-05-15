@@ -26,6 +26,8 @@ public class MainController {
     // 세션에 하드코딩된 값 추가
     // 테스트 시 주석처리 되지 않은 역할로 채팅 진입
     public String userUUID = "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6";
+
+    @TimeTrace
     @GetMapping("/main-carousels")
     public List<MainCarouselDTO> getMainCarousels(){
         log.info("call getMainCarousels");

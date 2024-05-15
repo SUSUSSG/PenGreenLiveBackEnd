@@ -30,6 +30,8 @@
       TB_BROADCAST_PRODUCT bp ON b.BROADCAST_SEQ = bp.BROADCAST_SEQ
         LEFT JOIN
       TB_PRODUCT p ON bp.PRODUCT_SEQ = p.PRODUCT_SEQ
+    ORDER BY b.BROADCAST_SEQ DESC
+    LIMIT 10
   </select>
 
   <select id="selectScheduledBroadcasts" parameterType="map" resultType="susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO">

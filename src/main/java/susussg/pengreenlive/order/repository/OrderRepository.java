@@ -1,4 +1,4 @@
-package susussg.pengreenlive.order;
+package susussg.pengreenlive.order.repository;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
