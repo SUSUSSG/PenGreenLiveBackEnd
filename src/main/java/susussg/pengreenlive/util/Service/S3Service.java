@@ -23,14 +23,16 @@ public class S3Service {
         this.amazonS3 = amazonS3;
     }
 
-    public String uploadFile(MultipartFile file) throws IOException {
+    public String uploadFile(MultipartFile file, String folderName) throws IOException {
         String fileName = file.getOriginalFilename();
+        String fullPath = folderName + "/" + fileName;
+
         InputStream inputStream = file.getInputStream();
 
-        amazonS3.putObject(new PutObjectRequest(bucketName, fileName, inputStream, null)
+        amazonS3.putObject(new PutObjectRequest(bucketName, fullPath, inputStream, null)
             .withCannedAcl(CannedAccessControlList.PublicRead));
 
-        return amazonS3.getUrl(bucketName, fileName).toString();
+        return amazonS3.getUrl(bucketName, fullPath).toString();
     }
 
     public S3Object downloadFile(String fileName) {
