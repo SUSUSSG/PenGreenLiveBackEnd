@@ -105,7 +105,6 @@ public class LiveRegisterController {
     // 방송 예정 목록
     @GetMapping("/upcoming-broadcasts")
     public List<UpcomingBroadcastInfoDTO> fetchUpcomingBroadcasts() {
-//        List<UpcomingBroadcastInfoDTO> upcomingBroadcastInfo = liveRegisterService.getUpcomingBroadcastInfo(vendorId);
         log.info("방송 준비 컨트롤러 호출");
         return liveRegisterService.getUpcomingBroadcastInfo(vendorId);
     }
