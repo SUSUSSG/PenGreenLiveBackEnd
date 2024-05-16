@@ -35,6 +35,7 @@
   </select>
 
   <select id="selectScheduledBroadcasts" parameterType="map" resultType="susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO">
+    WITH BroadcastData AS (
     SELECT
     BC.BROADCAST_SEQ,
     BC.BROADCAST_SCHEDULED_TIME,
@@ -49,7 +50,8 @@
     PD.PRODUCT_IMAGE,
     CH.CHANNEL_IMAGE,
     CH.CHANNEL_NM,
-    CH.CHANNEL_SEQ
+    CH.CHANNEL_SEQ,
+    ROW_NUMBER() OVER (PARTITION BY BC.BROADCAST_SEQ ORDER BY BC.BROADCAST_SCHEDULED_TIME) AS rn
     FROM
     TB_BROADCAST BC
     JOIN TB_BROADCAST_CATEGORY BCT ON BC.CATEGORY_CD = BCT.CATEGORY_CD
@@ -69,8 +71,25 @@
     <if test="categoryCd != null and categoryCd != ''">
       AND BCT.CATEGORY_CD LIKE #{categoryCd}
     </if>
-    ORDER BY
-    BC.BROADCAST_SCHEDULED_TIME;
+    )
+    SELECT DISTINCT
+    BROADCAST_SEQ,
+    BROADCAST_SCHEDULED_TIME,
+    BROADCAST_TITLE,
+    BROADCAST_IMAGE,
+    BROADCAST_SUMMARY,
+    BENEFIT_CONTENT,
+    DISCOUNT_PRICE,
+    DISCOUNT_RATE,
+    LIST_PRICE,
+    PRODUCT_NM,
+    PRODUCT_IMAGE,
+    CHANNEL_IMAGE,
+    CHANNEL_NM,
+    CHANNEL_SEQ
+    FROM BroadcastData
+    WHERE rn = 1
+    ORDER BY BROADCAST_SCHEDULED_TIME;
   </select>
 
   <select id="selectLiveChanceCarousels" parameterType="String" resultType="susussg.pengreenlive.main.DTO.LiveChanceCarouselDTO">
