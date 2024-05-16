@@ -80,4 +80,11 @@
         WHERE broadcast_seq = #{broadcastId}
     </update>
 
+    <!-- 방송 통계 조회수 업데이트 -->
+    <update id="incrementViewsCount">
+        UPDATE TB_BROADCAST_STATISTICS
+        SET views_count = views_count + 1
+        WHERE broadcast_seq = #{broadcastSeq}
+    </update>
+
 </mapper>

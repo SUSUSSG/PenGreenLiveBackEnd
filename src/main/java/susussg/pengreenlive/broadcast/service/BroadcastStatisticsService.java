@@ -10,4 +10,5 @@ public interface BroadcastStatisticsService {
     void updateMaxViewerCount(long broadcastSeq, int maxViewerCount);
     BroadcastStatistics findById(long broadcastSeq);
     void updateBroadcastStatistics(long broadcastId, BroadcastStatistics statistics);
+    void incrementViewsCount(long broadcastSeq);
 }
