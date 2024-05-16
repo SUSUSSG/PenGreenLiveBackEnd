@@ -15,5 +15,5 @@ public interface BroadcastRegisterService {
     List<ChannelSalesProductDTO> getChannelSalesProductAll(long vendorId);
 
     // 방송 예정 정보
-    List<UpcomingBroadcastInfoDTO> getUpcomingBroadcastInfo(long vendorId);
+    List<PrepareBroadcastInfoDTO> getUpcomingBroadcastInfo(long vendorId);
 }

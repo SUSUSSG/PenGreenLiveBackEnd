@@ -103,8 +103,8 @@ public class BroadcastRegisterController {
     }
 
     // 방송 예정 목록
-    @GetMapping("/upcoming-broadcasts")
-    public List<UpcomingBroadcastInfoDTO> fetchUpcomingBroadcasts() {
+    @GetMapping("/prepare-broadcasts")
+    public List<PrepareBroadcastInfoDTO> fetchUpcomingBroadcasts() {
         log.info("방송 준비 컨트롤러 호출");
         return broadcastRegisterService.getUpcomingBroadcastInfo(vendorId);
     }

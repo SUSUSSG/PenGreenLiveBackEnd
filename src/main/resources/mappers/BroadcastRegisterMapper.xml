@@ -34,7 +34,7 @@
     <select id="selectChannelName" parameterType="long" resultType="java.lang.String">
         SELECT CHANNEL_NM FROM TB_CHANNEL WHERE VENDOR_SEQ = #{vendorId};
     </select>
-    <select id="selectUpcomingBroadcastInfo" resultType="susussg.pengreenlive.broadcast.dto.UpcomingBroadcastInfoDTO" parameterType="long">
+    <select id="selectPrepareBroadcastInfo" resultType="susussg.pengreenlive.broadcast.dto.PrepareBroadcastInfoDTO" parameterType="long">
         SELECT bp.BROADCAST_SEQ,
                bp.PRODUCT_SEQ,
                p.PRODUCT_NM,

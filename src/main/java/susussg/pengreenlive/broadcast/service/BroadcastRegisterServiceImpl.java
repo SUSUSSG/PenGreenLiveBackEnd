@@ -116,7 +116,7 @@ public class BroadcastRegisterServiceImpl implements BroadcastRegisterService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<UpcomingBroadcastInfoDTO> getUpcomingBroadcastInfo(long vendorId) {
-        return broadcastRegisterMapper.selectUpcomingBroadcastInfo(vendorId);
+    public List<PrepareBroadcastInfoDTO> getUpcomingBroadcastInfo(long vendorId) {
+        return broadcastRegisterMapper.selectPrepareBroadcastInfo(vendorId);
     }
 }

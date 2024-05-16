@@ -104,7 +104,7 @@ public class LiveRegisterMapperTest {
 
     @Test
     void selectPreBroadcastInfo() {
-        List<UpcomingBroadcastInfoDTO> infoList = broadcastRegisterMapper.selectUpcomingBroadcastInfo(2);
+        List<PrepareBroadcastInfoDTO> infoList = broadcastRegisterMapper.selectUpcomingBroadcastInfo(2);
         infoList.forEach(info -> log.info(String.valueOf(info.getBroadcastSeq())));
     }
 }
