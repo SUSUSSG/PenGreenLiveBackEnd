@@ -94,7 +94,7 @@
       ) BP ON BC.BROADCAST_SEQ = BP.BROADCAST_SEQ AND BP.rn = 1
       JOIN TB_PRODUCT PD ON BP.PRODUCT_SEQ = PD.PRODUCT_SEQ
     WHERE
-      BC.BROADCAST_YN LIKE 'Y'
+      BC.BROADCAST_YN LIKE '1'
       <if test="categoryCd != null and categoryCd != ''">
         AND BCT.CATEGORY_CD LIKE #{categoryCd}
       </if>
