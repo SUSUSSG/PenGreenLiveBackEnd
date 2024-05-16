@@ -4,7 +4,7 @@ import susussg.pengreenlive.broadcast.dto.*;
 
 import java.util.List;
 
-public interface LiveRegisterService {
+public interface BroadcastRegisterService {
     String getChannelName(long vendorId);
     List<BroadcastCategoryDTO> getAllCategory();
     void saveBroadcast(BroadcastDTO broadcastDTO);

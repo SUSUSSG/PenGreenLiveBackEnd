@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="susussg.pengreenlive.broadcast.mapper.LiveRegisterMapper">
+<mapper namespace="susussg.pengreenlive.broadcast.mapper.BroadcastRegisterMapper">
 
     <select id="selectAllCategory" resultType="susussg.pengreenlive.broadcast.dto.BroadcastCategoryDTO" >
         SELECT CATEGORY_CD, CATEGORY_NM FROM TB_BROADCAST_CATEGORY

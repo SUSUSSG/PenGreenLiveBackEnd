@@ -26,11 +26,11 @@ public class MainServiceTest {
         log.info("getMainCarousel list : " + mainService.getMainCarousels());
     }
 
-    @Test
-    public void getScheduledBroadcasts() {
-        String catregoryCd = "BCT-CTG-001";
-        log.info("getMainCarousel list : " + mainService.getScheduledBroadcasts(catregoryCd));
-    }
+//    @Test
+//    public void getScheduledBroadcasts() {
+//        String catregoryCd = "BCT-CTG-001";
+//        log.info("getMainCarousel list : " + mainService.getScheduledBroadcasts(catregoryCd));
+//    }
 
     @Test
     public void getLiveChanceCarousels() {

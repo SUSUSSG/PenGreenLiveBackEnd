@@ -5,20 +5,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.broadcast.dto.*;
-import susussg.pengreenlive.broadcast.service.LiveRegisterService;
+import susussg.pengreenlive.broadcast.service.BroadcastRegisterService;
 
 import java.util.Base64;
 import java.util.List;
 
 @RestController
 @Log4j2
-public class LiveRegisterController {
+public class BroadcastRegisterController {
 
     @Autowired
-    private final LiveRegisterService liveRegisterService;
+    private final BroadcastRegisterService broadcastRegisterService;
 
-    public LiveRegisterController(LiveRegisterService liveRegisterService) {
-        this.liveRegisterService = liveRegisterService;
+    public BroadcastRegisterController(BroadcastRegisterService broadcastRegisterService) {
+        this.broadcastRegisterService = broadcastRegisterService;
     }
 
     //판매자 고유번호
@@ -27,14 +27,14 @@ public class LiveRegisterController {
     // 방송 카테고리 목록 불러오기
     @GetMapping("/broadcast-category")
     public ResponseEntity<List<BroadcastCategoryDTO>> fetchBroadcastCategory() {
-        List<BroadcastCategoryDTO> categoryList = liveRegisterService.getAllCategory();
+        List<BroadcastCategoryDTO> categoryList = broadcastRegisterService.getAllCategory();
         return ResponseEntity.ok().body(categoryList);
     }
 
     // 방송 등록
     @PostMapping(value = "/register-broadcast")
     public ResponseEntity<String> registerBroadcast(@RequestBody BroadcastRegistrationRequestDTO request) {
-        String channelName = liveRegisterService.getChannelName(vendorId); // 판매자 정보
+        String channelName = broadcastRegisterService.getChannelName(vendorId); // 판매자 정보
 
         BroadcastDTO broadcastDTO = BroadcastDTO.builder()
                 .channelNm(channelName)
@@ -54,7 +54,7 @@ public class LiveRegisterController {
             }
         }
 
-        liveRegisterService.saveBroadcast(broadcastDTO);
+        broadcastRegisterService.saveBroadcast(broadcastDTO);
 
         request.getRegisteredProducts().forEach(productInfo -> {
             BroadcastProductDTO productDTO = BroadcastProductDTO.builder()
@@ -63,7 +63,7 @@ public class LiveRegisterController {
                     .discountRate(productInfo.getDiscountRate())
                     .discountPrice(productInfo.getDiscountPrice())
                     .build();
-            liveRegisterService.saveBroadcastProduct(productDTO);
+            broadcastRegisterService.saveBroadcastProduct(productDTO);
         });
 
         request.getNotices().forEach(notice -> {
@@ -71,7 +71,7 @@ public class LiveRegisterController {
                     .broadcastSeq(broadcastDTO.getBroadcastSeq())
                     .noticeContent(notice)
                     .build();
-            liveRegisterService.saveNotice(noticeDTO);
+            broadcastRegisterService.saveNotice(noticeDTO);
         });
 
         request.getBenefits().forEach(benefit -> {
@@ -79,7 +79,7 @@ public class LiveRegisterController {
                     .broadcastSeq(broadcastDTO.getBroadcastSeq())
                     .benefitContent(benefit)
                     .build();
-            liveRegisterService.saveBenefit(benefitDTO);
+            broadcastRegisterService.saveBenefit(benefitDTO);
         });
 
         request.getQa().forEach(qaInfo -> {
@@ -88,7 +88,7 @@ public class LiveRegisterController {
                     .questionTitle(qaInfo.getQuestionTitle())
                     .questionAnswer(qaInfo.getQuestionAnswer())
                     .build();
-            liveRegisterService.saveFaq(faqDTO);
+            broadcastRegisterService.saveFaq(faqDTO);
         });
 
         return ResponseEntity.ok().body("방송 정보가 성공적으로 등록되었습니다.");
@@ -98,7 +98,7 @@ public class LiveRegisterController {
     //채널별 상품 목록
     @GetMapping("/channel-sales-product")
     public ResponseEntity<List<ChannelSalesProductDTO>> fetchChannelSalesProduct() {
-        List<ChannelSalesProductDTO> channelSalesProducts = liveRegisterService.getChannelSalesProductAll(vendorId);
+        List<ChannelSalesProductDTO> channelSalesProducts = broadcastRegisterService.getChannelSalesProductAll(vendorId);
         return ResponseEntity.ok().body(channelSalesProducts);
     }
 
@@ -106,7 +106,7 @@ public class LiveRegisterController {
     @GetMapping("/upcoming-broadcasts")
     public List<UpcomingBroadcastInfoDTO> fetchUpcomingBroadcasts() {
         log.info("방송 준비 컨트롤러 호출");
-        return liveRegisterService.getUpcomingBroadcastInfo(vendorId);
+        return broadcastRegisterService.getUpcomingBroadcastInfo(vendorId);
     }
 
 }

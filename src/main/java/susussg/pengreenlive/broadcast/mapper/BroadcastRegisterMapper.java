@@ -6,7 +6,7 @@ import susussg.pengreenlive.broadcast.dto.*;
 import java.util.List;
 
 @Mapper
-public interface LiveRegisterMapper {
+public interface BroadcastRegisterMapper {
     String selectChannelName(long vendorId);
     List<BroadcastCategoryDTO> selectAllCategory();
     int insertBroadcast(BroadcastDTO broadcastDTO);

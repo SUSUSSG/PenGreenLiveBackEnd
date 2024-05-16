@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import susussg.pengreenlive.broadcast.dto.*;
-import susussg.pengreenlive.broadcast.mapper.LiveRegisterMapper;
+import susussg.pengreenlive.broadcast.mapper.BroadcastRegisterMapper;
 
 
 import java.util.List;
@@ -16,17 +16,17 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor
 
-public class LiveRegisterServiceImpl implements LiveRegisterService {
+public class BroadcastRegisterServiceImpl implements BroadcastRegisterService {
 
     @Autowired
-    private final LiveRegisterMapper liveRegisterMapper;
+    private final BroadcastRegisterMapper broadcastRegisterMapper;
 
     private final BroadcastStatisticsService broadcastStatisticsService;
 
     @Override
     @Transactional
     public String getChannelName(long vendorId) {
-        String channelName = liveRegisterMapper.selectChannelName(vendorId);
+        String channelName = broadcastRegisterMapper.selectChannelName(vendorId);
         if (channelName.isEmpty()) {
             throw new RuntimeException("channel name emplty");
         } else {
@@ -37,7 +37,7 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
     @Override
     @Transactional
     public List<BroadcastCategoryDTO> getAllCategory() {
-        List<BroadcastCategoryDTO> categoryList = liveRegisterMapper.selectAllCategory();
+        List<BroadcastCategoryDTO> categoryList = broadcastRegisterMapper.selectAllCategory();
         if (categoryList.isEmpty()) {
             throw new RuntimeException("cateogry  emplty");
         } else {
@@ -48,7 +48,7 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
     @Override
     @Transactional
     public void saveBroadcast(BroadcastDTO broadcastDTO) {
-        int result = liveRegisterMapper.insertBroadcast(broadcastDTO);
+        int result = broadcastRegisterMapper.insertBroadcast(broadcastDTO);
         BroadcastStatistics broadcastStatistics = BroadcastStatistics.builder()
                         .broadcastSeq(broadcastDTO.getBroadcastSeq())
                                 .broadcastDuration(0)
@@ -71,7 +71,7 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
     @Override
     @Transactional
     public void saveBroadcastProduct(BroadcastProductDTO broadcastProductDTO) {
-        int result = liveRegisterMapper.insertBroadcastProduct(broadcastProductDTO);
+        int result = broadcastRegisterMapper.insertBroadcastProduct(broadcastProductDTO);
         if (result != 1) {
             throw new RuntimeException("broadcastProduct insert failed");
         }
@@ -80,7 +80,7 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
     @Override
     @Transactional
     public void saveNotice(NoticeDTO noticeDTO) {
-        int result = liveRegisterMapper.insertNotice(noticeDTO);
+        int result = broadcastRegisterMapper.insertNotice(noticeDTO);
         if (result != 1) {
             throw new RuntimeException("notice insert failed");
         }
@@ -89,7 +89,7 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
     @Override
     @Transactional
     public void saveFaq(FaqDTO faqDTO) {
-        int result = liveRegisterMapper.insertFaq(faqDTO);
+        int result = broadcastRegisterMapper.insertFaq(faqDTO);
         if (result != 1) {
             throw new RuntimeException("faq insert failed");
         }
@@ -98,7 +98,7 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
     @Override
     @Transactional
     public void saveBenefit(BenefitDTO benefitDTO) {
-        int result = liveRegisterMapper.insertBenefit(benefitDTO);
+        int result = broadcastRegisterMapper.insertBenefit(benefitDTO);
         if (result != 1) {
             throw new RuntimeException("benefit insert failed");
         }
@@ -106,7 +106,7 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
 
     @Override
     public List<ChannelSalesProductDTO> getChannelSalesProductAll(long vendorId) {
-        List<ChannelSalesProductDTO> productList = liveRegisterMapper.selectChannelSalesProduct(vendorId);
+        List<ChannelSalesProductDTO> productList = broadcastRegisterMapper.selectChannelSalesProduct(vendorId);
         if (productList.isEmpty()) {
             throw new RuntimeException("product list empty");
         } else {
@@ -117,6 +117,6 @@ public class LiveRegisterServiceImpl implements LiveRegisterService {
     @Override
     @Transactional(readOnly = true)
     public List<UpcomingBroadcastInfoDTO> getUpcomingBroadcastInfo(long vendorId) {
-        return liveRegisterMapper.selectUpcomingBroadcastInfo(vendorId);
+        return broadcastRegisterMapper.selectUpcomingBroadcastInfo(vendorId);
     }
 }
