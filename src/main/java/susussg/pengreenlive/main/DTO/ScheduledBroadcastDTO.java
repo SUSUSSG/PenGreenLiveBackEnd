@@ -16,15 +16,15 @@ public class ScheduledBroadcastDTO {
     private int broadcastSeq;
     private LocalDateTime broadcastScheduledTime;
     private String broadcastTitle;
-    private byte[] broadcastImage;
+    private String broadcastImage;
     private String broadcastSummary;
     private String benefitContent;
     private int discountPrice;
     private int discountRate;
     private int listPrice;
-    private byte[] channelImage;
+    private String channelImage;
     private String channelNm;
     private int channelSeq;
     private String productNm;
-    private byte[] productImage;
+    private String productImage;
 }

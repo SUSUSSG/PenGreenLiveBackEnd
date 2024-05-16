@@ -98,4 +98,12 @@ public class BroadcastStatisticsServiceTest {
         assertEquals(250, result.getMaxViewerCount());
         assertEquals(3600, result.getBroadcastDuration());
     }
+
+    @Test
+    public void testIncrementViewsCount(){
+        broadcastStatisticsService.incrementViewsCount(6L);
+        BroadcastStatistics result = broadcastStatisticsService.findById(6L);
+        assertNotNull(result);
+        assertEquals(1, result.getViewsCount());
+    }
 }

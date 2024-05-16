@@ -6,14 +6,24 @@ import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import susussg.pengreenlive.dashboard.DTO.ProductDTO;
 import susussg.pengreenlive.dashboard.Mapper.ProductMapper;
+import susussg.pengreenlive.util.Service.ByteArrayMultipartFile;
+import susussg.pengreenlive.util.Service.ImageService;
+import susussg.pengreenlive.util.Service.S3Service;
 
 @Log4j2
 @Service
 public class ProductServiceImpl implements ProductService{
 
   private final ProductMapper productMapper;
+
+  @Autowired
+  ImageService imageService;
+
+  @Autowired
+  S3Service s3Service;
 
   @Autowired
   public ProductServiceImpl(ProductMapper productMapper) {
@@ -31,7 +41,12 @@ public class ProductServiceImpl implements ProductService{
     try {
       if (productDTO.getBase64Image() != null) {
         byte[] imageBytes = Base64.getDecoder().decode(productDTO.getBase64Image());
-        productDTO.setProductImage(imageBytes);
+
+        byte[] compressedImage = imageService.compressAndResizeImage(imageBytes,400,1f);
+        MultipartFile multipartFile = new ByteArrayMultipartFile(compressedImage, "productImage", "product.jpg", "image/jpeg");
+        String url = s3Service.uploadFile(multipartFile, "product");
+
+        productDTO.setBase64Image(url);
       }
       productMapper.insertProduct(productDTO);
       Long productSeq = productDTO.getProductSeq();
@@ -59,7 +74,12 @@ public class ProductServiceImpl implements ProductService{
     try {
       if (productDTO.getBase64Image() != null) {
         byte[] imageBytes = Base64.getDecoder().decode(productDTO.getBase64Image());
-        productDTO.setProductImage(imageBytes);
+
+        byte[] compressedImage = imageService.compressAndResizeImage(imageBytes,400,1f);
+        MultipartFile multipartFile = new ByteArrayMultipartFile(compressedImage, "productImage", "product.jpg", "image/jpeg");
+        String url = s3Service.uploadFile(multipartFile, "product");
+
+        productDTO.setBase64Image(url);
       }
 
       productDTO.setProductSeq(productSeq);

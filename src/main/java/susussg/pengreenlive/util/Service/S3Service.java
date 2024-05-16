@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 @Service
 public class S3Service {
@@ -24,18 +25,25 @@ public class S3Service {
     }
 
     public String uploadFile(MultipartFile file, String folderName) throws IOException {
-        String fileName = file.getOriginalFilename();
-        String fullPath = folderName + "/" + fileName;
+        String originalFileName = file.getOriginalFilename();
+        String fileExtension = getFileExtension(originalFileName);
+        String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
+        String fullPath = folderName + "/" + uniqueFileName;
 
-        InputStream inputStream = file.getInputStream();
-
-        amazonS3.putObject(new PutObjectRequest(bucketName, fullPath, inputStream, null)
-            .withCannedAcl(CannedAccessControlList.PublicRead));
+        try (InputStream inputStream = file.getInputStream()) {
+            amazonS3.putObject(new PutObjectRequest(bucketName, fullPath, inputStream, null)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        }
 
         return amazonS3.getUrl(bucketName, fullPath).toString();
     }
 
     public S3Object downloadFile(String fileName) {
         return amazonS3.getObject(bucketName, fileName);
+    }
+
+    private String getFileExtension(String fileName) {
+        int lastIndexOfDot = fileName.lastIndexOf(".");
+        return (lastIndexOfDot == -1) ? "" : fileName.substring(lastIndexOfDot);
     }
 }
