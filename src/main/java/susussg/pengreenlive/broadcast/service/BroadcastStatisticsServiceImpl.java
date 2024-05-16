@@ -54,4 +54,10 @@ public class BroadcastStatisticsServiceImpl implements BroadcastStatisticsServic
     public void updateBroadcastStatistics(long broadcastId, BroadcastStatistics statistics) {
         broadcastStatisticsMapper.updateBroadcastStatistics(broadcastId, statistics);
     }
+
+    @Override
+    @Transactional
+    public void incrementViewsCount(long broadcastSeq) {
+        broadcastStatisticsMapper.incrementViewsCount(broadcastSeq);
+    }
 }

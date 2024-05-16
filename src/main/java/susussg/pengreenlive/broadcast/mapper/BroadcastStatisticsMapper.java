@@ -14,4 +14,5 @@ public interface BroadcastStatisticsMapper {
     void updateMaxViewerCount(@Param("broadcastSeq")long broadcastSeq, @Param("maxViewerCount") int maxViewerCount);
     BroadcastStatistics findById(long broadcastSeq);
     void updateBroadcastStatistics(@Param("broadcastId") long broadcastId, @Param("statistics") BroadcastStatistics statistics);
+    void incrementViewsCount(@Param("broadcastSeq") long broadcastSeq);
 }

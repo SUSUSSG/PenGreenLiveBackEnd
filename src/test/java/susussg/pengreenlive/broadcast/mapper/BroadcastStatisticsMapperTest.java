@@ -96,4 +96,11 @@ public class BroadcastStatisticsMapperTest {
         assertEquals(250, result.getMaxViewerCount());
         assertEquals(3600, result.getBroadcastDuration());
     }
+
+    @Test
+    public void testIncrementViewsCount(){
+        broadcastStatisticsMapper.incrementViewsCount(6L);
+        BroadcastStatistics result = broadcastStatisticsMapper.findById(6L);
+        assertEquals(1, result.getViewsCount());
+    }
 }
