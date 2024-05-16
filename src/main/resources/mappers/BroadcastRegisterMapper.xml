@@ -57,7 +57,7 @@
                                 FROM TB_BROADCAST_PRODUCT
                                 WHERE BROADCAST_SEQ = bp.BROADCAST_SEQ
                                   AND DISCOUNT_PRICE = max_discount.MAX_DISCOUNT_PRICE)
-          AND b.BROADCAST_YN IS NULL
+          AND b.BROADCAST_YN = FALSE
           AND c.VENDOR_SEQ = #{vendorId}
     </select>
 </mapper>
