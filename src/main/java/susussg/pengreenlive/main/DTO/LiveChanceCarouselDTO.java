@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class LiveChanceCarouselDTO {
 
     private int broadcastSeq;
-    private byte[] broadcastImage;
+    private String broadcastImage;
     private String broadcastTitle;
     private String productImage;
     private String productNm;

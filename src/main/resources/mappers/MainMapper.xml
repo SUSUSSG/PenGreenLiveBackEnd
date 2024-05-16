@@ -35,6 +35,7 @@
   </select>
 
   <select id="selectScheduledBroadcasts" parameterType="map" resultType="susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO">
+    WITH BroadcastData AS (
     SELECT
     BC.BROADCAST_SEQ,
     BC.BROADCAST_SCHEDULED_TIME,
@@ -49,7 +50,8 @@
     PD.PRODUCT_IMAGE,
     CH.CHANNEL_IMAGE,
     CH.CHANNEL_NM,
-    CH.CHANNEL_SEQ
+    CH.CHANNEL_SEQ,
+    ROW_NUMBER() OVER (PARTITION BY BC.BROADCAST_SEQ ORDER BY BC.BROADCAST_SCHEDULED_TIME) AS rn
     FROM
     TB_BROADCAST BC
     JOIN TB_BROADCAST_CATEGORY BCT ON BC.CATEGORY_CD = BCT.CATEGORY_CD
@@ -69,54 +71,84 @@
     <if test="categoryCd != null and categoryCd != ''">
       AND BCT.CATEGORY_CD LIKE #{categoryCd}
     </if>
-    ORDER BY
-    BC.BROADCAST_SCHEDULED_TIME;
+    )
+    SELECT DISTINCT
+    BROADCAST_SEQ,
+    BROADCAST_SCHEDULED_TIME,
+    BROADCAST_TITLE,
+    BROADCAST_IMAGE,
+    BROADCAST_SUMMARY,
+    BENEFIT_CONTENT,
+    DISCOUNT_PRICE,
+    DISCOUNT_RATE,
+    LIST_PRICE,
+    PRODUCT_NM,
+    PRODUCT_IMAGE,
+    CHANNEL_IMAGE,
+    CHANNEL_NM,
+    CHANNEL_SEQ
+    FROM BroadcastData
+    WHERE rn = 1
+    ORDER BY BROADCAST_SCHEDULED_TIME
   </select>
 
   <select id="selectLiveChanceCarousels" parameterType="String" resultType="susussg.pengreenlive.main.DTO.LiveChanceCarouselDTO">
+    WITH BroadcastData AS (
     SELECT
-      BC.BROADCAST_SEQ,
-      BC.BROADCAST_SCHEDULED_TIME,
-      BC.BROADCAST_TITLE,
-      BC.BROADCAST_IMAGE,
-      BP.DISCOUNT_PRICE,
-      BP.DISCOUNT_RATE,
-      PD.PRODUCT_IMAGE,
-      PD.PRODUCT_NM
+    BC.BROADCAST_SEQ,
+    BC.BROADCAST_SCHEDULED_TIME,
+    BC.BROADCAST_TITLE,
+    BC.BROADCAST_IMAGE,
+    BP.DISCOUNT_PRICE,
+    BP.DISCOUNT_RATE,
+    PD.PRODUCT_IMAGE,
+    PD.PRODUCT_NM,
+    ROW_NUMBER() OVER (PARTITION BY BC.BROADCAST_SEQ ORDER BY BC.BROADCAST_SCHEDULED_TIME) AS rn
     FROM
-      TB_BROADCAST BC
-      JOIN TB_BROADCAST_CATEGORY BCT ON BC.CATEGORY_CD = BCT.CATEGORY_CD
-      LEFT JOIN TB_BENEFIT BF ON BC.BROADCAST_SEQ = BF.BROADCAST_SEQ
-      JOIN (
-        SELECT *,
-          ROW_NUMBER() OVER (PARTITION BY BROADCAST_SEQ ORDER BY PRODUCT_SEQ) AS rn
-        FROM TB_BROADCAST_PRODUCT
-      ) BP ON BC.BROADCAST_SEQ = BP.BROADCAST_SEQ AND BP.rn = 1
-      JOIN TB_PRODUCT PD ON BP.PRODUCT_SEQ = PD.PRODUCT_SEQ
+    TB_BROADCAST BC
+    JOIN TB_BROADCAST_CATEGORY BCT ON BC.CATEGORY_CD = BCT.CATEGORY_CD
+    LEFT JOIN TB_BENEFIT BF ON BC.BROADCAST_SEQ = BF.BROADCAST_SEQ
+    JOIN (
+    SELECT *,
+    ROW_NUMBER() OVER (PARTITION BY BROADCAST_SEQ ORDER BY PRODUCT_SEQ) AS rn
+    FROM TB_BROADCAST_PRODUCT
+    ) BP ON BC.BROADCAST_SEQ = BP.BROADCAST_SEQ AND BP.rn = 1
+    JOIN TB_PRODUCT PD ON BP.PRODUCT_SEQ = PD.PRODUCT_SEQ
     WHERE
-      BC.BROADCAST_YN LIKE '1'
-      <if test="categoryCd != null and categoryCd != ''">
-        AND BCT.CATEGORY_CD LIKE #{categoryCd}
-      </if>
-    ORDER BY
-      BC.BROADCAST_SCHEDULED_TIME;
+    BC.BROADCAST_YN LIKE '1'
+    <if test="categoryCd != null and categoryCd != ''">
+      AND BCT.CATEGORY_CD LIKE #{categoryCd}
+    </if>
+    )
+    SELECT DISTINCT
+    BROADCAST_SEQ,
+    BROADCAST_SCHEDULED_TIME,
+    BROADCAST_TITLE,
+    BROADCAST_IMAGE,
+    DISCOUNT_PRICE,
+    DISCOUNT_RATE,
+    PRODUCT_IMAGE,
+    PRODUCT_NM
+    FROM BroadcastData
+    WHERE rn = 1
+    ORDER BY BROADCAST_SCHEDULED_TIME
   </select>
 
   <select id="checkNotificationChannelExists" parameterType="map" resultType="java.lang.Integer">
     SELECT COUNT(*)
     FROM TB_NOTIFICATION_CHANNEL
-    WHERE USER_UUID = #{userUuid}
+    WHERE USER_UUID = UUID_TO_BIN(#{userUuid})
       AND CHANNEL_SEQ = #{channelSeq}
   </select>
 
   <insert id="insertNotificationChannel" parameterType="map">
     INSERT INTO TB_NOTIFICATION_CHANNEL (USER_UUID, CHANNEL_SEQ)
-    VALUES (#{userUuid}, #{channelSeq})
+    VALUES (UUID_TO_BIN(#{userUuid}), #{channelSeq})
   </insert>
 
   <delete id="deleteNotificationChannel" parameterType="map">
     DELETE FROM TB_NOTIFICATION_CHANNEL
-    WHERE USER_UUID = #{userUuid}
+    WHERE USER_UUID = UUID_TO_BIN(#{userUuid})
       AND CHANNEL_SEQ = #{channelSeq}
   </delete>
 </mapper>
