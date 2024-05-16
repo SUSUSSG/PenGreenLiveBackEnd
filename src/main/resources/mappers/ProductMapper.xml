@@ -40,7 +40,7 @@
 
   <insert id="insertProduct" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO" useGeneratedKeys="true" keyProperty="productSeq">
     INSERT INTO TB_PRODUCT (PRODUCT_CD, GREEN_PRODUCT_ID, PRODUCT_NM, LIST_PRICE, BRAND, PRODUCT_IMAGE, CATEGORY_CD)
-    VALUES (#{productCd}, #{greenProductCd}, #{productNm}, #{listPrice}, #{brand}, #{base64Image}, #{categoryCd});
+    VALUES (#{productCd}, #{greenProductId}, #{productNm}, #{listPrice}, #{brand}, #{base64Image}, #{categoryCd});
   </insert>
 
   <insert id="insertProductStock" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
@@ -61,7 +61,7 @@
   <update id="updateProduct" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
     UPDATE TB_PRODUCT
     SET PRODUCT_CD = #{productCd},
-        GREEN_PRODUCT_ID = #{greenProductCd},
+        GREEN_PRODUCT_ID = #{greenProductId},
         PRODUCT_NM = #{productNm},
         LIST_PRICE = #{listPrice},
         BRAND = #{brand},

@@ -13,7 +13,7 @@ public class ProductDTO {
 
   private Long productSeq;
   private String productCd;
-  private String greenProductCd;
+  private String greenProductId;
   private String productNm;
   private int listPrice;
   private String brand;
