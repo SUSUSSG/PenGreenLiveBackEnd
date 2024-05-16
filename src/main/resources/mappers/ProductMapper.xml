@@ -19,7 +19,7 @@
         LEFT JOIN TB_PRODUCT_STOCK s ON p.PRODUCT_SEQ = s.PRODUCT_SEQ
   </select>
 
-  <select id="findProductsByVendor" resultType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
+  <select id="findProductsByVendor" resultType="susussg.pengreenlive.dashboard.DTO.VendorProductListDTO">
     SELECT
       p.PRODUCT_SEQ,
       p.PRODUCT_CD,

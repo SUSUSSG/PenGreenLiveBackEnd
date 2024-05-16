@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import susussg.pengreenlive.dashboard.DTO.ProductDTO;
+import susussg.pengreenlive.dashboard.DTO.VendorProductListDTO;
 import susussg.pengreenlive.dashboard.Service.ProductService;
 
 @RestController
@@ -34,8 +35,8 @@ public class ProductController {
   }
 
   @GetMapping("/product-list/{vendorSeq}")
-  public ResponseEntity<List<ProductDTO>> getProductsByVendor(@PathVariable Long vendorSeq) {
-    List<ProductDTO> products = productService.findProductsByVendor(vendorSeq);
+  public ResponseEntity<List<VendorProductListDTO>> getProductsByVendor(@PathVariable Long vendorSeq) {
+    List<VendorProductListDTO> products = productService.findProductsByVendor(vendorSeq);
     return ResponseEntity.ok(products);
   }
 
