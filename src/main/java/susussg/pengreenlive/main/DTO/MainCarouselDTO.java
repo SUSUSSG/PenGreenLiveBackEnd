@@ -15,7 +15,7 @@ import lombok.ToString;
 public class MainCarouselDTO {
     private int broadcastSeq;
     private String broadcastTitle;
-    private byte[] broadcastImage;
+    private String broadcastImage;
     private String broadcastSummary;
     private List<MainCarouselProductDTO> products;
 }

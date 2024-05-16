@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class MainCarouselProductDTO {
-    private byte[] productImage;
+    private String productImage;
     private String productNm;
     private int discountPrice;
 }
