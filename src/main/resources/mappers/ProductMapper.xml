@@ -40,7 +40,7 @@
 
   <insert id="insertProduct" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO" useGeneratedKeys="true" keyProperty="productSeq">
     INSERT INTO TB_PRODUCT (PRODUCT_CD, GREEN_PRODUCT_ID, PRODUCT_NM, LIST_PRICE, BRAND, PRODUCT_IMAGE, CATEGORY_CD)
-    VALUES (#{productCd}, #{greenProductCd}, #{productNm}, #{listPrice}, #{brand}, #{productImage}, #{categoryCd});
+    VALUES (#{productCd}, #{greenProductCd}, #{productNm}, #{listPrice}, #{brand}, #{base64Image}, #{categoryCd});
   </insert>
 
   <insert id="insertProductStock" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
