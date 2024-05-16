@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService{
       if (productDTO.getBase64Image() != null) {
         byte[] imageBytes = Base64.getDecoder().decode(productDTO.getBase64Image());
 
-        byte[] compressedImage = imageService.compressAndResizeImage(imageBytes,300,1f);
+        byte[] compressedImage = imageService.compressAndResizeImage(imageBytes,400,1f);
         MultipartFile multipartFile = new ByteArrayMultipartFile(compressedImage, "productImage", "product.jpg", "image/jpeg");
         String url = s3Service.uploadFile(multipartFile, "product");
 
@@ -74,7 +74,12 @@ public class ProductServiceImpl implements ProductService{
     try {
       if (productDTO.getBase64Image() != null) {
         byte[] imageBytes = Base64.getDecoder().decode(productDTO.getBase64Image());
-        productDTO.setProductImage(imageBytes);
+
+        byte[] compressedImage = imageService.compressAndResizeImage(imageBytes,400,1f);
+        MultipartFile multipartFile = new ByteArrayMultipartFile(compressedImage, "productImage", "product.jpg", "image/jpeg");
+        String url = s3Service.uploadFile(multipartFile, "product");
+
+        productDTO.setBase64Image(url);
       }
 
       productDTO.setProductSeq(productSeq);

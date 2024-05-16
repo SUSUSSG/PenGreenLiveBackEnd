@@ -65,7 +65,7 @@
         PRODUCT_NM = #{productNm},
         LIST_PRICE = #{listPrice},
         BRAND = #{brand},
-        PRODUCT_IMAGE = #{productImage},
+        PRODUCT_IMAGE = #{base64Image},
         CATEGORY_CD = #{categoryCd}
     WHERE PRODUCT_SEQ = #{productSeq};
   </update>
