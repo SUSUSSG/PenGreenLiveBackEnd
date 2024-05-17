@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="susussg.pengreenlive.statistics.mapper.ProductStatisticsMapper">
+
+    <!-- 특정 채널의 판매 상품 중 누적 주문 금액이 가장 높은 10개를 가져오는 쿼리 -->
+    <select id="findTop10ProductsByChannel" parameterType="long" resultType="susussg.pengreenlive.statistics.dto.ProductInChannelDTO">
+        SELECT
+            P.PRODUCT_NM,
+            P.PRODUCT_CD,
+            SUM(O.ORDER_PAYED_PRICE) AS TOTAL_SALES
+        FROM
+            TB_ORDER O
+                JOIN
+            TB_PRODUCT P ON O.PRODUCT_SEQ = P.PRODUCT_SEQ
+                JOIN
+            TB_CHANNEL_SALES_PRODUCT CSP ON P.PRODUCT_SEQ = CSP.PRODUCT_SEQ
+        WHERE
+            CSP.CHANNEL_SEQ = #{channelSeq}
+        GROUP BY
+            P.PRODUCT_NM, P.PRODUCT_CD
+        ORDER BY
+            TOTAL_SALES DESC
+        LIMIT 10
+    </select>
+
+    <!-- 채널에서 파는 모든 상품의 이름과 상품 코드, 누적 매출액 리스트를 가져오는 쿼리 -->
+    <select id="findAllProductsByChannelWithSales" parameterType="long"  resultType="susussg.pengreenlive.statistics.dto.ProductInChannelDTO">
+        SELECT
+            P.PRODUCT_NM,
+            P.PRODUCT_CD,
+            IFNULL(SUM(O.ORDER_PAYED_PRICE), 0) AS TOTAL_SALES
+        FROM
+            TB_PRODUCT P
+                LEFT JOIN
+            TB_ORDER O ON P.PRODUCT_SEQ = O.PRODUCT_SEQ
+                JOIN
+            TB_CHANNEL_SALES_PRODUCT CSP ON P.PRODUCT_SEQ = CSP.PRODUCT_SEQ
+        WHERE
+            CSP.CHANNEL_SEQ = #{channelSeq}
+        GROUP BY
+            P.PRODUCT_NM, P.PRODUCT_CD
+        ORDER BY
+            TOTAL_SALES DESC
+    </select>
+
+
+</mapper>
