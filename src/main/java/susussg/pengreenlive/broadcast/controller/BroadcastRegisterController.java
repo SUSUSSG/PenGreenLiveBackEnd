@@ -33,55 +33,8 @@ public class BroadcastRegisterController {
 
     // 방송 등록
     @PostMapping(value = "/register-broadcast")
-    public ResponseEntity<String> registerBroadcast(@RequestBody BroadcastRegistrationRequestDTO request) {
-        String channelName = broadcastRegisterService.getChannelName(vendorId); // 판매자 정보
-
-        BroadcastDTO broadcastDTO = BroadcastDTO.builder()
-                .channelNm(channelName)
-                .broadcastTitle(request.getBroadcastTitle())
-                .broadcastSummary(request.getBroadcastSummary())
-                .broadcastImageUrl(request.getImage())
-                .broadcastScheduledTime(request.getBroadcastScheduledTime())
-                .categoryCd(request.getCategoryCd())
-                .build();
-
-        broadcastRegisterService.saveBroadcast(broadcastDTO);
-
-        request.getRegisteredProducts().forEach(productInfo -> {
-            BroadcastProductDTO productDTO = BroadcastProductDTO.builder()
-                    .broadcastSeq(broadcastDTO.getBroadcastSeq())
-                    .productSeq(productInfo.getProductSeq())
-                    .discountRate(productInfo.getDiscountRate())
-                    .discountPrice(productInfo.getDiscountPrice())
-                    .build();
-            broadcastRegisterService.saveBroadcastProduct(productDTO);
-        });
-
-        request.getNotices().forEach(notice -> {
-            NoticeDTO noticeDTO = NoticeDTO.builder()
-                    .broadcastSeq(broadcastDTO.getBroadcastSeq())
-                    .noticeContent(notice)
-                    .build();
-            broadcastRegisterService.saveNotice(noticeDTO);
-        });
-
-        request.getBenefits().forEach(benefit -> {
-            BenefitDTO benefitDTO = BenefitDTO.builder()
-                    .broadcastSeq(broadcastDTO.getBroadcastSeq())
-                    .benefitContent(benefit)
-                    .build();
-            broadcastRegisterService.saveBenefit(benefitDTO);
-        });
-
-        request.getQa().forEach(qaInfo -> {
-            FaqDTO faqDTO = FaqDTO.builder()
-                    .broadcastSeq(broadcastDTO.getBroadcastSeq())
-                    .questionTitle(qaInfo.getQuestionTitle())
-                    .questionAnswer(qaInfo.getQuestionAnswer())
-                    .build();
-            broadcastRegisterService.saveFaq(faqDTO);
-        });
-
+    public ResponseEntity<String> registerBroadcast(@RequestBody BroadcastRegistrationRequestDTO broadcastRegisterInfo) {
+        broadcastRegisterService.registerBroadcast(broadcastRegisterInfo, vendorId);
         return ResponseEntity.ok().body("방송 정보가 성공적으로 등록되었습니다.");
     }
 

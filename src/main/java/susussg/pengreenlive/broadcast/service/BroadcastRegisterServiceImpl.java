@@ -5,10 +5,15 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import susussg.pengreenlive.broadcast.dto.*;
 import susussg.pengreenlive.broadcast.mapper.BroadcastRegisterMapper;
+import susussg.pengreenlive.util.Service.ByteArrayMultipartFile;
+import susussg.pengreenlive.util.Service.ImageService;
+import susussg.pengreenlive.util.Service.S3Service;
 
 
+import java.util.Base64;
 import java.util.List;
 
 
@@ -23,23 +28,19 @@ public class BroadcastRegisterServiceImpl implements BroadcastRegisterService {
 
     private final BroadcastStatisticsService broadcastStatisticsService;
 
-    @Override
-    @Transactional
-    public String getChannelName(long vendorId) {
-        String channelName = broadcastRegisterMapper.selectChannelName(vendorId);
-        if (channelName.isEmpty()) {
-            throw new RuntimeException("channel name emplty");
-        } else {
-            return channelName;
-        }
-    }
+    @Autowired
+    ImageService imageService;
+
+    @Autowired
+    S3Service s3Service;
+
 
     @Override
     @Transactional
     public List<BroadcastCategoryDTO> getAllCategory() {
         List<BroadcastCategoryDTO> categoryList = broadcastRegisterMapper.selectAllCategory();
         if (categoryList.isEmpty()) {
-            throw new RuntimeException("cateogry  emplty");
+            throw new RuntimeException("category  empty");
         } else {
             return categoryList;
         }
@@ -47,15 +48,78 @@ public class BroadcastRegisterServiceImpl implements BroadcastRegisterService {
 
     @Override
     @Transactional
-    public void saveBroadcast(BroadcastDTO broadcastDTO) {
-        int result = broadcastRegisterMapper.insertBroadcast(broadcastDTO);
-        try {
+    public void registerBroadcast(BroadcastRegistrationRequestDTO broadcastRegisterInfo, long vendorId) {
+        String channelName = getChannelName(vendorId); // 판매자 정보
 
+        BroadcastDTO broadcastDTO = BroadcastDTO.builder()
+                .channelNm(channelName)
+                .broadcastTitle(broadcastRegisterInfo.getBroadcastTitle())
+                .broadcastSummary(broadcastRegisterInfo.getBroadcastSummary())
+                .broadcastScheduledTime(broadcastRegisterInfo.getBroadcastScheduledTime())
+                .categoryCd(broadcastRegisterInfo.getCategoryCd())
+                .build();
+        try {
+            if(broadcastRegisterInfo.getImage() != null) {
+                byte[] imageBytes = Base64.getDecoder().decode(broadcastRegisterInfo.getImage());
+                byte[] compressedImage = imageService.compressAndResizeImage(imageBytes, 400, 1f);
+                MultipartFile multipartFile = new ByteArrayMultipartFile(compressedImage, "broadcast", "broadcast.jpg", "image/jpeg");
+                String url = s3Service.uploadFile(multipartFile, "broadcast");
+                broadcastDTO.setBroadcastImageUrl(url);
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("broadcast insert failed");
+            throw new RuntimeException("Broadcast image decode Failed");
         }
 
+        saveBroadcast(broadcastDTO);
+
+        broadcastRegisterInfo.getRegisteredProducts().forEach(productInfo -> {
+            BroadcastProductDTO productDTO = BroadcastProductDTO.builder()
+                    .broadcastSeq(broadcastDTO.getBroadcastSeq())
+                    .productSeq(productInfo.getProductSeq())
+                    .discountRate(productInfo.getDiscountRate())
+                    .discountPrice(productInfo.getDiscountPrice())
+                    .build();
+            saveBroadcastProduct(productDTO);
+        });
+
+        broadcastRegisterInfo.getNotices().forEach(notice -> {
+            NoticeDTO noticeDTO = NoticeDTO.builder()
+                    .broadcastSeq(broadcastDTO.getBroadcastSeq())
+                    .noticeContent(notice)
+                    .build();
+            saveNotice(noticeDTO);
+        });
+
+        broadcastRegisterInfo.getBenefits().forEach(benefit -> {
+            BenefitDTO benefitDTO = BenefitDTO.builder()
+                    .broadcastSeq(broadcastDTO.getBroadcastSeq())
+                    .benefitContent(benefit)
+                    .build();
+            saveBenefit(benefitDTO);
+        });
+
+        broadcastRegisterInfo.getQa().forEach(qaInfo -> {
+            FaqDTO faqDTO = FaqDTO.builder()
+                    .broadcastSeq(broadcastDTO.getBroadcastSeq())
+                    .questionTitle(qaInfo.getQuestionTitle())
+                    .questionAnswer(qaInfo.getQuestionAnswer())
+                    .build();
+            saveFaq(faqDTO);
+        });
+    }
+
+    private String getChannelName(long vendorId) {
+        String channelName = broadcastRegisterMapper.selectChannelName(vendorId);
+        if (channelName.isEmpty()) {
+            throw new RuntimeException("channel name empty");
+        } else {
+            return channelName;
+        }
+    }
+
+    private void saveBroadcast(BroadcastDTO broadcastDTO) {
+        int result = broadcastRegisterMapper.insertBroadcast(broadcastDTO);
         BroadcastStatistics broadcastStatistics = BroadcastStatistics.builder()
                 .broadcastSeq(broadcastDTO.getBroadcastSeq())
                 .broadcastDuration(0)
@@ -70,39 +134,33 @@ public class BroadcastRegisterServiceImpl implements BroadcastRegisterService {
                 .viewsCount(0)
                 .build();
         broadcastStatisticsService.insertBroadcastStatistics(broadcastStatistics);
-
+        if (result != 1) {
+            throw new RuntimeException("broadcast insert failed");
+        }
     }
 
-    @Override
-    @Transactional
-    public void saveBroadcastProduct(BroadcastProductDTO broadcastProductDTO) {
+    private void saveBroadcastProduct(BroadcastProductDTO broadcastProductDTO) {
         int result = broadcastRegisterMapper.insertBroadcastProduct(broadcastProductDTO);
         if (result != 1) {
             throw new RuntimeException("broadcastProduct insert failed");
         }
     }
 
-    @Override
-    @Transactional
-    public void saveNotice(NoticeDTO noticeDTO) {
+    private void saveNotice(NoticeDTO noticeDTO) {
         int result = broadcastRegisterMapper.insertNotice(noticeDTO);
         if (result != 1) {
             throw new RuntimeException("notice insert failed");
         }
     }
 
-    @Override
-    @Transactional
-    public void saveFaq(FaqDTO faqDTO) {
+    private void saveFaq(FaqDTO faqDTO) {
         int result = broadcastRegisterMapper.insertFaq(faqDTO);
         if (result != 1) {
             throw new RuntimeException("faq insert failed");
         }
     }
 
-    @Override
-    @Transactional
-    public void saveBenefit(BenefitDTO benefitDTO) {
+    private void saveBenefit(BenefitDTO benefitDTO) {
         int result = broadcastRegisterMapper.insertBenefit(benefitDTO);
         if (result != 1) {
             throw new RuntimeException("benefit insert failed");
@@ -110,6 +168,7 @@ public class BroadcastRegisterServiceImpl implements BroadcastRegisterService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ChannelSalesProductDTO> getChannelSalesProductAll(long vendorId) {
         List<ChannelSalesProductDTO> productList = broadcastRegisterMapper.selectChannelSalesProduct(vendorId);
         if (productList.isEmpty()) {

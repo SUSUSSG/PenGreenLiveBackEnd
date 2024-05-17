@@ -5,13 +5,13 @@ import susussg.pengreenlive.broadcast.dto.*;
 import java.util.List;
 
 public interface BroadcastRegisterService {
-    String getChannelName(long vendorId);
+    // 방송 카테고리
     List<BroadcastCategoryDTO> getAllCategory();
-    void saveBroadcast(BroadcastDTO broadcastDTO);
-    void saveBroadcastProduct(BroadcastProductDTO broadcastProductDTO);
-    void saveNotice(NoticeDTO noticeDTO);
-    void saveFaq(FaqDTO faqDTO);
-    void saveBenefit(BenefitDTO benefitDTO);
+
+    // 방송 정보 등록
+    void registerBroadcast(BroadcastRegistrationRequestDTO broadcastRegisterInfo, long vendorId);
+
+    // 채널별 판매 상품 목록
     List<ChannelSalesProductDTO> getChannelSalesProductAll(long vendorId);
 
     // 방송 예정 정보

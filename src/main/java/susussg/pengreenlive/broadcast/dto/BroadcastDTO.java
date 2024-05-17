@@ -18,7 +18,7 @@ public class BroadcastDTO {
     private String vendorSeq;
     private String channelNm;
     private String broadcastTitle;
-    private byte[] broadcastImage;
+//    private byte[] broadcastImage;
     private String broadcastImageUrl;
     private String broadcastSummary;
     private Date broadcastScheduledTime;
