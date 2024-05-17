@@ -44,7 +44,7 @@
                b.BROADCAST_TITLE,
                b.BROADCAST_SCHEDULED_TIME,
                b.BROADCAST_IMAGE,
-               p.PRODUCT_IMAGE,
+               p.PRODUCT_IMAGE
         FROM TB_BROADCAST_PRODUCT bp
                  JOIN TB_PRODUCT p ON bp.PRODUCT_SEQ = p.PRODUCT_SEQ
                  JOIN(SELECT BROADCAST_SEQ, MAX(DISCOUNT_PRICE) AS MAX_DISCOUNT_PRICE
