@@ -11,16 +11,16 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpcomingBroadcastInfoDTO {
+public class PrepareBroadcastInfoDTO {
     //방송
     private long broadcastSeq;
     private String broadcastTitle;
-    private byte[] broadcastImage;
+    private String broadcastImage;
     private Date broadcastScheduledTime;
     //상품
     private long productSeq;
     private String productNm;
-    private byte[] productImage;
+    private String productImage;
     private int listPrice;
     //방송 판매 상품
     private int discountRate;

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import susussg.pengreenlive.broadcast.dto.*;
-import susussg.pengreenlive.broadcast.mapper.LiveRegisterMapper;
+import susussg.pengreenlive.broadcast.mapper.BroadcastRegisterMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,17 +18,17 @@ import java.util.List;
 public class LiveRegisterMapperTest {
 
     @Autowired
-    private LiveRegisterMapper liveRegisterMapper;
+    private BroadcastRegisterMapper broadcastRegisterMapper;
 
     @Test
     void selectChannelName() {
-        String channelNm = liveRegisterMapper.selectChannelName(2);
+        String channelNm = broadcastRegisterMapper.selectChannelName(2);
         log.info(channelNm);
     }
 
     @Test
     void selectAllCategory() {
-        List<BroadcastCategoryDTO> categoryList = liveRegisterMapper.selectAllCategory();
+        List<BroadcastCategoryDTO> categoryList = broadcastRegisterMapper.selectAllCategory();
         categoryList.stream().forEach(c -> log.info(c));
     }
 
@@ -46,7 +46,7 @@ public class LiveRegisterMapperTest {
                 .broadcastScheduledTime(new Date(2024, 10, 11))
                 .categoryCd("BCT-CTG-003")
                 .build();
-        liveRegisterMapper.insertBroadcast(broad);
+        broadcastRegisterMapper.insertBroadcast(broad);
         log.info("result!!!!!" + broad.getBroadcastSeq());
     }
 
@@ -59,7 +59,7 @@ public class LiveRegisterMapperTest {
                 .discountPrice(1000)
                 .build();
 
-        liveRegisterMapper.insertBroadcastProduct(product);
+        broadcastRegisterMapper.insertBroadcastProduct(product);
         log.info("insert success!!!");
     }
 
@@ -70,7 +70,7 @@ public class LiveRegisterMapperTest {
                 .noticeContent("공지입니다~~")
                 .build();
 
-        liveRegisterMapper.insertNotice(notice);
+        broadcastRegisterMapper.insertNotice(notice);
         log.info("insert success!!!");
     }
 
@@ -81,7 +81,7 @@ public class LiveRegisterMapperTest {
                 .benefitContent("2개 구매시 한개 더 증정")
                 .build();
 
-        liveRegisterMapper.insertBenefit(benefit);
+        broadcastRegisterMapper.insertBenefit(benefit);
         log.info("insert success!!!");
     }
 
@@ -92,19 +92,19 @@ public class LiveRegisterMapperTest {
                 .questionTitle("회원가입시 혜택이 뭔가요?")
                 .questionAnswer("따로 없습니다.")
                 .build();
-        liveRegisterMapper.insertFaq(faq);
+        broadcastRegisterMapper.insertFaq(faq);
         log.info("insert success!!!");
     }
 
     @Test
     void selectChannelSalesProduct() {
-        List<ChannelSalesProductDTO> products = liveRegisterMapper.selectChannelSalesProduct(2);
+        List<ChannelSalesProductDTO> products = broadcastRegisterMapper.selectChannelSalesProduct(2);
         products.stream().forEach(System.out::println);
     }
 
     @Test
     void selectPreBroadcastInfo() {
-        List<UpcomingBroadcastInfoDTO> infoList = liveRegisterMapper.selectUpcomingBroadcastInfo(2);
+        List<PrepareBroadcastInfoDTO> infoList = broadcastRegisterMapper.selectUpcomingBroadcastInfo(2);
         infoList.forEach(info -> log.info(String.valueOf(info.getBroadcastSeq())));
     }
 }
