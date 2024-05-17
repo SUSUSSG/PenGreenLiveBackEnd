@@ -76,7 +76,7 @@ public class ProductController {
     }
   }
 
-  @DeleteMapping("/{vendorSeq}/{productSeq}")
+  @DeleteMapping("/product/{vendorSeq}/{productSeq}")
   public ResponseEntity<String> deleteProduct(@PathVariable Long vendorSeq, @PathVariable Long productSeq) {
     try {
       productService.deleteProduct(vendorSeq, productSeq);
