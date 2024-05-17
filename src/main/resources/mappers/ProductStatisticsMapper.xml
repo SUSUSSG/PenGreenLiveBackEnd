@@ -43,5 +43,28 @@
             TOTAL_SALES DESC
     </select>
 
-
+    <!-- 특정 채널의 누적 거래액, 누적 판매 건수, 누적 평균 단가, 평균 구매자 수, 평균 판매 수량을 조회하는 쿼리 -->
+    <select id="findTotalSalesOrdersAvgPriceAvgBuyersAndAvgQuantityByChannel" parameterType="long" resultType="susussg.pengreenlive.statistics.dto.SalesDataDTO">
+        SELECT
+            IFNULL(SUM(O.ORDER_PAYED_PRICE), 0) AS totalSales,
+            COUNT(O.ORDER_SEQ) AS totalOrders,
+            CASE
+                WHEN COUNT(O.ORDER_SEQ) = 0 THEN 0
+                ELSE IFNULL(SUM(O.ORDER_PAYED_PRICE) / COUNT(O.ORDER_SEQ), 0)
+                END AS avgUnitPrice,
+            CASE
+                WHEN COUNT(DISTINCT O.PRODUCT_SEQ) = 0 THEN 0
+                ELSE COUNT(O.ORDER_SEQ) / COUNT(DISTINCT O.PRODUCT_SEQ)
+                END AS avgBuyersPerProduct,
+            CASE
+                WHEN COUNT(DISTINCT O.PRODUCT_SEQ) = 0 THEN 0
+                ELSE SUM(O.ORDER_QTY) / COUNT(DISTINCT O.PRODUCT_SEQ)
+                END AS avgQuantityPerProduct
+        FROM
+            TB_ORDER O
+                JOIN
+            TB_CHANNEL_SALES_PRODUCT CSP ON O.PRODUCT_SEQ = CSP.PRODUCT_SEQ
+        WHERE
+            CSP.CHANNEL_SEQ = #{channelSeq}
+    </select>
 </mapper>
