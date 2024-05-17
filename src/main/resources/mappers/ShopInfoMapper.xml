@@ -13,7 +13,7 @@
     SET
       CHANNEL_NM = #{channelNM},
       CHANNEL_URL = #{channelUrl},
-      CHANNEL_IMAGE = #{channelImage},
+      CHANNEL_IMAGE = #{rawchannelImage},
       CHANNEL_INFO = #{channelInfo}
     WHERE CHANNEL_SEQ = #{channelSeq}
   </update>

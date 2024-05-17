@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDTO {
+public class VendorProductListDTO {
 
   private Long productSeq;
   private String productCd;
@@ -17,8 +17,8 @@ public class ProductDTO {
   private String productNm;
   private int listPrice;
   private String brand;
-  private String base64Image;
-  private byte[] productImage;
+  private byte[] base64Image;
+  private String productImage;
   private String categoryCd;
   private String categoryNm;
   private int productStock;

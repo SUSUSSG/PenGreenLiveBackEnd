@@ -4,13 +4,14 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import susussg.pengreenlive.dashboard.DTO.ProductDTO;
+import susussg.pengreenlive.dashboard.DTO.VendorProductListDTO;
 
 @Mapper
 public interface ProductMapper {
 
   List<ProductDTO> findAllProducts();
 
-  List<ProductDTO> findProductsByVendor(Long venderSeq);
+  List<VendorProductListDTO> findProductsByVendor(Long venderSeq);
 
   void insertProduct(ProductDTO product);
 

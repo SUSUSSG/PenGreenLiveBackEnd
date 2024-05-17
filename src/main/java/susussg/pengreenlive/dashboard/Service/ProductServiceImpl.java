@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import susussg.pengreenlive.dashboard.DTO.ProductDTO;
+import susussg.pengreenlive.dashboard.DTO.VendorProductListDTO;
 import susussg.pengreenlive.dashboard.Mapper.ProductMapper;
 import susussg.pengreenlive.util.Service.ByteArrayMultipartFile;
 import susussg.pengreenlive.util.Service.ImageService;
@@ -65,7 +66,7 @@ public class ProductServiceImpl implements ProductService{
   }
 
   @Override
-  public List<ProductDTO> findProductsByVendor(Long venderSeq) {
+  public List<VendorProductListDTO> findProductsByVendor(Long venderSeq) {
     return productMapper.findProductsByVendor(venderSeq);
   }
 

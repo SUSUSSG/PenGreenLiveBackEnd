@@ -54,4 +54,9 @@
       o.USER_UUID = #{userUuid} AND o.REVIEW_YN = 1
   </select>
 
+  <insert id="insertReview" parameterType="susussg.pengreenlive.order.dto.ReviewDTO">
+    INSERT INTO TB_REVIEW (PRODUCT_SEQ, REVIEW_CONTENT, REVIEW_TIME, USER_UUID)
+    VALUES (#{productSeq}, #{reviewContent}, #{reviewTime}, #{userUUID});
+  </insert>
+
 </mapper>
