@@ -40,19 +40,10 @@ public class BroadcastRegisterController {
                 .channelNm(channelName)
                 .broadcastTitle(request.getBroadcastTitle())
                 .broadcastSummary(request.getBroadcastSummary())
+                .broadcastImageUrl(request.getImage())
                 .broadcastScheduledTime(request.getBroadcastScheduledTime())
                 .categoryCd(request.getCategoryCd())
                 .build();
-
-        if (request.getImage() != null) {
-            try {
-                byte[] imageBytes = Base64.getDecoder().decode(request.getImage());
-                broadcastDTO.setBroadcastImage(imageBytes);
-            } catch (Exception e) {
-                String errorMessage = "이미지 파일 처리 중 오류 발생: " + e.getMessage();
-                return ResponseEntity.badRequest().body(errorMessage);
-            }
-        }
 
         broadcastRegisterService.saveBroadcast(broadcastDTO);
 

@@ -49,23 +49,28 @@ public class BroadcastRegisterServiceImpl implements BroadcastRegisterService {
     @Transactional
     public void saveBroadcast(BroadcastDTO broadcastDTO) {
         int result = broadcastRegisterMapper.insertBroadcast(broadcastDTO);
-        BroadcastStatistics broadcastStatistics = BroadcastStatistics.builder()
-                        .broadcastSeq(broadcastDTO.getBroadcastSeq())
-                                .broadcastDuration(0)
-                                        .avgProductClicks(0)
-                                                .avgViewerCount(0)
-                                                        .avgViewingTime(0)
-                                                                .likesCount(0)
-                                                                        .maxViewerCount(0)
-                                                                                .avgPurchaseAmount(0)
-                                                                                        .totalSalesAmount(0)
-                                                                                                .totalSalesQty(0)
-                                                                                                        .viewsCount(0)
-                                                                                                                .build();
-        broadcastStatisticsService.insertBroadcastStatistics(broadcastStatistics);
-        if (result != 1) {
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("broadcast insert failed");
         }
+
+        BroadcastStatistics broadcastStatistics = BroadcastStatistics.builder()
+                .broadcastSeq(broadcastDTO.getBroadcastSeq())
+                .broadcastDuration(0)
+                .avgProductClicks(0)
+                .avgViewerCount(0)
+                .avgViewingTime(0)
+                .likesCount(0)
+                .maxViewerCount(0)
+                .avgPurchaseAmount(0)
+                .totalSalesAmount(0)
+                .totalSalesQty(0)
+                .viewsCount(0)
+                .build();
+        broadcastStatisticsService.insertBroadcastStatistics(broadcastStatistics);
+
     }
 
     @Override
