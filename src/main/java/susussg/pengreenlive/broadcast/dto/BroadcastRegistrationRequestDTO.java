@@ -22,5 +22,5 @@ public class BroadcastRegistrationRequestDTO {
     private List<String> notices;
     private List<FaqDTO> qa;
     private List<String> benefits;
-    private byte[] image;
+    private String image;
 }

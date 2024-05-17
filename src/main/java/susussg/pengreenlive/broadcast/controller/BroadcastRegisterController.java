@@ -22,7 +22,7 @@ public class BroadcastRegisterController {
     }
 
     //판매자 고유번호
-    long vendorId = 2;
+    long vendorId = 3;
 
     // 방송 카테고리 목록 불러오기
     @GetMapping("/broadcast-category")
