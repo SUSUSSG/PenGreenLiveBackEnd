@@ -2,6 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="susussg.pengreenlive.statistics.mapper.ProductStatisticsMapper">
 
+    <resultMap id="ProductDetailsMap" type="susussg.pengreenlive.statistics.dto.ProductDetailsDTO">
+        <id property="productCd" column="PRODUCT_CD"/>
+        <result property="productNm" column="PRODUCT_NM"/>
+        <result property="greenProductId" column="GREEN_PRODUCT_ID"/>
+        <result property="listPrice" column="LIST_PRICE"/>
+        <result property="brand" column="BRAND"/>
+        <result property="productImage" column="PRODUCT_IMAGE"/>
+        <result property="categoryNm" column="CATEGORY_NM"/>
+        <collection property="labels" ofType="susussg.pengreenlive.statistics.dto.LabelInfo">
+            <result property="labelImage" column="LABEL_IMAGE"/>
+            <result property="certificationReason" column="CERTIFICATION_REASON"/>
+        </collection>
+    </resultMap>
+
     <!-- 특정 채널의 판매 상품 중 누적 주문 금액이 가장 높은 10개를 가져오는 쿼리 -->
     <select id="findTop10ProductsByChannel" parameterType="long" resultType="susussg.pengreenlive.statistics.dto.ProductInChannelDTO">
         SELECT
@@ -67,4 +81,28 @@
         WHERE
             CSP.CHANNEL_SEQ = #{channelSeq}
     </select>
+
+    <select id="findProductDetailsByProductCd" parameterType="string" resultMap="ProductDetailsMap">
+        SELECT
+            P.PRODUCT_CD,
+            P.PRODUCT_NM,
+            P.GREEN_PRODUCT_ID,
+            P.LIST_PRICE,
+            P.BRAND,
+            P.PRODUCT_IMAGE,
+            C.CATEGORY_NM,
+            L.LABEL_IMAGE,
+            PL.CERTIFICATION_REASON
+        FROM
+            TB_PRODUCT P
+                JOIN
+            TB_PRODUCT_CATEGORY C ON P.CATEGORY_CD = C.CATEGORY_CD
+                LEFT JOIN
+            TB_PRODUCT_GREEN_LABEL PL ON P.PRODUCT_SEQ = PL.PRODUCT_SEQ
+                LEFT JOIN
+            TB_GREEN_LABEL L ON PL.LABEL_ID_SEQ = L.LABEL_ID_SEQ
+        WHERE
+            P.PRODUCT_CD = #{productCd}
+    </select>
+
 </mapper>

@@ -3,6 +3,7 @@ package susussg.pengreenlive.statistics.service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import susussg.pengreenlive.statistics.dto.ProductDetailsDTO;
 import susussg.pengreenlive.statistics.dto.ProductInChannelDTO;
 import susussg.pengreenlive.statistics.dto.SalesDataDTO;
 import susussg.pengreenlive.statistics.mapper.ProductStatisticsMapper;
@@ -26,5 +27,9 @@ public class ProductStatisticsServiceImpl implements ProductStatisticsService{
     @Override
     public SalesDataDTO getTotalSalesOrdersAvgPriceAvgBuyersAndAvgQuantityByChannel(Long channelSeq) {
         return productStatisticsMapper.findTotalSalesOrdersAvgPriceAvgBuyersAndAvgQuantityByChannel(channelSeq);
+    }
+
+    public ProductDetailsDTO getProductDetailsByProductCd(String productCd) {
+        return productStatisticsMapper.findProductDetailsByProductCd(productCd);
     }
 }
