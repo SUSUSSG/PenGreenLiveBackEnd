@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,18 +25,25 @@ public class OpenAIService {
     @Value("${openai.api.key}")
     private String apiKey;
 
-    public String getChatbotResponse(String userMessage) throws Exception {
+    private List<Map<String, Object>> messages = new ArrayList<>();
+
+    public OpenAIService() {
         Map<String, Object> systemMessage = new HashMap<>();
         systemMessage.put("role", "system");
         systemMessage.put("content", "your name is susussg.");
+        messages.add(systemMessage);
+    }
 
+    public String getChatbotResponse(String userMessage) throws Exception {
         Map<String, Object> userMessageMap = new HashMap<>();
         userMessageMap.put("role", "user");
         userMessageMap.put("content", userMessage);
 
+        messages.add(userMessageMap);
+
         Map<String, Object> body = new HashMap<>();
         body.put("model", "gpt-4o");
-        body.put("messages", List.of(systemMessage, userMessageMap));
+        body.put("messages", messages);
         body.put("max_tokens", 100);
 
         String requestBody = toJson(body);
@@ -61,17 +69,18 @@ public class OpenAIService {
         }
 
         String responseBody = response.toString();
-        logger.info("Response Body: " + responseBody);  // 로그 찍기
+        logger.info("Response Body: " + responseBody);
 
-        return responseBody;
+        return responseBody;  // JSON 응답 본문을 반환합니다.
     }
 
     public String parseResponse(String responseBody) throws Exception {
+        logger.info("Parsing Response Body: " + responseBody);  // 파싱할 응답 본문 로그 추가
         JSONObject jsonResponse = new JSONObject(responseBody);
         JSONArray choices = jsonResponse.getJSONArray("choices");
         if (choices.length() > 0) {
             JSONObject message = choices.getJSONObject(0).getJSONObject("message");
-            return message.getString("content").trim();  // 앞뒤 공백 제거
+            return message.getString("content").trim();
         } else {
             throw new Exception("Invalid response format");
         }
