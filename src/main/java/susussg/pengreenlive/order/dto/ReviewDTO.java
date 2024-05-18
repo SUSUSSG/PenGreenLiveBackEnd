@@ -24,7 +24,7 @@ public class ReviewDTO {
   private String deliveryStatus;
   private boolean reviewYn;
   private String productNm;
-  private byte[] productImage;
+  private String productImage;
   private String reviewContent;
   private LocalDateTime reviewTime;
 
