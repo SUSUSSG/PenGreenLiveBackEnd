@@ -11,4 +11,6 @@ public interface ReviewService {
   List<ReviewDTO> findUnreviewedOrdersByUser(String userUuid);
 
   List<ReviewDTO> findReviewedOrdersByUser(String userUuid);
+
+  void addReview(ReviewDTO reviewDTO);
 }

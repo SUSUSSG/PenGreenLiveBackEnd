@@ -3,18 +3,13 @@ package susussg.pengreenlive.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import susussg.pengreenlive.dashboard.DTO.ProductDTO;
-import susussg.pengreenlive.dashboard.DTO.ShopInfoDTO;
 import susussg.pengreenlive.dashboard.Service.ProductService;
-import susussg.pengreenlive.dashboard.Service.ShopInfoService;
 
 @SpringBootTest
 @Log4j2
@@ -69,7 +64,7 @@ public class ProductServiceTest {
       ProductDTO productDTO = ProductDTO.builder()
           .productSeq(17L)
           .productCd("PRD-200")
-          .greenProductCd("tempgreenproduct")
+          .greenProductId("tempgreenproduct")
           .categoryCd(category)
           .productNm("추가 테스트상품15")
           .listPrice(5000)
@@ -94,7 +89,7 @@ public class ProductServiceTest {
 
     ProductDTO productDTO = new ProductDTO();
     productDTO.setProductCd("PRD-300");
-    productDTO.setGreenProductCd("tempgreenproduct");
+    productDTO.setGreenProductId("tempgreenproduct");
     productDTO.setCategoryCd("PCT-CTG-001");
     productDTO.setProductNm("상품수정테스트상품99");
     productDTO.setListPrice(99999);
