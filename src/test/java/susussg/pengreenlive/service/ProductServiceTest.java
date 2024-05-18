@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import susussg.pengreenlive.dashboard.DTO.ProductDTO;
+import susussg.pengreenlive.dashboard.DTO.VendorProductListDTO;
 import susussg.pengreenlive.dashboard.Service.ProductService;
 
 @SpringBootTest
@@ -34,7 +35,7 @@ public class ProductServiceTest {
   public void getVendorSeqProductTest() {
 
     Long venvendorSeq = 1L;
-    List<ProductDTO> result = productService.findProductsByVendor(venvendorSeq);
+    List<VendorProductListDTO> result = productService.findProductsByVendor(venvendorSeq);
 
     if (result != null) {
       log.info("상품 목록 조회 성공. Retrieved data: {}", result);
@@ -103,15 +104,15 @@ public class ProductServiceTest {
     log.info("상점정보 변경 성공" + productDTO );
   }
 
-//  @Test
-//  public void testDeleteProduct() {
-//    // 상품 삭제
-//    productService.deleteProduct(1L, 25L);
-//
-//    // 삭제 확인
-//    List<ProductDTO> products = productService.findProductsByVendor(1L);
-//
-//  }
+  @Test
+  public void testDeleteProduct() {
+    // 상품 삭제
+    productService.deleteProduct(1L, 25L);
+
+    // 삭제 확인
+    List<VendorProductListDTO> products = productService.findProductsByVendor(1L);
+
+  }
 
 
 }

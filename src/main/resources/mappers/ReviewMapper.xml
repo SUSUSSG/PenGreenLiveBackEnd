@@ -17,7 +17,7 @@
         JOIN
       TB_PRODUCT p ON o.PRODUCT_SEQ = p.PRODUCT_SEQ
     WHERE
-      o.USER_UUID = #{userUuid}
+      o.USER_UUID = UUID_TO_BIN(#{userUuid})
   </select>
 
   <select id="findUnreviewedOrdersByUser" resultType="susussg.pengreenlive.order.dto.ReviewDTO">
@@ -34,7 +34,7 @@
         JOIN
       TB_PRODUCT p ON o.PRODUCT_SEQ = p.PRODUCT_SEQ
     WHERE
-      o.USER_UUID = #{userUuid} AND o.REVIEW_YN = 0
+      o.USER_UUID = UUID_TO_BIN(#{userUuid}) AND o.REVIEW_YN = 0
   </select>
 
   <select id="findReviewedOrdersByUser" resultType="susussg.pengreenlive.order.dto.ReviewDTO">
@@ -45,18 +45,32 @@
       o.DELIVERY_STATUS,
       o.REVIEW_YN,
       p.PRODUCT_NM,
-      p.PRODUCT_IMAGE
+      p.PRODUCT_IMAGE,
+      r.REVIEW_CONTENT,
+      r.REVIEW_TIME
     FROM
       TB_ORDER o
-        JOIN
-      TB_PRODUCT p ON o.PRODUCT_SEQ = p.PRODUCT_SEQ
+        JOIN TB_PRODUCT p ON o.PRODUCT_SEQ = p.PRODUCT_SEQ
+        LEFT JOIN TB_REVIEW r ON o.PRODUCT_SEQ = r.PRODUCT_SEQ AND o.USER_UUID = r.USER_UUID
     WHERE
-      o.USER_UUID = #{userUuid} AND o.REVIEW_YN = 1
+      o.USER_UUID = UUID_TO_BIN(#{userUuid}) AND o.REVIEW_YN = 1
   </select>
 
   <insert id="insertReview" parameterType="susussg.pengreenlive.order.dto.ReviewDTO">
     INSERT INTO TB_REVIEW (PRODUCT_SEQ, REVIEW_CONTENT, REVIEW_TIME, USER_UUID)
-    VALUES (#{productSeq}, #{reviewContent}, #{reviewTime}, #{userUUID});
+    VALUES (#{productSeq}, #{reviewContent}, #{reviewTime}, UUID_TO_BIN(#{userUuid}));
   </insert>
+
+  <delete id="deleteReviewByUserAndReviewSeq" parameterType="map">
+    DELETE FROM TB_REVIEW
+    WHERE REVIEW_SEQ = #{reviewSeq} AND USER_UUID = UUID_TO_BIN(#{userUuid})
+  </delete>
+
+  <update id="updateReviewStatusByReviewSeq" parameterType="map">
+    UPDATE TB_ORDER
+    SET REVIEW_YN = #{reviewYn}
+    WHERE PRODUCT_SEQ = (SELECT PRODUCT_SEQ FROM TB_REVIEW WHERE REVIEW_SEQ = #{reviewSeq})
+      AND USER_UUID = (SELECT USER_UUID FROM TB_REVIEW WHERE REVIEW_SEQ = #{reviewSeq});
+  </update>
 
 </mapper>
