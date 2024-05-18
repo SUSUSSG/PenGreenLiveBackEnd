@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +49,16 @@ public class ReviewController {
       return ResponseEntity.ok("리뷰 등록이 완료되었습니다.");
     } catch (Exception e) {
       return ResponseEntity.status(500).body("리뷰등록에 실패했습니다: " + e.getMessage());
+    }
+  }
+
+  @DeleteMapping("/reviews/{userUuid}/{reviewSeq}")
+  public ResponseEntity<String> deleteReview(@PathVariable String userUuid, @PathVariable long reviewSeq) {
+    try {
+      reviewService.deleteReview(userUuid, reviewSeq);
+      return ResponseEntity.ok("리뷰 삭제가 완료되었습니다.");
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body("리뷰 삭제에 실패했습니다: " + e.getMessage());
     }
   }
 

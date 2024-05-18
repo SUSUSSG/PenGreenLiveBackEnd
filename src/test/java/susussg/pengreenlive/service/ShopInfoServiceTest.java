@@ -3,6 +3,7 @@ package susussg.pengreenlive.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class ShopInfoServiceTest {
     shopInfoDTO.setChannelSeq(1L);
     shopInfoDTO.setChannelNM("UpdatedTestShop");
     shopInfoDTO.setChannelUrl("www.updatedtest.com");
-    shopInfoDTO.setChannelImage(imageData);
+    shopInfoDTO.setChannelImage(Arrays.toString(imageData));
     shopInfoDTO.setChannelInfo("Updated info");
 
     shopInfoService.updateShopInfo(shopInfoDTO);
