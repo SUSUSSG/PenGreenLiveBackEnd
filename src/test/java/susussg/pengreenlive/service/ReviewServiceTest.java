@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import susussg.pengreenlive.dashboard.DTO.VendorProductListDTO;
 import susussg.pengreenlive.order.dto.ReviewDTO;
 import susussg.pengreenlive.order.service.ReviewService;
 
@@ -60,6 +61,14 @@ public class ReviewServiceTest {
 
       reviewService.addReview(reviewDTO);
       log.info("리뷰 등록: {}", reviewDTO);
+  }
+
+  @Test
+  public void testDeleteProduct() {
+
+    String userUUID = "f23a72e0-1347-11ef-b085-f220affc9a21";
+    reviewService.deleteReview(userUUID, 20L);
+
   }
 
 }

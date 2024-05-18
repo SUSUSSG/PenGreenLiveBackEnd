@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import susussg.pengreenlive.order.dto.ReviewDTO;
 import susussg.pengreenlive.order.mapper.ReviewMapper;
 
@@ -36,5 +37,10 @@ public class ReviewServiceImpl implements ReviewService {
   @Override
   public void addReview(ReviewDTO reviewDTO) {
     reviewMapper.insertReview(reviewDTO);
+  }
+
+  @Override
+  public void deleteReview(String userUuid, long reviewSeq) {
+    reviewMapper.deleteReviewByUserAndReviewSeq(userUuid, reviewSeq);
   }
 }
