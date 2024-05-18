@@ -60,9 +60,6 @@ dependencies {
 	//S3 bucket access
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.306'
 
-	//for gpt
-	implementation 'org.springframework.boot:spring-boot-starter-webflux' // WebClient 사용
-	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 }
 
