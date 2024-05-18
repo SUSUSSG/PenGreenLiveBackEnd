@@ -41,31 +41,9 @@ public class ShopInfoController {
   }
 
   @PutMapping("/shop/{channelSeq}")
-  public ResponseEntity<?> updateShopInfo(@PathVariable Long channelSeq,
-      @RequestParam("nickname") String nickname,
-      @RequestParam("shoplink") String shoplink,
-      @RequestParam("description") String description,
-      @RequestParam(value = "image", required = false) MultipartFile image) {
+  public ResponseEntity<String> updateShopInfo(@RequestBody ShopInfoDTO shopInfoDTO) {
 
-    ShopInfoDTO existingShopInfo = shopInfoService.getShopInfo(channelSeq);
-    if (existingShopInfo == null) {
-      return ResponseEntity.notFound().build();
-    }
-
-    if (image != null && !image.isEmpty()) {
-      try {
-        byte[] imageBytes = image.getBytes();
-        existingShopInfo.setChannelImage(imageBytes);
-      } catch (IOException e) {
-        return ResponseEntity.badRequest().body("이미지 파일 처리 중 오류 발생: " + e.getMessage());
-      }
-    }
-
-    existingShopInfo.setChannelNM(nickname);
-    existingShopInfo.setChannelUrl(shoplink);
-    existingShopInfo.setChannelInfo(description);
-
-    shopInfoService.updateShopInfo(existingShopInfo);
+    shopInfoService.updateShopInfo(shopInfoDTO);
     return ResponseEntity.ok().body("Shop info updated successfully.");
   }
 

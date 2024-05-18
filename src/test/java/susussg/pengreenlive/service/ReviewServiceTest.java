@@ -1,5 +1,7 @@
 package susussg.pengreenlive.service;
 
+
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -43,4 +45,21 @@ public class ReviewServiceTest {
     log.info("리뷰 작성 완료 주문 목록 : " + reviewDTOList);
   }
 
+  @Test
+  public void addReviewTest(){
+
+    String userUUID = "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6";
+
+      ReviewDTO reviewDTO = ReviewDTO.builder()
+          .productSeq(1L)
+          .userUUID(userUUID)
+          .reviewContent("립스틱 너무 좋아요")
+          .reviewTime(LocalDateTime.now())
+          .build();
+
+      reviewService.addReview(reviewDTO);
+      log.info("리뷰 등록: {}", reviewDTO);
+  }
+
 }
+
