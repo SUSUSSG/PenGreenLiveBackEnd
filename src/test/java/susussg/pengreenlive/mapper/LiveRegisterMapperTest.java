@@ -33,15 +33,11 @@ public class LiveRegisterMapperTest {
     }
 
     @Test
-    void insertBroadcast() throws IOException {
-
-        File file = new File("/Users/jinii/Downloads/패션-티셔츠.png");
-        byte[] imageData = Files.readAllBytes(file.toPath());
-
+    void insertBroadcast() {
         BroadcastDTO broad = BroadcastDTO.builder()
                 .channelNm("test4")
                 .broadcastTitle("test4")
-                .broadcastImage(imageData)
+                .broadcastImage("imageData")
                 .broadcastSummary("test4")
                 .broadcastScheduledTime(new Date(2024, 10, 11))
                 .categoryCd("BCT-CTG-003")
@@ -104,7 +100,7 @@ public class LiveRegisterMapperTest {
 
     @Test
     void selectPreBroadcastInfo() {
-        List<PrepareBroadcastInfoDTO> infoList = broadcastRegisterMapper.selectUpcomingBroadcastInfo(2);
+        List<PrepareBroadcastInfoDTO> infoList = broadcastRegisterMapper.selectPrepareBroadcastInfo(2);
         infoList.forEach(info -> log.info(String.valueOf(info.getBroadcastSeq())));
     }
 }
