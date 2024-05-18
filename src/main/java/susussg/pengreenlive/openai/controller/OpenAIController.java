@@ -22,11 +22,9 @@ public class OpenAIController {
     @PostMapping("/message")
     public ChatResponseDTO getChatbotResponse(@RequestBody ChatRequestDTO chatRequestDTO) {
         try {
-            String originalResponse = openAIService.getChatbotResponse(chatRequestDTO.getMessage());
-            log.info("Original Response: " + originalResponse);
-            String parsedResponse = openAIService.parseResponse(originalResponse);
-            log.info("Parsed Response: " + parsedResponse);
-            return new ChatResponseDTO(parsedResponse);
+            String response = openAIService.getChatbotResponse(chatRequestDTO.getMessage());
+            log.info("response: " + response);
+            return new ChatResponseDTO(response);
         } catch (Exception e) {
             log.info("Exception occurred: " + e.getMessage());
             return new ChatResponseDTO(null);
