@@ -34,7 +34,6 @@ public class ReviewController {
     List<ReviewDTO> orders = reviewService.findUnreviewedOrdersByUser(userUuid);
     return ResponseEntity.ok(orders);
   }
-  
 
   @GetMapping("/reviewed-orders/{userUuid}")
   public ResponseEntity<List<ReviewDTO>> getReviewedOrdersByUser(@PathVariable String userUuid) {

@@ -40,10 +40,11 @@ public class ReviewServiceTest {
 
   @Test
   public void getReviewListTest(){
-    String userUUID = "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6";
+    String userUUID = "f23a72e0-1347-11ef-b085-f220affc9a21";
     List<ReviewDTO> reviewDTOList = reviewService.findReviewedOrdersByUser(userUUID);
     log.info("리뷰 작성 완료 주문 목록 : " + reviewDTOList);
   }
+
 
   @Test
   public void addReviewTest(){
