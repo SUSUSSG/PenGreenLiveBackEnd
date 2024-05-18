@@ -36,22 +36,22 @@ public class ShopInfoServiceTest {
 
   }
 
-//  @Test
-//  public void testUpdateShopInfo() throws IOException {
-//
-//    File file = new File("C:/Users/kuy06/OneDrive/Desktop/c2.jpg");
-//    byte[] imageData = Files.readAllBytes(file.toPath());
-//
-//    ShopInfoDTO shopInfoDTO = new ShopInfoDTO();
-//    shopInfoDTO.setChannelSeq(1L);
-//    shopInfoDTO.setChannelNM("UpdatedTestShop");
-//    shopInfoDTO.setChannelUrl("www.updatedtest.com");
-//    shopInfoDTO.setChannelImage(imageData);
-//    shopInfoDTO.setChannelInfo("Updated info");
-//
-//    shopInfoService.updateShopInfo(shopInfoDTO);
-//
-//    log.info("상점정보 변경 성공");
-//  }
+  @Test
+  public void testUpdateShopInfo() throws IOException {
+
+    File file = new File("C:/Users/kuy06/OneDrive/Desktop/c2.jpg");
+    byte[] imageData = Files.readAllBytes(file.toPath());
+
+    ShopInfoDTO shopInfoDTO = new ShopInfoDTO();
+    shopInfoDTO.setChannelSeq(1L);
+    shopInfoDTO.setChannelNM("UpdatedTestShop");
+    shopInfoDTO.setChannelUrl("www.updatedtest.com");
+    shopInfoDTO.setChannelImage(imageData);
+    shopInfoDTO.setChannelInfo("Updated info");
+
+    shopInfoService.updateShopInfo(shopInfoDTO);
+
+    log.info("상점정보 변경 성공");
+  }
 
 }

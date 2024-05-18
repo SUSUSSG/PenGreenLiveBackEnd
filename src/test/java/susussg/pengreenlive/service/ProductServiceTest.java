@@ -30,19 +30,19 @@ public class ProductServiceTest {
     log.info(productDTOList);
   }
 
-//  @Test
-//  public void getVendorSeqProductTest() {
-//
-//    Long venvendorSeq = 1L;
-//    List<ProductDTO> result = productService.findProductsByVendor(venvendorSeq);
-//
-//    if (result != null) {
-//      log.info("상품 목록 조회 성공. Retrieved data: {}", result);
-//    } else {
-//      log.error("상품 목록 조회 실패: {}", venvendorSeq);
-//    }
-//
-//  }
+  @Test
+  public void getVendorSeqProductTest() {
+
+    Long venvendorSeq = 1L;
+    List<ProductDTO> result = productService.findProductsByVendor(venvendorSeq);
+
+    if (result != null) {
+      log.info("상품 목록 조회 성공. Retrieved data: {}", result);
+    } else {
+      log.error("상품 목록 조회 실패: {}", venvendorSeq);
+    }
+
+  }
 
   @Test
   public void getProductCategoryListTest() {
