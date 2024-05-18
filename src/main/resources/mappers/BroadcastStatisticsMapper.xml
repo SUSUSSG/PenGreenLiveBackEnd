@@ -87,4 +87,90 @@
         WHERE broadcast_seq = #{broadcastSeq}
     </update>
 
+    <!-- 날짜 범위로 방송 통계 조회 -->
+    <select id="getStatisticsByDateRange" parameterType="map" resultType="susussg.pengreenlive.broadcast.dto.BroadcastStatistics">
+        SELECT * FROM TB_BROADCAST_STATISTICS
+        WHERE BROADCAST_SCHEDULED_TIME BETWEEN #{startDate} AND #{endDate}
+    </select>
+
+    <!-- 날짜 범위로 특정 판매자에 대한 통계 조회 -->
+    <select id="getStatisticsByVendorAndDateRange" resultType="susussg.pengreenlive.broadcast.dto.BroadcastStatistics">
+        SELECT
+            bs.BROADCAST_SEQ as broadcastSeq,
+            bs.AVG_VIEWER_COUNT as avgViewerCount,
+            bs.MAX_VIEWER_COUNT as maxViewerCount,
+            bs.LIKES_COUNT as likesCount,
+            bs.VIEWS_COUNT as viewsCount,
+            bs.AVG_PURCHASE_AMOUNT as avgPurchaseAmount,
+            bs.AVG_VIEWING_TIME as avgViewingTime,
+            bs.BROADCAST_DURATION as broadcastDuration,
+            bs.AVG_PRODUCT_CLICKS as avgProductClicks,
+            bs.TOTAL_SALES_AMOUNT as totalSalesAmount,
+            bs.TOTAL_SALES_QTY as totalSalesQty
+        FROM TB_BROADCAST_STATISTICS bs
+                 JOIN TB_BROADCAST b ON bs.BROADCAST_SEQ = b.BROADCAST_SEQ
+                 JOIN TB_CHANNEL c ON b.CHANNEL_NM = c.CHANNEL_NM
+        WHERE c.VENDOR_SEQ = #{vendorSeq}
+          AND b.BROADCAST_SCHEDULED_TIME BETWEEN #{startDate} AND #{endDate}
+    </select>
+
+    <select id="getAverageBroadcastDuration" resultType="int">
+        SELECT AVG(BROADCAST_DURATION)
+        FROM TB_BROADCAST_STATISTICS
+        WHERE BROADCAST_SEQ IN (
+            SELECT BROADCAST_SEQ
+            FROM TB_BROADCAST
+            WHERE CHANNEL_SEQ = #{vendorSeq}
+              AND BROADCAST_SCHEDULED_TIME BETWEEN #{startDate} AND #{endDate}
+        );
+    </select>
+
+    <select id="getAverageViewerCount" resultType="int">
+        SELECT AVG(BS.AVG_VIEWER_COUNT)
+        FROM TB_BROADCAST_STATISTICS BS
+                 INNER JOIN TB_BROADCAST B ON BS.BROADCAST_SEQ = B.BROADCAST_SEQ
+        WHERE B.CHANNEL_SEQ = #{vendorSeq}
+          AND B.BROADCAST_SCHEDULED_TIME BETWEEN #{startDate} AND #{endDate};
+    </select>
+
+    <select id="getAveragePurchaseQuantity" resultType="int">
+        SELECT AVG(BS.AVG_PURCHASE_AMOUNT)
+        FROM TB_BROADCAST_STATISTICS BS
+                 INNER JOIN TB_BROADCAST B ON BS.BROADCAST_SEQ = B.BROADCAST_SEQ
+        WHERE B.CHANNEL_SEQ = #{vendorSeq}
+          AND B.BROADCAST_SCHEDULED_TIME BETWEEN #{startDate} AND #{endDate};
+    </select>
+
+    <select id="getAverageProductClicks" resultType="int">
+        SELECT AVG(BS.AVG_PRODUCT_CLICKS)
+        FROM TB_BROADCAST_STATISTICS BS
+                 INNER JOIN TB_BROADCAST B ON BS.BROADCAST_SEQ = B.BROADCAST_SEQ
+        WHERE B.CHANNEL_SEQ = #{vendorSeq}
+          AND B.BROADCAST_SCHEDULED_TIME BETWEEN #{startDate} AND #{endDate};
+    </select>
+
+    <select id="getAverageViewingTime" resultType="int">
+        SELECT AVG(BS.AVG_VIEWING_TIME)
+        FROM TB_BROADCAST_STATISTICS BS
+                 INNER JOIN TB_BROADCAST B ON BS.BROADCAST_SEQ = B.BROADCAST_SEQ
+        WHERE B.CHANNEL_SEQ = #{vendorSeq}
+          AND B.BROADCAST_SCHEDULED_TIME BETWEEN #{startDate} AND #{endDate};
+    </select>
+
+    <select id="getAverageLikesCount" resultType="int">
+        SELECT AVG(BS.LIKES_COUNT)
+        FROM TB_BROADCAST_STATISTICS BS
+                 INNER JOIN TB_BROADCAST B ON BS.BROADCAST_SEQ = B.BROADCAST_SEQ
+        WHERE B.CHANNEL_SEQ = #{vendorSeq}
+          AND B.BROADCAST_SCHEDULED_TIME BETWEEN #{startDate} AND #{endDate};
+    </select>
+
+    <select id="getAveragePurchaseAmount" resultType="long">
+        SELECT AVG(BS.TOTAL_SALES_AMOUNT)
+        FROM TB_BROADCAST_STATISTICS BS
+                 INNER JOIN TB_BROADCAST B ON BS.BROADCAST_SEQ = B.BROADCAST_SEQ
+        WHERE B.CHANNEL_SEQ = #{vendorSeq}
+          AND B.BROADCAST_SCHEDULED_TIME BETWEEN #{startDate} AND #{endDate};
+    </select>
+
 </mapper>

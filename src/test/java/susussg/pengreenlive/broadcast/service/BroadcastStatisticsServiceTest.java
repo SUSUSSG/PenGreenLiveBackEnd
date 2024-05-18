@@ -8,6 +8,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import susussg.pengreenlive.broadcast.dto.BroadcastStatistics;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -105,5 +110,81 @@ public class BroadcastStatisticsServiceTest {
         BroadcastStatistics result = broadcastStatisticsService.findById(6L);
         assertNotNull(result);
         assertEquals(1, result.getViewsCount());
+    }
+
+    @Test
+    public void testGetStatisticsByVendorAndDateRange() {
+        long vendorSeq = 1L;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startDate = LocalDateTime.parse("2023-01-01 00:00:00", formatter);
+        LocalDateTime endDate = LocalDateTime.parse("2024-12-31 23:59:59", formatter);
+
+        List<BroadcastStatistics> statistics = broadcastStatisticsService.getStatisticsByVendorAndDateRange(vendorSeq, startDate, endDate);
+
+        assertNotNull(statistics);
+        assertEquals(4, statistics.size());
+    }
+
+    @Test
+    public void testGetAverageBroadcastDuration() {
+        long vendorSeq = 1L;
+        LocalDate startDate = LocalDate.parse("2023-01-01");
+        LocalDate endDate = LocalDate.parse("2023-12-31");
+        int avgBroadcastDuration = broadcastStatisticsService.getAverageBroadcastDuration(vendorSeq, startDate, endDate);
+        assertTrue(avgBroadcastDuration > 0);
+    }
+
+    @Test
+    public void testGetAverageViewerCount() {
+        long vendorSeq = 1L;
+        LocalDate startDate = LocalDate.parse("2023-01-01");
+        LocalDate endDate = LocalDate.parse("2023-12-31");
+        int avgViewerCount = broadcastStatisticsService.getAverageViewerCount(vendorSeq, startDate, endDate);
+        assertTrue(avgViewerCount > 0);
+    }
+
+    @Test
+    public void testGetAveragePurchaseQuantity() {
+        long vendorSeq = 1L;
+        LocalDate startDate = LocalDate.parse("2023-01-01");
+        LocalDate endDate = LocalDate.parse("2023-12-31");
+        int avgPurchaseQuantity = broadcastStatisticsService.getAveragePurchaseQuantity(vendorSeq, startDate, endDate);
+        assertTrue(avgPurchaseQuantity > 0);
+    }
+
+    @Test
+    public void testGetAverageProductClicks() {
+        long vendorSeq = 1L;
+        LocalDate startDate = LocalDate.parse("2023-01-01");
+        LocalDate endDate = LocalDate.parse("2023-12-31");
+        int avgProductClicks = broadcastStatisticsService.getAverageProductClicks(vendorSeq, startDate, endDate);
+        assertTrue(avgProductClicks > 0);
+    }
+
+    @Test
+    public void testGetAverageViewingTime() {
+        long vendorSeq = 1L;
+        LocalDate startDate = LocalDate.parse("2023-01-01");
+        LocalDate endDate = LocalDate.parse("2023-12-31");
+        int avgViewingTime = broadcastStatisticsService.getAverageViewingTime(vendorSeq, startDate, endDate);
+        assertTrue(avgViewingTime > 0);
+    }
+
+    @Test
+    public void testGetAverageLikesCount() {
+        long vendorSeq = 1L;
+        LocalDate startDate = LocalDate.parse("2023-01-01");
+        LocalDate endDate = LocalDate.parse("2023-12-31");
+        int avgLikesCount = broadcastStatisticsService.getAverageLikesCount(vendorSeq, startDate, endDate);
+        assertTrue(avgLikesCount > 0);
+    }
+
+    @Test
+    public void testGetAveragePurchaseAmount() {
+        long vendorSeq = 1L;
+        LocalDate startDate = LocalDate.parse("2023-01-01");
+        LocalDate endDate = LocalDate.parse("2023-12-31");
+        long avgPurchaseAmount = broadcastStatisticsService.getAveragePurchaseAmount(vendorSeq, startDate, endDate);
+        assertTrue(avgPurchaseAmount > 0);
     }
 }

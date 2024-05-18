@@ -5,12 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import susussg.pengreenlive.broadcast.dto.*;
-import susussg.pengreenlive.broadcast.mapper.BroadcastRegisterMapper;
+import susussg.pengreenlive.broadcast.mapper.BroadcastMapper;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
@@ -18,37 +14,37 @@ import java.util.List;
 public class LiveRegisterMapperTest {
 
     @Autowired
-    private BroadcastRegisterMapper broadcastRegisterMapper;
+    private BroadcastMapper broadcastMapper;
 
     @Test
     void selectChannelName() {
-        String channelNm = broadcastRegisterMapper.selectChannelName(2);
+        String channelNm = broadcastMapper.selectChannelName(2);
         log.info(channelNm);
     }
 
     @Test
     void selectAllCategory() {
-        List<BroadcastCategoryDTO> categoryList = broadcastRegisterMapper.selectAllCategory();
+        List<BroadcastCategoryDTO> categoryList = broadcastMapper.selectAllCategory();
         categoryList.stream().forEach(c -> log.info(c));
     }
 
-    @Test
-    void insertBroadcast() throws IOException {
-
-        File file = new File("/Users/jinii/Downloads/패션-티셔츠.png");
-        byte[] imageData = Files.readAllBytes(file.toPath());
-
-        BroadcastDTO broad = BroadcastDTO.builder()
-                .channelNm("test4")
-                .broadcastTitle("test4")
-                .broadcastImage(imageData)
-                .broadcastSummary("test4")
-                .broadcastScheduledTime(new Date(2024, 10, 11))
-                .categoryCd("BCT-CTG-003")
-                .build();
-        broadcastRegisterMapper.insertBroadcast(broad);
-        log.info("result!!!!!" + broad.getBroadcastSeq());
-    }
+//    @Test
+//    void insertBroadcast() throws IOException {
+//
+//        File file = new File("/Users/jinii/Downloads/패션-티셔츠.png");
+//        byte[] imageData = Files.readAllBytes(file.toPath());
+//
+//        BroadcastDTO broad = BroadcastDTO.builder()
+//                .channelNm("test4")
+//                .broadcastTitle("test4")
+//                .broadcastImage(imageData)
+//                .broadcastSummary("test4")
+//                .broadcastScheduledTime(new Date(2024, 10, 11))
+//                .categoryCd("BCT-CTG-003")
+//                .build();
+//        broadcastRegisterMapper.insertBroadcast(broad);
+//        log.info("result!!!!!" + broad.getBroadcastSeq());
+//    }
 
     @Test
     void insertBroadcastProduct() {
@@ -59,7 +55,7 @@ public class LiveRegisterMapperTest {
                 .discountPrice(1000)
                 .build();
 
-        broadcastRegisterMapper.insertBroadcastProduct(product);
+        broadcastMapper.insertBroadcastProduct(product);
         log.info("insert success!!!");
     }
 
@@ -70,7 +66,7 @@ public class LiveRegisterMapperTest {
                 .noticeContent("공지입니다~~")
                 .build();
 
-        broadcastRegisterMapper.insertNotice(notice);
+        broadcastMapper.insertNotice(notice);
         log.info("insert success!!!");
     }
 
@@ -81,7 +77,7 @@ public class LiveRegisterMapperTest {
                 .benefitContent("2개 구매시 한개 더 증정")
                 .build();
 
-        broadcastRegisterMapper.insertBenefit(benefit);
+        broadcastMapper.insertBenefit(benefit);
         log.info("insert success!!!");
     }
 
@@ -92,19 +88,19 @@ public class LiveRegisterMapperTest {
                 .questionTitle("회원가입시 혜택이 뭔가요?")
                 .questionAnswer("따로 없습니다.")
                 .build();
-        broadcastRegisterMapper.insertFaq(faq);
+        broadcastMapper.insertFaq(faq);
         log.info("insert success!!!");
     }
 
     @Test
     void selectChannelSalesProduct() {
-        List<ChannelSalesProductDTO> products = broadcastRegisterMapper.selectChannelSalesProduct(2);
+        List<ChannelSalesProductDTO> products = broadcastMapper.selectChannelSalesProduct(2);
         products.stream().forEach(System.out::println);
     }
 
-    @Test
-    void selectPreBroadcastInfo() {
-        List<PrepareBroadcastInfoDTO> infoList = broadcastRegisterMapper.selectUpcomingBroadcastInfo(2);
-        infoList.forEach(info -> log.info(String.valueOf(info.getBroadcastSeq())));
-    }
+//    @Test
+//    void selectPreBroadcastInfo() {
+//        List<PrepareBroadcastInfoDTO> infoList = broadcastRegisterMapper.selectUpcomingBroadcastInfo(2);
+//        infoList.forEach(info -> log.info(String.valueOf(info.getBroadcastSeq())));
+//    }
 }

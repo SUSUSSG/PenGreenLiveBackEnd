@@ -5,11 +5,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.broadcast.dto.BroadcastStatistics;
 import susussg.pengreenlive.broadcast.service.BroadcastStatisticsService;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -112,9 +116,9 @@ public class BroadcastStatisticsController {
     /**
      * 누적 시청자 수 증가
      * @param broadcastSeq
-     * @param viewedBroadcastsCookie
-     * @param response
-     * @param request
+     * @param
+     * @param
+     * @param
      * @return
      */
     @PatchMapping("/{broadcastSeq}/viewsCount")
@@ -157,6 +161,100 @@ public class BroadcastStatisticsController {
         // 조회수 증가가 필요 없는 경우에도 OK 응답 반환
         return ResponseEntity.ok().build();
     }
+
+
+    /**
+     * 특정 판매자의 기간별 방송 통계를 조회합니다.
+     * @param vendorSeq
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    @GetMapping("/vendor/{vendorSeq}")
+    public ResponseEntity<List<BroadcastStatistics>> getStatistics(
+            @PathVariable long vendorSeq,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String endDate) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startDateTime = LocalDateTime.parse(startDate + " 00:00:00", formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse(endDate + " 23:59:59", formatter);
+
+        List<BroadcastStatistics> statistics = broadcastStatisticsService.getStatisticsByVendorAndDateRange(vendorSeq, startDateTime, endDateTime);
+        return ResponseEntity.ok(statistics);
+    }
+
+    // 평균 방송 진행 시간
+    @GetMapping("/average-broadcast-duration")
+    public ResponseEntity<Integer> getAverageBroadcastDuration(
+            @RequestParam long vendorSeq,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        int avgBroadcastDuration = broadcastStatisticsService.getAverageBroadcastDuration(vendorSeq, startDate, endDate);
+        return ResponseEntity.ok(avgBroadcastDuration);
+    }
+
+    // 평균 시청자 수
+    @GetMapping("/average-viewer-count")
+    public ResponseEntity<Integer> getAverageViewerCount(
+            @RequestParam long vendorSeq,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        int avgViewerCount = broadcastStatisticsService.getAverageViewerCount(vendorSeq, startDate, endDate);
+        return ResponseEntity.ok(avgViewerCount);
+    }
+
+    // 평균 구매 개수
+    @GetMapping("/average-purchase-quantity")
+    public ResponseEntity<Integer> getAveragePurchaseQuantity(
+            @RequestParam long vendorSeq,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        int avgPurchaseQuantity = broadcastStatisticsService.getAveragePurchaseQuantity(vendorSeq, startDate, endDate);
+        return ResponseEntity.ok(avgPurchaseQuantity);
+    }
+
+    // 평균 상품 클릭수
+    @GetMapping("/average-product-clicks")
+    public ResponseEntity<Integer> getAverageProductClicks(
+            @RequestParam long vendorSeq,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        int avgProductClicks = broadcastStatisticsService.getAverageProductClicks(vendorSeq, startDate, endDate);
+        return ResponseEntity.ok(avgProductClicks);
+    }
+
+    // 평균 방송 시청 시간
+    @GetMapping("/average-viewing-time")
+    public ResponseEntity<Integer> getAverageViewingTime(
+            @RequestParam long vendorSeq,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        int avgViewingTime = broadcastStatisticsService.getAverageViewingTime(vendorSeq, startDate, endDate);
+        return ResponseEntity.ok(avgViewingTime);
+    }
+
+    // 평균 좋아요 수
+    @GetMapping("/average-likes-count")
+    public ResponseEntity<Integer> getAverageLikesCount(
+            @RequestParam long vendorSeq,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        int avgLikesCount = broadcastStatisticsService.getAverageLikesCount(vendorSeq, startDate, endDate);
+        return ResponseEntity.ok(avgLikesCount);
+    }
+
+    // 평균 구매 금액
+    @GetMapping("/average-purchase-amount")
+    public ResponseEntity<Long> getAveragePurchaseAmount(
+            @RequestParam long vendorSeq,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        long avgPurchaseAmount = broadcastStatisticsService.getAveragePurchaseAmount(vendorSeq, startDate, endDate);
+        return ResponseEntity.ok(avgPurchaseAmount);
+    }
+
+
 
 
 }

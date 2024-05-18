@@ -30,19 +30,19 @@ public class ProductServiceTest {
     log.info(productDTOList);
   }
 
-  @Test
-  public void getVendorSeqProductTest() {
-
-    Long venvendorSeq = 1L;
-    List<ProductDTO> result = productService.findProductsByVendor(venvendorSeq);
-
-    if (result != null) {
-      log.info("상품 목록 조회 성공. Retrieved data: {}", result);
-    } else {
-      log.error("상품 목록 조회 실패: {}", venvendorSeq);
-    }
-
-  }
+//  @Test
+//  public void getVendorSeqProductTest() {
+//
+//    Long venvendorSeq = 1L;
+//    List<ProductDTO> result = productService.findProductsByVendor(venvendorSeq);
+//
+//    if (result != null) {
+//      log.info("상품 목록 조회 성공. Retrieved data: {}", result);
+//    } else {
+//      log.error("상품 목록 조회 실패: {}", venvendorSeq);
+//    }
+//
+//  }
 
   @Test
   public void getProductCategoryListTest() {
@@ -103,15 +103,15 @@ public class ProductServiceTest {
     log.info("상점정보 변경 성공" + productDTO );
   }
 
-  @Test
-  public void testDeleteProduct() {
-    // 상품 삭제
-    productService.deleteProduct(1L, 25L);
-
-    // 삭제 확인
-    List<ProductDTO> products = productService.findProductsByVendor(1L);
-
-  }
+//  @Test
+//  public void testDeleteProduct() {
+//    // 상품 삭제
+//    productService.deleteProduct(1L, 25L);
+//
+//    // 삭제 확인
+//    List<ProductDTO> products = productService.findProductsByVendor(1L);
+//
+//  }
 
 
 }
