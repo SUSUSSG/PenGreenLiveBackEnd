@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="susussg.pengreenlive.broadcast.mapper.LiveBroadcastInfoMapper">
+
+    <select id="selectBroadcast" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.BroadcastDTO">
+        SELECT BROADCAST_SEQ, CHANNEL_NM, BROADCAST_TITLE, BROADCAST_IMAGE, BROADCAST_SUMMARY, BROADCAST_SCHEDULED_TIME FROM TB_BROADCAST WHERE BROADCAST_SEQ = #{broadcastId}
+    </select>
+    <select id="selectNotice" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.NoticeDTO">
+        SELECT BROADCAST_SEQ, NOTICE_SEQ, NOTICE_CONTENT FROM TB_NOTICE WHERE BROADCAST_SEQ = #{broadcastId}
+    </select>
+    <select id="selectBenefit" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.BenefitDTO">
+        SELECT BROADCAST_SEQ, BENEFIT_SEQ, BENEFIT_CONTENT FROM TB_BENEFIT WHERE BROADCAST_SEQ = #{broadcastId}
+    </select>
+    <select id="selectFaq" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.FaqDTO">
+        SELECT BROADCAST_SEQ, FAQ_SEQ, QUESTION_TITLE, QUESTION_ANSWER FROM TB_FAQ WHERE BROADCAST_SEQ = #{broadcastId}
+    </select>
+
+</mapper>
