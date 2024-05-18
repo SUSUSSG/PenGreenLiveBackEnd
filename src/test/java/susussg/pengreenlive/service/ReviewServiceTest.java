@@ -53,7 +53,7 @@ public class ReviewServiceTest {
       ReviewDTO reviewDTO = ReviewDTO.builder()
           .productSeq(1L)
           .userUUID(userUUID)
-          .reviewContent("립스틱 너무 좋아요")
+          .reviewContent("배송이 빨라서 좋아요")
           .reviewTime(LocalDateTime.now())
           .build();
 

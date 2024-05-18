@@ -17,7 +17,7 @@
         JOIN
       TB_PRODUCT p ON o.PRODUCT_SEQ = p.PRODUCT_SEQ
     WHERE
-      o.USER_UUID = #{userUuid}
+      o.USER_UUID = UUID_TO_BIN(#{userUuid})
   </select>
 
   <select id="findUnreviewedOrdersByUser" resultType="susussg.pengreenlive.order.dto.ReviewDTO">
@@ -34,7 +34,7 @@
         JOIN
       TB_PRODUCT p ON o.PRODUCT_SEQ = p.PRODUCT_SEQ
     WHERE
-      o.USER_UUID = #{userUuid} AND o.REVIEW_YN = 0
+      o.USER_UUID = UUID_TO_BIN(#{userUuid}) AND o.REVIEW_YN = 0
   </select>
 
   <select id="findReviewedOrdersByUser" resultType="susussg.pengreenlive.order.dto.ReviewDTO">
@@ -51,7 +51,7 @@
         JOIN
       TB_PRODUCT p ON o.PRODUCT_SEQ = p.PRODUCT_SEQ
     WHERE
-      o.USER_UUID = #{userUuid} AND o.REVIEW_YN = 1
+      o.USER_UUID = UUID_TO_BIN(#{userUuid}) AND o.REVIEW_YN = 1
   </select>
 
   <insert id="insertReview" parameterType="susussg.pengreenlive.order.dto.ReviewDTO">
