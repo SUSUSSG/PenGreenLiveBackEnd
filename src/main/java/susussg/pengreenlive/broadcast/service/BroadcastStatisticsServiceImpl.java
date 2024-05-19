@@ -7,6 +7,12 @@ import susussg.pengreenlive.broadcast.dto.BroadcastStatistics;
 import susussg.pengreenlive.broadcast.mapper.BroadcastStatisticsMapper;
 import susussg.pengreenlive.broadcast.service.BroadcastStatisticsService;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class BroadcastStatisticsServiceImpl implements BroadcastStatisticsService {
 
@@ -59,5 +65,43 @@ public class BroadcastStatisticsServiceImpl implements BroadcastStatisticsServic
     @Transactional
     public void incrementViewsCount(long broadcastSeq) {
         broadcastStatisticsMapper.incrementViewsCount(broadcastSeq);
+    }
+
+    @Override
+    public List<BroadcastStatistics> getStatisticsByDateRange(String startDate, String endDate) {
+        return broadcastStatisticsMapper.getStatisticsByDateRange(startDate, endDate);
+    }
+
+    @Override
+    public List<BroadcastStatistics> getStatisticsByVendorAndDateRange(long vendorSeq, LocalDateTime startDate, LocalDateTime endDate) {
+        return broadcastStatisticsMapper.getStatisticsByVendorAndDateRange(vendorSeq, startDate, endDate);
+    }
+
+    public int getAverageBroadcastDuration(long vendorSeq, LocalDate startDate, LocalDate endDate) {
+        return broadcastStatisticsMapper.getAverageBroadcastDuration(vendorSeq, startDate, endDate);
+    }
+
+    public int getAverageViewerCount(long vendorSeq, LocalDate startDate, LocalDate endDate) {
+        return broadcastStatisticsMapper.getAverageViewerCount(vendorSeq, startDate, endDate);
+    }
+
+    public int getAveragePurchaseQuantity(long vendorSeq, LocalDate startDate, LocalDate endDate) {
+        return broadcastStatisticsMapper.getAveragePurchaseQuantity(vendorSeq, startDate, endDate);
+    }
+
+    public int getAverageProductClicks(long vendorSeq, LocalDate startDate, LocalDate endDate) {
+        return broadcastStatisticsMapper.getAverageProductClicks(vendorSeq, startDate, endDate);
+    }
+
+    public int getAverageViewingTime(long vendorSeq, LocalDate startDate, LocalDate endDate) {
+        return broadcastStatisticsMapper.getAverageViewingTime(vendorSeq, startDate, endDate);
+    }
+
+    public int getAverageLikesCount(long vendorSeq, LocalDate startDate, LocalDate endDate) {
+        return broadcastStatisticsMapper.getAverageLikesCount(vendorSeq, startDate, endDate);
+    }
+
+    public long getAveragePurchaseAmount(long vendorSeq, LocalDate startDate, LocalDate endDate) {
+        return broadcastStatisticsMapper.getAveragePurchaseAmount(vendorSeq, startDate, endDate);
     }
 }
