@@ -2,9 +2,10 @@ package susussg.pengreenlive.broadcast.service;
 
 import susussg.pengreenlive.broadcast.dto.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-public interface BroadcastRegisterService {
+public interface BroadcastService {
     // 방송 카테고리
     List<BroadcastCategoryDTO> getAllCategory();
 
@@ -16,4 +17,6 @@ public interface BroadcastRegisterService {
 
     // 방송 예정 정보
     List<PrepareBroadcastInfoDTO> getUpcomingBroadcastInfo(long vendorId);
+
+    List<BroadcastDTO> getBroadcastsByVendorAndDateRange(long vendorSeq, LocalDateTime startDateTime, LocalDateTime endDateTime);
 }
