@@ -27,7 +27,7 @@ public class ReviewDTO {
   private String productImage;
   private String reviewContent;
   private LocalDateTime reviewTime;
-  private Long reviewSeq;
+  private long reviewSeq;
 
 
 
