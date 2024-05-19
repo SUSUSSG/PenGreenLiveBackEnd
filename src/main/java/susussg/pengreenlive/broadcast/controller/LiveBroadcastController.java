@@ -1,5 +1,6 @@
 package susussg.pengreenlive.broadcast.controller;
 
+import io.lettuce.core.dynamic.annotation.Param;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -7,7 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import susussg.pengreenlive.broadcast.dto.LiveBroadcastInfoDTO;
+import susussg.pengreenlive.broadcast.dto.LiveBroadcastProductDTO;
 import susussg.pengreenlive.broadcast.service.LiveBroadcastService;
+
+import java.util.List;
 
 @RestController
 @Log4j2
@@ -25,5 +29,12 @@ public class LiveBroadcastController {
     public ResponseEntity<LiveBroadcastInfoDTO> fetchBasicBroadcastInfo(@PathVariable long broadcastId){
         LiveBroadcastInfoDTO basicBroadcastInfo = liveBroadcastService.getBroadcastInfo(broadcastId);
         return ResponseEntity.ok().body(basicBroadcastInfo);
+    }
+
+    @GetMapping("live-broadcast-product/{broadcastId}")
+    public ResponseEntity<List<LiveBroadcastProductDTO>> fetchLiveBroadcastProduct(@PathVariable long broadcastId){
+        log.info("생방송상품 컨트롤러 호출");
+        List<LiveBroadcastProductDTO> liveBroadcastProduct = liveBroadcastService.getBroadcastProducts(broadcastId);
+        return ResponseEntity.ok().body(liveBroadcastProduct);
     }
 }
