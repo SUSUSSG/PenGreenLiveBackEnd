@@ -12,7 +12,9 @@ public interface ReviewMapper {
 
   List<ReviewDTO> findUnreviewedOrdersByUser(@Param("userUuid") String userUuid);
 
-  List<ReviewDTO> findReviewedOrdersByUser(@Param("userUuid") String userUuid);
+  List<ReviewDTO> findReviewedOrdersByUser(String userUuid);
+
+  void deleteReviewByUserAndReviewSeq(@Param("userUuid") String userUuid, @Param("reviewSeq") long reviewSeq);
 
   void insertReview(ReviewDTO reviewDTO);
 

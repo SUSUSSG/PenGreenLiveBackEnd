@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import susussg.pengreenlive.dashboard.DTO.VendorProductListDTO;
 import susussg.pengreenlive.order.dto.ReviewDTO;
 import susussg.pengreenlive.order.service.ReviewService;
 
@@ -40,10 +41,11 @@ public class ReviewServiceTest {
 
   @Test
   public void getReviewListTest(){
-    String userUUID = "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6";
+    String userUUID = "f23a72e0-1347-11ef-b085-f220affc9a21";
     List<ReviewDTO> reviewDTOList = reviewService.findReviewedOrdersByUser(userUUID);
     log.info("리뷰 작성 완료 주문 목록 : " + reviewDTOList);
   }
+
 
   @Test
   public void addReviewTest(){
@@ -53,12 +55,20 @@ public class ReviewServiceTest {
       ReviewDTO reviewDTO = ReviewDTO.builder()
           .productSeq(1L)
           .userUUID(userUUID)
-          .reviewContent("립스틱 너무 좋아요")
+          .reviewContent("배송이 빨라서 좋아요")
           .reviewTime(LocalDateTime.now())
           .build();
 
       reviewService.addReview(reviewDTO);
       log.info("리뷰 등록: {}", reviewDTO);
+  }
+
+  @Test
+  public void testDeleteProduct() {
+
+    String userUUID = "f23a72e0-1347-11ef-b085-f220affc9a21";
+    reviewService.deleteReview(userUUID, 20L);
+
   }
 
 }
