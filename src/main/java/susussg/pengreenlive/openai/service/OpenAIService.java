@@ -28,6 +28,10 @@ public class OpenAIService {
     private List<Map<String, Object>> messages = new ArrayList<>();
 
     public OpenAIService() {
+        initializeMessages();
+    }
+
+    private void initializeMessages() {
         Map<String, Object> systemMessage = new HashMap<>();
         systemMessage.put("role", "system");
         systemMessage.put("content", "#Role"
@@ -80,6 +84,12 @@ public class OpenAIService {
 
         String responseBody = response.toString();
         String finalResponse = parseResponse(responseBody);
+
+        // 응답을 반환한 후에 messages 초기화 및 시스템 메시지 다시 추가
+        if (finalResponse.startsWith("@")) {
+            initializeMessages();
+        }
+
         logger.info("Response Body: " + responseBody);
         logger.info("finalResponse: " + finalResponse);
 
