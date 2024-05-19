@@ -7,23 +7,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import susussg.pengreenlive.broadcast.dto.LiveBroadcastInfoDTO;
-import susussg.pengreenlive.broadcast.service.LiveBroadcastInfoService;
+import susussg.pengreenlive.broadcast.service.LiveBroadcastService;
 
 @RestController
 @Log4j2
-public class LiveBroadcastInfoController {
+public class LiveBroadcastController {
 
     @Autowired
-    private final LiveBroadcastInfoService liveBroadcastInfoService;
+    private final LiveBroadcastService liveBroadcastService;
 
 
-    public LiveBroadcastInfoController(LiveBroadcastInfoService liveBroadcastInfoService) {
-        this.liveBroadcastInfoService = liveBroadcastInfoService;
+    public LiveBroadcastController(LiveBroadcastService liveBroadcastService) {
+        this.liveBroadcastService = liveBroadcastService;
     }
 
-    @GetMapping("basic-broadcast-info/{broadcastId}")
+    @GetMapping("live-broadcast-info/{broadcastId}")
     public ResponseEntity<LiveBroadcastInfoDTO> fetchBasicBroadcastInfo(@PathVariable long broadcastId){
-        LiveBroadcastInfoDTO basicBroadcastInfo = liveBroadcastInfoService.getBasicBroadcastInfo(broadcastId);
+        LiveBroadcastInfoDTO basicBroadcastInfo = liveBroadcastService.getBroadcastInfo(broadcastId);
         return ResponseEntity.ok().body(basicBroadcastInfo);
     }
 }

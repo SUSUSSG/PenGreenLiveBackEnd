@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="susussg.pengreenlive.broadcast.mapper.LiveBroadcastInfoMapper">
+<mapper namespace="susussg.pengreenlive.broadcast.mapper.LiveBroadcastMapper">
 
     <select id="selectBroadcast" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.BroadcastDTO">
         SELECT BROADCAST_SEQ, CHANNEL_NM, BROADCAST_TITLE, BROADCAST_IMAGE, BROADCAST_SUMMARY, BROADCAST_SCHEDULED_TIME FROM TB_BROADCAST WHERE BROADCAST_SEQ = #{broadcastId}

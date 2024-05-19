@@ -9,7 +9,7 @@ import susussg.pengreenlive.broadcast.dto.NoticeDTO;
 import java.util.List;
 
 @Mapper
-public interface LiveBroadcastInfoMapper {
+public interface LiveBroadcastMapper {
     BroadcastDTO selectBroadcast(long broadcastId);
 
     List<NoticeDTO> selectNotice(long broadcastId);

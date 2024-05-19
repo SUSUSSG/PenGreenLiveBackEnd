@@ -23,6 +23,4 @@ public class LiveBroadcastInfoDTO {
 
     //라이브 혜택
     private List<BenefitDTO> benefits;
-
-    //판매 중인 상품
 }
