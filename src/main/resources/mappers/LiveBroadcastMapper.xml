@@ -16,4 +16,27 @@
         SELECT BROADCAST_SEQ, FAQ_SEQ, QUESTION_TITLE, QUESTION_ANSWER FROM TB_FAQ WHERE BROADCAST_SEQ = #{broadcastId}
     </select>
 
+
+    <resultMap id="LiveBroadcastProductMap" type="susussg.pengreenlive.broadcast.dto.LiveBroadcastProductDTO">
+        <id property="productSeq" column="PRODUCT_SEQ"/>
+        <result property="productImage" column="PRODUCT_IMAGE"/>
+        <result property="productCd" column="PRODUCT_CD"/>
+        <result property="productNm" column="PRODUCT_NM"/>
+        <result property="productStock" column="PRODUCT_STOCK"/>
+        <result property="listPrice" column="LIST_PRICE"/>
+        <result property="discountRate" column="DISCOUNT_RATE"/>
+        <result property="discountPrice" column="DISCOUNT_PRICE"/>
+    </resultMap>
+    <select id="selectBroadcastProduct" parameterType="long" resultMap="LiveBroadcastProductMap">
+        SELECT P.PRODUCT_SEQ, PRODUCT_CD, PRODUCT_NM, PRODUCT_IMAGE, LIST_PRICE, DISCOUNT_RATE, DISCOUNT_PRICE, PRODUCT_STOCK, BROADCAST_SEQ
+        FROM TB_PRODUCT P
+                 LEFT JOIN TB_PRODUCT_STOCK S ON S.PRODUCT_SEQ = P.PRODUCT_SEQ
+                 LEFT JOIN TB_BROADCAST_PRODUCT BP ON BP.PRODUCT_SEQ = P.PRODUCT_SEQ
+        WHERE BROADCAST_SEQ = #{broadcastId}
+    </select>
+
+
+
+
+
 </mapper>
