@@ -1,5 +1,6 @@
 package susussg.pengreenlive.openai.controller;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +12,9 @@ import susussg.pengreenlive.openai.service.OpenAIService;
 
 @RestController
 @RequestMapping("/openai")
+@Log4j2
 public class OpenAIController {
+
 
     @Autowired
     private OpenAIService openAIService;
@@ -19,10 +22,11 @@ public class OpenAIController {
     @PostMapping("/message")
     public ChatResponseDTO getChatbotResponse(@RequestBody ChatRequestDTO chatRequestDTO) {
         try {
-            String originalResponse = openAIService.getChatbotResponse(chatRequestDTO.getMessage());
-            String parsedResponse = openAIService.parseResponse(originalResponse);
-            return new ChatResponseDTO(parsedResponse);
+            String response = openAIService.getChatbotResponse(chatRequestDTO.getMessage());
+            log.info("response: " + response);
+            return new ChatResponseDTO(response);
         } catch (Exception e) {
+            log.info("Exception occurred: " + e.getMessage());
             return new ChatResponseDTO(null);
         }
     }
