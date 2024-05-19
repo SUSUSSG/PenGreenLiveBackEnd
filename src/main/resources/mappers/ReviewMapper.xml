@@ -47,7 +47,8 @@
       p.PRODUCT_NM,
       p.PRODUCT_IMAGE,
       r.REVIEW_CONTENT,
-      r.REVIEW_TIME
+      r.REVIEW_TIME,
+     r.REVIEW_SEQ
     FROM
       TB_ORDER o
         JOIN TB_PRODUCT p ON o.PRODUCT_SEQ = p.PRODUCT_SEQ
@@ -65,12 +66,5 @@
     DELETE FROM TB_REVIEW
     WHERE REVIEW_SEQ = #{reviewSeq} AND USER_UUID = UUID_TO_BIN(#{userUuid})
   </delete>
-
-  <update id="updateReviewStatusByReviewSeq" parameterType="map">
-    UPDATE TB_ORDER
-    SET REVIEW_YN = #{reviewYn}
-    WHERE PRODUCT_SEQ = (SELECT PRODUCT_SEQ FROM TB_REVIEW WHERE REVIEW_SEQ = #{reviewSeq})
-      AND USER_UUID = (SELECT USER_UUID FROM TB_REVIEW WHERE REVIEW_SEQ = #{reviewSeq});
-  </update>
 
 </mapper>
