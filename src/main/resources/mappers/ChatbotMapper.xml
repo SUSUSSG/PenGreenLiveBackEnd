@@ -8,13 +8,15 @@
            P.PRODUCT_IMAGE AS productImage,
            C.CHANNEL_NM    AS channelName,
            C.CHANNEL_IMAGE AS channelImage,
-           C.CHANNEL_URL   AS channelUrl
+           C.CHANNEL_URL   AS channelUrl,
+           O.ORDER_DATE    AS orderDate
     FROM TB_ORDER O
            INNER JOIN
          TB_PRODUCT P ON O.PRODUCT_SEQ = P.PRODUCT_SEQ
            INNER JOIN
          TB_CHANNEL C ON O.CHANNEL_SEQ = C.CHANNEL_SEQ
-    WHERE O.ORDER_DATE > DATE_SUB(NOW(), INTERVAL 1 MONTH) AND UUID_TO_BIN(#{userUuid}) LIKE O.USER_UUID
+    WHERE O.ORDER_DATE > DATE_SUB(NOW(), INTERVAL 1 MONTH)
+      AND UUID_TO_BIN(#{userUuid}) LIKE O.USER_UUID
     ORDER BY O.ORDER_DATE DESC
   </select>
 
