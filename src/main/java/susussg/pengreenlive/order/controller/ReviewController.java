@@ -42,16 +42,6 @@ public class ReviewController {
     return ResponseEntity.ok(orders);
   }
 
-  @PostMapping("/reviews")
-  public ResponseEntity<String> addReview(@RequestBody ReviewDTO reviewDTO) {
-    try {
-      reviewService.addReview(reviewDTO);
-      return ResponseEntity.ok("리뷰 등록이 완료되었습니다.");
-    } catch (Exception e) {
-      return ResponseEntity.status(500).body("리뷰등록에 실패했습니다: " + e.getMessage());
-    }
-  }
-
   @DeleteMapping("/reviews/{userUuid}/{reviewSeq}")
   public ResponseEntity<String> deleteReview(@PathVariable String userUuid, @PathVariable long reviewSeq) {
     try {
@@ -59,6 +49,16 @@ public class ReviewController {
       return ResponseEntity.ok("리뷰 삭제가 완료되었습니다.");
     } catch (Exception e) {
       return ResponseEntity.status(500).body("리뷰 삭제에 실패했습니다: " + e.getMessage());
+    }
+  }
+
+  @PostMapping("/reviews")
+  public ResponseEntity<String> addReview(@RequestBody ReviewDTO review) {
+    try {
+      reviewService.addReview(review);
+      return ResponseEntity.ok("리뷰 등록이 완료되었습니다.");
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body("리뷰 등록에 실패했습니다: " + e.getMessage());
     }
   }
 

@@ -28,7 +28,8 @@
       o.DELIVERY_STATUS,
       o.REVIEW_YN,
       p.PRODUCT_NM,
-      p.PRODUCT_IMAGE
+      p.PRODUCT_IMAGE,
+      p.PRODUCT_SEQ
     FROM
       TB_ORDER o
         JOIN
@@ -57,14 +58,20 @@
       o.USER_UUID = UUID_TO_BIN(#{userUuid}) AND o.REVIEW_YN = 1
   </select>
 
-  <insert id="insertReview" parameterType="susussg.pengreenlive.order.dto.ReviewDTO">
-    INSERT INTO TB_REVIEW (PRODUCT_SEQ, REVIEW_CONTENT, REVIEW_TIME, USER_UUID)
-    VALUES (#{productSeq}, #{reviewContent}, #{reviewTime}, UUID_TO_BIN(#{userUuid}));
-  </insert>
-
   <delete id="deleteReviewByUserAndReviewSeq" parameterType="map">
     DELETE FROM TB_REVIEW
     WHERE REVIEW_SEQ = #{reviewSeq} AND USER_UUID = UUID_TO_BIN(#{userUuid})
   </delete>
+
+  <insert id="insertReview" parameterType="susussg.pengreenlive.order.dto.ReviewDTO">
+    INSERT INTO TB_REVIEW (USER_UUID, PRODUCT_SEQ, REVIEW_CONTENT, REVIEW_TIME)
+    VALUES (UUID_TO_BIN(#{review.userUUID}), #{review.productSeq}, #{review.reviewContent}, #{review.reviewTime})
+  </insert>
+
+  <update id="updateReviewYn" parameterType="map">
+    UPDATE TB_ORDER
+    SET REVIEW_YN = 1
+    WHERE USER_UUID = UUID_TO_BIN(#{userUuid}) AND PRODUCT_SEQ = #{productSeq}
+  </update>
 
 </mapper>
