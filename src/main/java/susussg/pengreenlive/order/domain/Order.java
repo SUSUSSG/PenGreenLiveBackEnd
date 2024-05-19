@@ -12,20 +12,45 @@ import java.time.LocalDateTime;
 @Entity(name = "TB_ORDER")
 public class Order {
 
-    @Id @GeneratedValue
-    @Column(name="order_seq")
-    long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ORDER_SEQ")
+    private long id;
 
-    String userUUID;
-    long productSeq;
-    int orderQty;
-    String orderPayment;
-    LocalDateTime orderDate;
-    int orderProductPrice;
-    int orderPayedPrice;
-    long broadcastSeq;
-    String deliveryStatus;
-    boolean reivewYn;
-    long vendorSeq;
-    long channelSeq;
+    @Column(name = "USER_UUID")
+    private String userUUID;
+
+    @OneToOne(optional = true)
+    @JoinColumn(name = "PRODUCT_SEQ", referencedColumnName = "PRODUCT_SEQ")
+    private Product product;
+
+    @Column(name = "ORDER_QTY")
+    private int orderQty;
+
+    @Column(name = "ORDER_PAYMENT")
+    private String orderPayment;
+
+    @Column(name = "ORDER_DATE")
+    private LocalDateTime orderDate;
+
+    @Column(name = "ORDER_PRODUCT_PRICE")
+    private int orderProductPrice;
+
+    @Column(name = "ORDER_PAYED_PRICE")
+    private int orderPayedPrice;
+
+    @Column(name = "BROADCAST_SEQ")
+    private long broadcastSeq;
+
+    @Column(name = "DELIVERY_STATUS")
+    private String deliveryStatus;
+
+    @Column(name = "REVIEW_YN")
+    private boolean reviewYn;
+
+    @Column(name = "VENDOR_SEQ")
+    private long vendorSeq;
+
+    @Column(name = "CHANNEL_SEQ")
+    private long channelSeq;
 }
