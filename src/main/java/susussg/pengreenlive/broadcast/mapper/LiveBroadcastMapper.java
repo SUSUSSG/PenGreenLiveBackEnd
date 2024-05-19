@@ -4,7 +4,6 @@ import org.apache.ibatis.annotations.Mapper;
 import susussg.pengreenlive.broadcast.dto.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface LiveBroadcastMapper {
@@ -17,6 +16,4 @@ public interface LiveBroadcastMapper {
     List<FaqDTO> selectFaq(long broadcastId);
 
     List<LiveBroadcastProductDTO> selectBroadcastProduct(long broadcastId);
-
-    List<Map<Long, String>> selectLabelImages(long broadcastId);
 }
