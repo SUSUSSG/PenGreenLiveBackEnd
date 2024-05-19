@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO;
 import susussg.pengreenlive.openai.dto.ChatRequestDTO;
 import susussg.pengreenlive.openai.dto.ChatResponseDTO;
 import susussg.pengreenlive.openai.dto.RecentOrderDTO;
@@ -44,5 +46,10 @@ public class OpenAIController {
     @GetMapping("/recent-orders")
     public List<RecentOrderDTO> getRecentOrders() {
         return openAIQueryService.getRecentOrders(userUuid);
+    }
+
+    @GetMapping("/broadcast-keyword")
+    public List<ScheduledBroadcastDTO> getBroadcastsByKeyword(@RequestParam String keyword) {
+        return openAIQueryService.getBroadcastsByKeyword(keyword);
     }
 }
