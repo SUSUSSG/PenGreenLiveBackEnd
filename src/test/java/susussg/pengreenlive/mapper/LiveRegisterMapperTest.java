@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import susussg.pengreenlive.broadcast.dto.*;
 import susussg.pengreenlive.broadcast.mapper.BroadcastMapper;
 
+import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
@@ -39,7 +40,7 @@ public class LiveRegisterMapperTest {
                 .broadcastScheduledTime(new Date(2024, 10, 11))
                 .categoryCd("BCT-CTG-003")
                 .build();
-        broadcastRegisterMapper.insertBroadcast(broad);
+        broadcastMapper.insertBroadcast(broad);
         log.info("result!!!!!" + broad.getBroadcastSeq());
     }
 
@@ -99,7 +100,7 @@ public class LiveRegisterMapperTest {
 
     @Test
     void selectPreBroadcastInfo() {
-        List<PrepareBroadcastInfoDTO> infoList = broadcastRegisterMapper.selectPrepareBroadcastInfo(2);
+        List<PrepareBroadcastInfoDTO> infoList = broadcastMapper.selectPrepareBroadcastInfo(2);
         infoList.forEach(info -> log.info(String.valueOf(info.getBroadcastSeq())));
     }
 }
