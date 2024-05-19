@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -19,6 +17,6 @@ public class LiveBroadcastProductDTO {
     private int listPrice;
     private int discountRate;
     private int discountPrice;
-    private List<String> labelImages;
+    private String labelImages;
     private int productStock;
 }
