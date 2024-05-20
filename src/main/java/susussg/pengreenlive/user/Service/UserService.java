@@ -1,4 +1,4 @@
-package susussg.pengreenlive.user.Service;
+package susussg.pengreenlive.user.service;
 
 public interface UserService {
 
