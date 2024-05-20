@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="susussg.pengreenlive.broadcast.mapper.ProductClicksMapper">
+
+    <select id="getProductsByBroadcastSeq" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.BroadcastProductDTO">
+        SELECT PRODUCT_SEQ, BROADCAST_SEQ, DISCOUNT_RATE, DISCOUNT_PRICE
+        FROM TB_BROADCAST_PRODUCT
+        WHERE BROADCAST_SEQ = #{broadcastSeq}
+    </select>
+
+    <insert id="insertProductClick" parameterType="susussg.pengreenlive.broadcast.dto.ProductClick">
+        INSERT INTO TB_PRODUCT_CLICKS (BROADCAST_SEQ, PRODUCT_SEQ)
+        VALUES (#{broadcastSeq}, #{productSeq})
+    </insert>
+
+    <update id="incrementClickCount" parameterType="map">
+        UPDATE TB_PRODUCT_CLICKS
+        SET CLICKS_COUNT = CLICKS_COUNT + 1
+        WHERE BROADCAST_SEQ = #{broadcastSeq} AND PRODUCT_SEQ = #{productSeq}
+    </update>
+
+</mapper>
