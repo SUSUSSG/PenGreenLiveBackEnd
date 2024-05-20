@@ -65,7 +65,7 @@ public class BroadcastServiceImpl implements BroadcastService {
                 byte[] compressedImage = imageService.compressAndResizeImage(imageBytes, 400, 1f);
                 MultipartFile multipartFile = new ByteArrayMultipartFile(compressedImage, "broadcast", "broadcast.jpg", "image/jpeg");
                 String url = s3Service.uploadFile(multipartFile, "broadcast");
-                broadcastDTO.setBroadcastImageUrl(url);
+                broadcastDTO.setBroadcastImage(url);
             }
         } catch (Exception e) {
             e.printStackTrace();

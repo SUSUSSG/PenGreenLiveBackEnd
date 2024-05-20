@@ -16,6 +16,8 @@ public interface ReviewMapper {
 
   void deleteReviewByUserAndReviewSeq(@Param("userUuid") String userUuid, @Param("reviewSeq") long reviewSeq);
 
-  void insertReview(ReviewDTO reviewDTO);
+  void insertReview(@Param("review") ReviewDTO review);
+
+  void updateReviewYn(@Param("userUuid") String userUuid, @Param("productSeq") long productSeq);
 
 }
