@@ -1,11 +1,11 @@
 package susussg.pengreenlive.openai.controller;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +23,6 @@ import susussg.pengreenlive.openai.service.OpenAIService;
 @Log4j2
 public class OpenAIController {
 
-
     @Autowired
     private OpenAIService openAIService;
 
@@ -31,6 +30,7 @@ public class OpenAIController {
     private OpenAIQueryService openAIQueryService;
 
     private final String userUuid = "f23a72e0-1347-11ef-b085-f220affc9a21"; //TODO 세션값으로 바꿔야함
+
     @PostMapping("/message")
     public ChatResponseDTO getChatbotResponse(@RequestBody ChatRequestDTO chatRequestDTO) {
         try {
@@ -51,5 +51,18 @@ public class OpenAIController {
     @GetMapping("/broadcast-keyword")
     public List<ScheduledBroadcastDTO> getBroadcastsByKeyword(@RequestParam String keyword) {
         return openAIQueryService.getBroadcastsByKeyword(keyword);
+    }
+
+    @PostMapping("/review-check")
+    public String checkReviewForHarmfulness(@RequestBody String reviewContent) {
+        try {
+            log.info("Checking review for harmfulness: " + reviewContent);
+            String response = openAIService.checkReviewForHarmfulness(reviewContent);
+            log.info("Review check response: " + response);
+            return response;
+        } catch (Exception e) {
+            log.error("Exception occurred while checking review: " + e.getMessage());
+            return "error";
+        }
     }
 }
