@@ -2,6 +2,7 @@ package susussg.pengreenlive.order.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import susussg.pengreenlive.order.util.UUIDConverter;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +18,8 @@ public class Order {
     @Column(name = "ORDER_SEQ")
     private long id;
 
-    @Column(name = "USER_UUID")
+    @Convert(converter = UUIDConverter.class)
+    @Column(name = "USER_UUID", columnDefinition = "BINARY(16)")
     private String userUUID;
 
     @OneToOne(optional = true)
@@ -39,8 +41,9 @@ public class Order {
     @Column(name = "ORDER_PAYED_PRICE")
     private int orderPayedPrice;
 
-    @Column(name = "BROADCAST_SEQ")
-    private long broadcastSeq;
+    @OneToOne
+    @JoinColumn(name="BROADCAST_SEQ")
+    private Broadcast broadcast;
 
     @Column(name = "DELIVERY_STATUS")
     private String deliveryStatus;
@@ -51,6 +54,7 @@ public class Order {
     @Column(name = "VENDOR_SEQ")
     private long vendorSeq;
 
-    @Column(name = "CHANNEL_SEQ")
-    private long channelSeq;
+    @OneToOne
+    @JoinColumn(name = "CHANNEL_SEQ")
+    private Channel channel;
 }
