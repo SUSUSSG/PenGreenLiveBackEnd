@@ -22,4 +22,11 @@
         WHERE BROADCAST_SEQ = #{broadcastSeq} AND PRODUCT_SEQ = #{productSeq}
     </update>
 
+    <update id="updateAverageClicks" parameterType="long">
+        UPDATE TB_BROADCAST_STATISTICS
+        SET AVG_PRODUCT_CLICKS = (SELECT AVG(CLICKS_COUNT)
+                                  FROM TB_PRODUCT_CLICKS
+                                  WHERE BROADCAST_SEQ = #{broadcastSeq})
+        WHERE BROADCAST_SEQ = #{broadcastSeq}
+    </update>
 </mapper>

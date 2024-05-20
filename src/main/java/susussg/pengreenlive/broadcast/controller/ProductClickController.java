@@ -29,4 +29,10 @@ public class ProductClickController {
         productClickService.incrementProductClick(broadcastSeq, productSeq);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/broadcast/{broadcastSeq}/update-average-clicks")
+    public ResponseEntity<Void> updateAverageClicks(@PathVariable Long broadcastSeq) {
+        productClickService.updateAverageProductClicks(broadcastSeq);
+        return ResponseEntity.ok().build();
+    }
 }

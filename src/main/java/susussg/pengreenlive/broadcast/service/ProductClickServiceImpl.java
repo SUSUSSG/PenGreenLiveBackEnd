@@ -44,4 +44,10 @@ public class ProductClickServiceImpl implements ProductClickService{
     public void incrementProductClick(Long broadcastSeq, Long productSeq) {
         productClickMapper.incrementClickCount(broadcastSeq, productSeq);
     }
+
+    @Override
+    @Transactional
+    public void updateAverageProductClicks(Long broadcastSeq) {
+        productClickMapper.updateAverageClicks(broadcastSeq);
+    }
 }
