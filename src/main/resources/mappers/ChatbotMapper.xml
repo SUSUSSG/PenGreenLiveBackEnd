@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="susussg.pengreenlive.openai.mapper.OpenAIMapper">
+
+  <select id="getRecentOrders" resultType="susussg.pengreenlive.openai.dto.RecentOrderDTO">
+    SELECT P.PRODUCT_NM    AS productName,
+           P.PRODUCT_IMAGE AS productImage,
+           C.CHANNEL_NM    AS channelName,
+           C.CHANNEL_IMAGE AS channelImage,
+           C.CHANNEL_URL   AS channelUrl,
+           O.ORDER_DATE    AS orderDate
+    FROM TB_ORDER O
+           INNER JOIN
+         TB_PRODUCT P ON O.PRODUCT_SEQ = P.PRODUCT_SEQ
+           INNER JOIN
+         TB_CHANNEL C ON O.CHANNEL_SEQ = C.CHANNEL_SEQ
+    WHERE O.ORDER_DATE > DATE_SUB(NOW(), INTERVAL 1 MONTH)
+      AND UUID_TO_BIN(#{userUuid}) LIKE O.USER_UUID
+    ORDER BY O.ORDER_DATE DESC
+  </select>
+
+  <select id="getBroadcastsByKeyword" parameterType="String" resultType="susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO">
+    WITH BroadcastData AS (
+    SELECT
+    BC.BROADCAST_SEQ,
+    BC.BROADCAST_SCHEDULED_TIME,
+    BC.BROADCAST_TITLE,
+    BC.BROADCAST_IMAGE,
+    BC.BROADCAST_SUMMARY,
+    BF.BENEFIT_CONTENT,
+    BP.DISCOUNT_PRICE,
+    BP.DISCOUNT_RATE,
+    PD.LIST_PRICE,
+    PD.PRODUCT_NM,
+    PD.PRODUCT_IMAGE,
+    CH.CHANNEL_IMAGE,
+    CH.CHANNEL_NM,
+    CH.CHANNEL_SEQ,
+    ROW_NUMBER() OVER (PARTITION BY BC.BROADCAST_SEQ ORDER BY BC.BROADCAST_SCHEDULED_TIME) AS rn
+    FROM
+    TB_BROADCAST BC
+    JOIN TB_BROADCAST_CATEGORY BCT ON BC.CATEGORY_CD = BCT.CATEGORY_CD
+    LEFT JOIN TB_BENEFIT BF ON BC.BROADCAST_SEQ = BF.BROADCAST_SEQ
+    JOIN (
+    SELECT *,
+    ROW_NUMBER() OVER (PARTITION BY BROADCAST_SEQ ORDER BY PRODUCT_SEQ) AS rn
+    FROM TB_BROADCAST_PRODUCT
+    ) BP ON BC.BROADCAST_SEQ = BP.BROADCAST_SEQ AND BP.rn = 1
+    JOIN TB_PRODUCT PD ON BP.PRODUCT_SEQ = PD.PRODUCT_SEQ
+    JOIN TB_CHANNEL CH ON BC.CHANNEL_NM = CH.CHANNEL_NM
+    WHERE
+    1=1
+    AND BC.BROADCAST_TITLE LIKE CONCAT('%', #{keyword}, '%'))
+    SELECT DISTINCT
+    BROADCAST_SEQ,
+    BROADCAST_SCHEDULED_TIME,
+    BROADCAST_TITLE,
+    BROADCAST_IMAGE,
+    BROADCAST_SUMMARY,
+    BENEFIT_CONTENT,
+    DISCOUNT_PRICE,
+    DISCOUNT_RATE,
+    LIST_PRICE,
+    PRODUCT_NM,
+    PRODUCT_IMAGE,
+    CHANNEL_IMAGE,
+    CHANNEL_NM,
+    CHANNEL_SEQ
+    FROM BroadcastData
+    WHERE rn = 1
+    ORDER BY BROADCAST_SCHEDULED_TIME
+  </select>
+</mapper>
