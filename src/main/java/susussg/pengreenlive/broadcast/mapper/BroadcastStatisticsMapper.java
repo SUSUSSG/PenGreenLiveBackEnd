@@ -54,4 +54,6 @@ public interface BroadcastStatisticsMapper {
                                   @Param("startDate") LocalDate startDate,
                                   @Param("endDate") LocalDate endDate);
 
+    void updateAvgViewingTime(@Param("broadcastSeq") Long broadcastSeq, @Param("avgViewingTime") Integer avgViewingTime);
+
 }
