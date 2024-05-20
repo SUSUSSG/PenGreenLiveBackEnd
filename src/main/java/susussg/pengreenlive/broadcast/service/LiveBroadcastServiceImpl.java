@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import susussg.pengreenlive.broadcast.dto.*;
 import susussg.pengreenlive.broadcast.mapper.LiveBroadcastMapper;
 
+import java.util.*;
+
 @Service
 @Log4j2
 @RequiredArgsConstructor
@@ -27,4 +29,10 @@ public class LiveBroadcastServiceImpl implements LiveBroadcastService {
 
         return liveBroadcastInfoDTO;
     }
+
+    @Override
+    public List<LiveBroadcastProductDTO> getBroadcastProducts(long broadcastId) {
+        return liveBroadcastMapper.selectBroadcastProduct(broadcastId);
+    }
+
 }

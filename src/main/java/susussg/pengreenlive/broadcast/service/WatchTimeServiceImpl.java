@@ -33,8 +33,5 @@ public class WatchTimeServiceImpl implements WatchTimeService {
         else {
             broadcastStatisticsMapper.updateAvgViewingTime(broadcastSeq, avgViewingTime);
         }
-
-        // 사용된 데이터 삭제
-        watchTimeMapper.deleteWatchTimeData(broadcastSeq);
     }
 }

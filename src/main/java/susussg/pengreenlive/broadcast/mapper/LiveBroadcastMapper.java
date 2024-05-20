@@ -1,10 +1,7 @@
 package susussg.pengreenlive.broadcast.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import susussg.pengreenlive.broadcast.dto.BenefitDTO;
-import susussg.pengreenlive.broadcast.dto.BroadcastDTO;
-import susussg.pengreenlive.broadcast.dto.FaqDTO;
-import susussg.pengreenlive.broadcast.dto.NoticeDTO;
+import susussg.pengreenlive.broadcast.dto.*;
 
 import java.util.List;
 
@@ -18,4 +15,5 @@ public interface LiveBroadcastMapper {
 
     List<FaqDTO> selectFaq(long broadcastId);
 
+    List<LiveBroadcastProductDTO> selectBroadcastProduct(long broadcastId);
 }
