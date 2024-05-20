@@ -1,5 +1,6 @@
 package susussg.pengreenlive.mypage.DTO;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,5 +22,7 @@ public class HistoryDTO {
   private int listPrice;
   private String brand;
   private String channelNm;
+  private LocalDateTime viewedDate;
+  private String channelImage;
 
 }
