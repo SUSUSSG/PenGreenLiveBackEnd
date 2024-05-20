@@ -25,4 +25,7 @@
     VALUES (UUID_TO_BIN(#{userUuid}), #{userId}, #{userPw})
   </insert>
 
+  <select id="selectByUserId" parameterType="String" resultType="int">
+    SELECT COUNT(*) FROM TB_LOCAL_LOGIN WHERE USER_ID=#{userId}
+  </select>
 </mapper>

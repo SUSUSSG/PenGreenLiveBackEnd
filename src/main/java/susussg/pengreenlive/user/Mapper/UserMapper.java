@@ -12,4 +12,6 @@ public interface UserMapper {
     void insertUser(SignupFormDTO signupForm);
 
     int insertLocalLogin(SignupFormDTO signupForm);
+
+    int selectByUserId(String userId);
 }

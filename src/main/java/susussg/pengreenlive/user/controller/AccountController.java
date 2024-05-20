@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import susussg.pengreenlive.user.dto.SignupFormDTO;
 import susussg.pengreenlive.user.service.AccountService;
 
+import java.util.Map;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,6 +29,22 @@ public class AccountController {
         try {
             accountService.createLocalUser(signupForm);
             return ResponseEntity.ok().body("success");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("failed");
+        }
+    }
+
+    @PostMapping("/check-id")
+    public ResponseEntity<?> checkDuplicateUserId(@RequestBody Map<String, String> form) {
+
+        String userId = form.get("id");
+        log.info("checj-id {}", userId);
+        try {
+            boolean isDuplicate = accountService.selectByUserId(userId);
+            if (!isDuplicate)
+                return ResponseEntity.ok().body("available");
+            else
+                return ResponseEntity.ok().body("duplicate");
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("failed");
         }

@@ -31,21 +31,15 @@ public class AccountService {
         log.info("createLocalUser {}", result);
     }
 
-//    @Transactional
-////    public void createLocalUser(SignupFormDTO signupForm) {
-////        TbUser user = modelMapper.map(signupForm, TbUser.class);
-////        userRepository.insertUser(user);
-////        String uuid = user.getUserUuid();
-////        signupForm.setUserUuid(uuid);
-////        LocalLogin localLogin = modelMapper.map(signupForm, LocalLogin.class);
-////        userRepository.insertLocalLogin(localLogin);
-////    }
-
     @Transactional
     public void createSocialUser(SignupFormDTO signupForm) {
         TbUser user = modelMapper.map(signupForm, TbUser.class);
         SocialLogin socialLogin = modelMapper.map(signupForm, SocialLogin.class);
         userRepository.insertUser(user);
         userRepository.insertSocialLogin(socialLogin);
+    }
+
+    public boolean selectByUserId(String userId) {
+        return userMapper.selectByUserId(userId) > 0;
     }
 }
