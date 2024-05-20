@@ -12,7 +12,6 @@ import lombok.*;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PRODUCT_SEQ")
     private long productSeq;
 
