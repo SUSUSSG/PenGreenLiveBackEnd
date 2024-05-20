@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="susussg.pengreenlive.broadcast.mapper.WatchTimeMapper">
+    <insert id="insertWatchTime">
+        INSERT INTO TB_WATCH_TIMES (BROADCAST_SEQ, WATCH_START_TIME, WATCH_END_TIME)
+        VALUES (#{broadcastSeq}, #{watchStartTime}, #{watchEndTime})
+    </insert>
+
+    <select id="calculateAvgViewingTime" resultType="java.lang.Integer">
+        SELECT AVG(TIMESTAMPDIFF(SECOND, WATCH_START_TIME, WATCH_END_TIME)) AS avg_viewing_time
+        FROM TB_WATCH_TIMES
+        WHERE BROADCAST_SEQ = #{broadcastSeq}
+    </select>
+
+    <delete id="deleteWatchTimeData">
+        DELETE FROM TB_WATCH_TIMES
+        WHERE BROADCAST_SEQ = #{broadcastSeq}
+    </delete>
+</mapper>

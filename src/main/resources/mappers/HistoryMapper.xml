@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="susussg.pengreenlive.mypage.Mapper.HistoryMapper">
+
+  <select id="getRecentBroadcasts" parameterType="String" resultType="susussg.pengreenlive.mypage.DTO.HistoryDTO">
+    SELECT hb.USER_UUID, hb.BROADCAST_SEQ, b.BROADCAST_TITLE, b.BROADCAST_IMAGE,
+           p.PRODUCT_SEQ, p.PRODUCT_NM, p.PRODUCT_IMAGE, p.LIST_PRICE, b.CHANNEL_NM
+    FROM TB_HISTORY_BROADCAST hb
+           JOIN TB_BROADCAST b ON hb.BROADCAST_SEQ = b.BROADCAST_SEQ
+           JOIN TB_BROADCAST_PRODUCT bp ON b.BROADCAST_SEQ = bp.BROADCAST_SEQ
+           JOIN TB_PRODUCT p ON bp.PRODUCT_SEQ = p.PRODUCT_SEQ
+    WHERE hb.USER_UUID = UUID_TO_BIN(#{userUuid})
+    ORDER BY hb.VIEWED_DATE DESC
+  </select>
+
+
+</mapper>
