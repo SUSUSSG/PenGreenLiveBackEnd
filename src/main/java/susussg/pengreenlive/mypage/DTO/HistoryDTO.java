@@ -20,5 +20,6 @@ public class HistoryDTO {
   private String productImage;
   private int listPrice;
   private String brand;
+  private String channelNm;
 
 }
