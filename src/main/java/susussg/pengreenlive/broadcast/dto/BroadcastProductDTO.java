@@ -14,4 +14,6 @@ public class BroadcastProductDTO {
     private long productSeq;
     private int discountRate;
     private int discountPrice;
+    private Long clicksCount;
+    private int conversionRate;
 }
