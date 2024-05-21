@@ -22,7 +22,7 @@ public class ReviewSummaryServiceTest {
   @Test
   public void getProductReviewList(){
 
-    String reviewList = reviewSummaryService.summarizeReviewsByProductSeq(4L);
+    String reviewList = reviewSummaryService.ReviewsByProductSeq(4L);
     log.info("리뷰!!!!!!!!!!!" + reviewList);
 
   }
