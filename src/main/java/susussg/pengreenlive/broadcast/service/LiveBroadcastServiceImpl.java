@@ -2,6 +2,7 @@ package susussg.pengreenlive.broadcast.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import susussg.pengreenlive.broadcast.dto.*;
@@ -37,7 +38,10 @@ public class LiveBroadcastServiceImpl implements LiveBroadcastService {
 
 
     @Override
-    public void addNotice(long broadcastId, String noticeContent) {
-        liveBroadcastMapper.insertNotice(broadcastId, noticeContent);
+    public void addNotice(NoticeDTO notice) {
+        int result = liveBroadcastMapper.insertNotice(notice);
+        if (result == 0) {
+            throw new RuntimeException("notice insert failed");
+        }
     }
 }

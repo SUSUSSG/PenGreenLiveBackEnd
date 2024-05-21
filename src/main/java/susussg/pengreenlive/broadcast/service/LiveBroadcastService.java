@@ -2,6 +2,7 @@ package susussg.pengreenlive.broadcast.service;
 
 import susussg.pengreenlive.broadcast.dto.LiveBroadcastInfoDTO;
 import susussg.pengreenlive.broadcast.dto.LiveBroadcastProductDTO;
+import susussg.pengreenlive.broadcast.dto.NoticeDTO;
 
 import java.util.List;
 
@@ -11,5 +12,5 @@ public interface LiveBroadcastService {
 
     List<LiveBroadcastProductDTO> getBroadcastProducts(long broadcastId);
 
-    void addNotice(long broadcastId, String noticeContent);
+    void addNotice(NoticeDTO notice);
 }

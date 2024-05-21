@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.broadcast.dto.LiveBroadcastInfoDTO;
 import susussg.pengreenlive.broadcast.dto.LiveBroadcastProductDTO;
+import susussg.pengreenlive.broadcast.dto.NoticeDTO;
 import susussg.pengreenlive.broadcast.service.LiveBroadcastService;
 
 import java.util.List;
@@ -38,9 +39,9 @@ public class LiveBroadcastController {
     }
 
     @PostMapping("live-notice")
-    public ResponseEntity<String> addNotice(@RequestParam long broadcastId, @RequestParam String noticeContent) {
+    public ResponseEntity<String> addNotice(@RequestBody NoticeDTO notice) {
         log.info("공지 등록 컨트롤러 호출");
-        liveBroadcastService.addNotice(broadcastId, noticeContent);
+        liveBroadcastService.addNotice(notice);
         return ResponseEntity.ok().body("공지 등록 완료");
     }
 }
