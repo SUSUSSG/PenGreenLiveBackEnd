@@ -5,19 +5,14 @@
 
 <mapper namespace="susussg.pengreenlive.broadcast.mapper.ProductClicksMapper">
 
-    <select id="getProductsByBroadcastSeq" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.BroadcastProductDTO">
-        SELECT PRODUCT_SEQ, BROADCAST_SEQ, DISCOUNT_RATE, DISCOUNT_PRICE
-        FROM TB_BROADCAST_PRODUCT
-        WHERE BROADCAST_SEQ = #{broadcastSeq}
-    </select>
-
-    <insert id="insertProductClick" parameterType="susussg.pengreenlive.broadcast.dto.ProductClick">
-        INSERT INTO TB_PRODUCT_CLICKS (BROADCAST_SEQ, PRODUCT_SEQ)
-        VALUES (#{broadcastSeq}, #{productSeq})
-    </insert>
+<!--    <select id="getProductsByBroadcastSeq" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.BroadcastProductDTO">-->
+<!--        SELECT PRODUCT_SEQ, BROADCAST_SEQ, DISCOUNT_RATE, DISCOUNT_PRICE, CLICKS_COUNT, CONVERSION_RATE-->
+<!--        FROM TB_BROADCAST_PRODUCT-->
+<!--        WHERE BROADCAST_SEQ = #{broadcastSeq}-->
+<!--    </select>-->
 
     <update id="incrementClickCount" parameterType="map">
-        UPDATE TB_PRODUCT_CLICKS
+        UPDATE TB_BROADCAST_PRODUCT
         SET CLICKS_COUNT = CLICKS_COUNT + 1
         WHERE BROADCAST_SEQ = #{broadcastSeq} AND PRODUCT_SEQ = #{productSeq}
     </update>
@@ -25,7 +20,7 @@
     <update id="updateAverageClicks" parameterType="long">
         UPDATE TB_BROADCAST_STATISTICS
         SET AVG_PRODUCT_CLICKS = (SELECT AVG(CLICKS_COUNT)
-                                  FROM TB_PRODUCT_CLICKS
+                                  FROM TB_BROADCAST_PRODUCT
                                   WHERE BROADCAST_SEQ = #{broadcastSeq})
         WHERE BROADCAST_SEQ = #{broadcastSeq}
     </update>
