@@ -35,4 +35,9 @@ public class LiveBroadcastServiceImpl implements LiveBroadcastService {
         return liveBroadcastMapper.selectBroadcastProduct(broadcastId);
     }
 
+
+    @Override
+    public void addNotice(long broadcastId, String noticeContent) {
+        liveBroadcastMapper.insertNotice(broadcastId, noticeContent);
+    }
 }

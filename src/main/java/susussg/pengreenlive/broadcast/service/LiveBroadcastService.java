@@ -10,4 +10,6 @@ public interface LiveBroadcastService {
     LiveBroadcastInfoDTO getBroadcastInfo(long broadcastId);
 
     List<LiveBroadcastProductDTO> getBroadcastProducts(long broadcastId);
+
+    void addNotice(long broadcastId, String noticeContent);
 }
