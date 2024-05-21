@@ -4,14 +4,13 @@ import io.lettuce.core.dynamic.annotation.Param;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.broadcast.dto.LiveBroadcastInfoDTO;
 import susussg.pengreenlive.broadcast.dto.LiveBroadcastProductDTO;
 import susussg.pengreenlive.broadcast.service.LiveBroadcastService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Log4j2
@@ -36,5 +35,12 @@ public class LiveBroadcastController {
         log.info("생방송상품 컨트롤러 호출");
         List<LiveBroadcastProductDTO> liveBroadcastProduct = liveBroadcastService.getBroadcastProducts(broadcastId);
         return ResponseEntity.ok().body(liveBroadcastProduct);
+    }
+
+    @PostMapping("live-notice")
+    public ResponseEntity<String> addNotice(@RequestParam long broadcastId, @RequestParam String noticeContent) {
+        log.info("공지 등록 컨트롤러 호출");
+        liveBroadcastService.addNotice(broadcastId, noticeContent);
+        return ResponseEntity.ok().body("공지 등록 완료");
     }
 }
