@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class ProductDetailsDTO {
 
+    private Long productSeq;
     private String productCd;
     private String productNm;
     private String greenProductId;
