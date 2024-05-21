@@ -10,5 +10,7 @@ public interface ProductClickService {
 //    void addProductClicksForBroadcast(Long broadcastSeq);
     void incrementProductClick(Long broadcastSeq, Long productSeq);
     void updateAverageProductClicks(Long broadcastSeq);
+    void updateConversionRates(long broadcastSeq);
+
 
 }

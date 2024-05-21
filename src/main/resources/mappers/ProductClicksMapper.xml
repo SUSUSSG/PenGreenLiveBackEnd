@@ -5,16 +5,17 @@
 
 <mapper namespace="susussg.pengreenlive.broadcast.mapper.ProductClicksMapper">
 
-<!--    <select id="getProductsByBroadcastSeq" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.BroadcastProductDTO">-->
-<!--        SELECT PRODUCT_SEQ, BROADCAST_SEQ, DISCOUNT_RATE, DISCOUNT_PRICE, CLICKS_COUNT, CONVERSION_RATE-->
-<!--        FROM TB_BROADCAST_PRODUCT-->
-<!--        WHERE BROADCAST_SEQ = #{broadcastSeq}-->
-<!--    </select>-->
+    <!--    <select id="getProductsByBroadcastSeq" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.BroadcastProductDTO">-->
+    <!--        SELECT PRODUCT_SEQ, BROADCAST_SEQ, DISCOUNT_RATE, DISCOUNT_PRICE, CLICKS_COUNT, CONVERSION_RATE-->
+    <!--        FROM TB_BROADCAST_PRODUCT-->
+    <!--        WHERE BROADCAST_SEQ = #{broadcastSeq}-->
+    <!--    </select>-->
 
     <update id="incrementClickCount" parameterType="map">
         UPDATE TB_BROADCAST_PRODUCT
         SET CLICKS_COUNT = CLICKS_COUNT + 1
-        WHERE BROADCAST_SEQ = #{broadcastSeq} AND PRODUCT_SEQ = #{productSeq}
+        WHERE BROADCAST_SEQ = #{broadcastSeq}
+          AND PRODUCT_SEQ = #{productSeq}
     </update>
 
     <update id="updateAverageClicks" parameterType="long">
@@ -22,6 +23,37 @@
         SET AVG_PRODUCT_CLICKS = (SELECT AVG(CLICKS_COUNT)
                                   FROM TB_BROADCAST_PRODUCT
                                   WHERE BROADCAST_SEQ = #{broadcastSeq})
+        WHERE BROADCAST_SEQ = #{broadcastSeq}
+    </update>
+
+    <!-- 방송 상품 구매 전환률 업데이트를 위한 정보 받아오기-->
+    <select id="getOrderAndClickCounts" parameterType="long" resultType="map">
+        SELECT bp.PRODUCT_SEQ,
+               bp.CLICKS_COUNT,
+               COALESCE(COUNT(ORDER_SEQ), 0) AS ORDER_COUNT
+        FROM TB_BROADCAST_PRODUCT bp
+                 LEFT JOIN TB_ORDER o ON bp.BROADCAST_SEQ = o.BROADCAST_SEQ AND bp.PRODUCT_SEQ = o.PRODUCT_SEQ
+        WHERE bp.BROADCAST_SEQ = #{broadcastSeq}
+        GROUP BY bp.PRODUCT_SEQ, bp.CLICKS_COUNT
+    </select>
+
+    <!-- 방송 상품의 구매 전환률을 업데이트 -->
+    <update id="updateProductConversionRate" parameterType="map">
+        UPDATE TB_BROADCAST_PRODUCT
+        SET CONVERSION_RATE = CASE
+                                  WHEN CLICKS_COUNT > 0 THEN (#{orderCount} * 100 / CLICKS_COUNT)
+                                  ELSE 0
+            END
+        WHERE BROADCAST_SEQ = #{broadcastSeq}
+          AND PRODUCT_SEQ = #{productSeq}
+    </update>
+
+    <!-- 방송 통계 테이블의 구매 전환률을 업데이트 -->
+    <update id="updateBroadcastConversionRate" parameterType="long">
+        UPDATE TB_BROADCAST_STATISTICS
+        SET CONVERSION_RATE = (SELECT AVG(CONVERSION_RATE)
+                               FROM TB_BROADCAST_PRODUCT
+                               WHERE BROADCAST_SEQ = #{broadcastSeq})
         WHERE BROADCAST_SEQ = #{broadcastSeq}
     </update>
 </mapper>

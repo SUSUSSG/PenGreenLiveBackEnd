@@ -35,4 +35,9 @@ public class ProductClickController {
         productClickService.updateAverageProductClicks(broadcastSeq);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/updateConversionRates/{broadcastSeq}")
+    public void updateConversionRates(@PathVariable long broadcastSeq) {
+        productClickService.updateConversionRates(broadcastSeq);
+    }
 }
