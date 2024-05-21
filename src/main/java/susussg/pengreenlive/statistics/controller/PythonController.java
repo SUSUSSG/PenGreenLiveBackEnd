@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
+import susussg.pengreenlive.naver.service.ReviewSummaryService;
 import susussg.pengreenlive.statistics.service.PythonService;
 
 @RestController
@@ -20,8 +21,12 @@ public class PythonController {
     @Autowired
     PythonService pythonService;
 
-    @PostMapping("/generate-image")
-    public ResponseEntity<Map<String, String>> generateImage(@RequestBody List<String> reviews) throws IOException, InterruptedException {
+    @Autowired
+    ReviewSummaryService reviewSummaryService;
+
+    @PostMapping("/review-semantic")
+    public ResponseEntity<Map<String, String>> generateImage(@RequestParam("productSeq") Long productSeq) throws IOException, InterruptedException {
+        String reviews = reviewSummaryService.summarizeReviewsByProductSeq(productSeq);
         Map<String, String> result = pythonService.generateImage(reviews);
         return ResponseEntity.ok(result);
     }
