@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import susussg.pengreenlive.statistics.service.PythonService;
 
 import java.io.*;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -14,15 +13,15 @@ import java.util.Map;
 public class PythonServiceImpl implements PythonService {
 
     @Override
-    public Map<String, String> generateImage(List<String> reviews) throws IOException, InterruptedException {
+    public Map<String, String> generateImage(String review) throws IOException, InterruptedException {
         String pythonScriptPath = "src/main/java/susussg/pengreenlive/statistics/py/word_network.py";
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String reviewsJson = objectMapper.writeValueAsString(reviews);
+        String reviewJson = objectMapper.writeValueAsString(review);
 
         String pythonPath = "/usr/local/bin/python3"; // TODO : 배포 시 서버 내 주소로 변경
 
-        ProcessBuilder processBuilder = new ProcessBuilder(pythonPath, pythonScriptPath, reviewsJson);
+        ProcessBuilder processBuilder = new ProcessBuilder(pythonPath, pythonScriptPath, reviewJson);
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
 
