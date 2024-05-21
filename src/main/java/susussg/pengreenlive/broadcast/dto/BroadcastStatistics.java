@@ -10,15 +10,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class BroadcastStatistics {
-    long broadcastSeq;
-    int avgViewerCount;
-    int maxViewerCount;
-    int likesCount;
-    int viewsCount;
-    long avgPurchaseAmount;
-    int avgViewingTime;
-    int broadcastDuration;
-    int avgProductClicks;
-    long totalSalesAmount;
-    int totalSalesQty;
+    private long broadcastSeq;
+    private int avgViewerCount;
+    private int maxViewerCount;
+    private int likesCount;
+    private int viewsCount;
+    private long avgPurchaseAmount;
+    private int avgViewingTime;
+    private int broadcastDuration;
+    private int avgProductClicks;
+    private long totalSalesAmount;
+    private int totalSalesQty;
+    private int conversionRate;
 }
