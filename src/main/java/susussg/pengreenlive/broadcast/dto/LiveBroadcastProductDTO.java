@@ -19,4 +19,5 @@ public class LiveBroadcastProductDTO {
     private int discountPrice;
     private String labelImages;
     private int productStock;
+    private int conversionRate;
 }
