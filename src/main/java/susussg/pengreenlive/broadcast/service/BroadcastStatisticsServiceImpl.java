@@ -77,30 +77,37 @@ public class BroadcastStatisticsServiceImpl implements BroadcastStatisticsServic
         return broadcastStatisticsMapper.getStatisticsByVendorAndDateRange(vendorSeq, startDate, endDate);
     }
 
+    @Override
     public int getAverageBroadcastDuration(long vendorSeq, LocalDate startDate, LocalDate endDate) {
         return broadcastStatisticsMapper.getAverageBroadcastDuration(vendorSeq, startDate, endDate);
     }
 
+    @Override
     public int getAverageViewerCount(long vendorSeq, LocalDate startDate, LocalDate endDate) {
         return broadcastStatisticsMapper.getAverageViewerCount(vendorSeq, startDate, endDate);
     }
 
+    @Override
     public int getAveragePurchaseQuantity(long vendorSeq, LocalDate startDate, LocalDate endDate) {
         return broadcastStatisticsMapper.getAveragePurchaseQuantity(vendorSeq, startDate, endDate);
     }
 
+    @Override
     public int getAverageProductClicks(long vendorSeq, LocalDate startDate, LocalDate endDate) {
         return broadcastStatisticsMapper.getAverageProductClicks(vendorSeq, startDate, endDate);
     }
 
+    @Override
     public int getAverageViewingTime(long vendorSeq, LocalDate startDate, LocalDate endDate) {
         return broadcastStatisticsMapper.getAverageViewingTime(vendorSeq, startDate, endDate);
     }
 
+    @Override
     public int getAverageLikesCount(long vendorSeq, LocalDate startDate, LocalDate endDate) {
         return broadcastStatisticsMapper.getAverageLikesCount(vendorSeq, startDate, endDate);
     }
 
+    @Override
     public long getAveragePurchaseAmount(long vendorSeq, LocalDate startDate, LocalDate endDate) {
         return broadcastStatisticsMapper.getAveragePurchaseAmount(vendorSeq, startDate, endDate);
     }
