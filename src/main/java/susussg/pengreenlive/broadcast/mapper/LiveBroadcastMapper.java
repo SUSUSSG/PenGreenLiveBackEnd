@@ -16,4 +16,6 @@ public interface LiveBroadcastMapper {
     List<FaqDTO> selectFaq(long broadcastId);
 
     List<LiveBroadcastProductDTO> selectBroadcastProduct(long broadcastId);
+
+    int insertNotice(long broadcastId, String noticeContent);
 }
