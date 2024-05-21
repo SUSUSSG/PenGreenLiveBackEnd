@@ -173,4 +173,11 @@
           AND B.BROADCAST_SCHEDULED_TIME BETWEEN #{startDate} AND #{endDate};
     </select>
 
+    <update id="updateAvgViewingTime">
+        UPDATE TB_BROADCAST_STATISTICS
+        SET avg_viewing_time = #{avgViewingTime}
+        WHERE broadcast_seq = #{broadcastSeq}
+    </update>
+
+
 </mapper>
