@@ -82,7 +82,10 @@ public class AccountService {
     public boolean verifyCode(String phoneNumber, String code) {
         ValueOperations<String, Object> valueOps = redisTemplate.opsForValue();
         String storedCode = (String) valueOps.get(phoneNumber);
-        if (storedCode != null && storedCode.equals(code)) {
+        if (storedCode == null) {
+            throw new IllegalArgumentException("인증 코드가 만료되었거나 존재하지 않습니다.");
+        }
+        if (storedCode.equals(code)) {
             redisTemplate.delete(phoneNumber);
             return true;
         }

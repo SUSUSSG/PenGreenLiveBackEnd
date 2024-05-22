@@ -49,12 +49,12 @@ public class AccountController {
             else
                 return ResponseEntity.ok().body("duplicate");
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("failed");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
         }
     }
 
     @PostMapping("/sms/request-authcode")
-    public ResponseEntity<?> sendAuthCode(@RequestParam String phoneNumber) {
+    public ResponseEntity<?> sendAuthCode(@RequestParam("phoneNumber") String phoneNumber) {
         log.info("/sms/request-authcode {}", phoneNumber);
 
         try {
@@ -62,27 +62,29 @@ public class AccountController {
             if (response.getStatusCode().equals("2000")) {
                 return ResponseEntity.ok("SMS 발송 성공.");
             } else {
-                return ResponseEntity.status(500).body("SMS 발송 실패.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SMS 발송 실패.");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("서버 오류: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류: " + e.getMessage());
         }
     }
 
     @PostMapping("/sms/verify")
-    public ResponseEntity<?> verifyCode(@RequestParam String phoneNumber, @RequestParam String code) {
+    public ResponseEntity<?> verifyCode(@RequestParam("phoneNumber") String phoneNumber, @RequestParam("code") String code) {
         log.info("/sms/verify {} {}", phoneNumber, code);
 
         try {
             boolean isVerified = accountService.verifyCode(phoneNumber, code);
 
             if (isVerified) {
-                return ResponseEntity.ok("인증 성공.");
+                return ResponseEntity.ok("인증 성공");
             } else {
-                return ResponseEntity.status(400).body("잘못된 인증번호.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증 번호가 일치하지 않습니다.");    // 401
             }
+        }  catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.GONE).body(e.getMessage()); // 410
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("서버 오류: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류: " + e.getMessage());
         }
-     }
+    }
 }
