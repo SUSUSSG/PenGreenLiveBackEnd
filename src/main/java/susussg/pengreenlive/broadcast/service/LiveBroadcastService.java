@@ -18,4 +18,5 @@ public interface LiveBroadcastService {
     void removeNotice(long noticeId);
 
     FaqDTO addFaq(FaqDTO faq);
+    void removeFaq(long faqId);
 }

@@ -62,4 +62,9 @@ public class LiveBroadcastServiceImpl implements LiveBroadcastService {
         }
         return liveBroadcastMapper.selectFaqRecent(faq.getBroadcastSeq());
     }
+
+    @Override
+    public void removeFaq(long faqId) {
+        liveBroadcastMapper.deleteFaq(faqId);
+    }
 }
