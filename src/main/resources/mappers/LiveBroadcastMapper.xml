@@ -28,12 +28,15 @@
         WHERE BROADCAST_SEQ = #{broadcastId}
     </select>
 
-
+<!--공지-->
     <insert id="insertNotice" parameterType="susussg.pengreenlive.broadcast.dto.NoticeDTO">
         INSERT INTO TB_NOTICE (BROADCAST_SEQ, NOTICE_CONTENT) VALUES (#{broadcastSeq}, #{noticeContent})
     </insert>
     <select id="selectNoticeRecent" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.NoticeDTO">
         SELECT * FROM TB_NOTICE WHERE BROADCAST_SEQ = #{broadcastId} ORDER BY NOTICE_SEQ DESC LIMIT 1;
     </select>
+    <delete id="deleteNotice" parameterType="long">
+        DELETE FROM TB_NOTICE WHERE NOTICE_SEQ = #{noticeSeq}
+    </delete>
 
 </mapper>

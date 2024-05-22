@@ -20,4 +20,5 @@ public interface LiveBroadcastMapper {
     int insertNotice(NoticeDTO notice);
 
     NoticeDTO selectNoticeRecent(long broadcastId);
+    void deleteNotice(long noticeId);
 }
