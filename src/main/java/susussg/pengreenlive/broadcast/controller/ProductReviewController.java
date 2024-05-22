@@ -23,3 +23,4 @@ public class ProductReviewController {
   public List<ProductReviewDTO> getReviewsByProductSeq(@RequestParam Long productSeq) {
     return productReviewService.getReviewsByProductSeq(productSeq);
   }
+}
