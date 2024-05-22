@@ -28,7 +28,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                    .requestMatchers("/login", "/signup", "/public/**").permitAll()
+                    .requestMatchers("/login", "/**").permitAll()
                     .anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin
@@ -46,7 +46,7 @@ public class SecurityConfig {
     public CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
         CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
         filter.setAuthenticationManager(authenticationManagerBean(authenticationConfiguration));
-        filter.setFilterProcessesUrl("/login"); // 로그인 엔드포인트
+        filter.setFilterProcessesUrl("/login");
         return filter;
     }
 
