@@ -38,10 +38,10 @@ public class LiveBroadcastController {
         return ResponseEntity.ok().body(liveBroadcastProduct);
     }
 
-    @PostMapping("live-notice")
-    public ResponseEntity<String> addNotice(@RequestBody NoticeDTO notice) {
+    @PostMapping("live-notice/add")
+    public ResponseEntity<NoticeDTO> addNotice(@RequestBody NoticeDTO noticeDTO) {
         log.info("공지 등록 컨트롤러 호출");
-        liveBroadcastService.addNotice(notice);
-        return ResponseEntity.ok().body("공지 등록 완료");
+        NoticeDTO newNotice = liveBroadcastService.addNotice(noticeDTO);
+        return ResponseEntity.ok(newNotice);
     }
 }
