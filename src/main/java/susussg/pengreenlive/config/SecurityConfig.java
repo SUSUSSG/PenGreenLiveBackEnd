@@ -1,5 +1,6 @@
 package susussg.pengreenlive.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,73 +11,50 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import susussg.pengreenlive.login.service.CustomAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private AuthenticationConfiguration authenticationConfiguration;
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/login", "/signup", "/public/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        return http
-                .csrf((csrf) -> csrf.disable())
-                .authorizeHttpRequests((authorizeRequests) -> {
-                    authorizeRequests.requestMatchers("/**").permitAll();
-
-//                authorizeRequests
-//                        .requestMatchers("/login", "/signup", "/find-password", "/reset-password").permitAll();
-
-//                authorizeRequests.requestMatchers("/admin/**")
-//                    .hasAuthority(MemberRole.ADMIN.getValue());
-
-//                authorizeRequests.requestMatchers("/member/**", "/**").hasAnyAuthority(
-//                        MemberRole.ADMIN.getValue(),
-//                        MemberRole.OPERATOR.getValue(),
-//                        MemberRole.WAREHOUSE_MANAGER.getValue());
-                })
-                .headers((headers) -> headers.addHeaderWriter(
-                        new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
-
-                .formLogin((formLogin) -> { formLogin
-                        .loginPage("/login")
-                        .successHandler(customAuthenticationSuccessHandler())
-                        .permitAll();
-//                .successForwardUrl("/");
-                })
-                .logout((logout) -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/").invalidateHttpSession(true))
-                .build();
+        return http.build();
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
+        CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManagerBean(authenticationConfiguration));
+        filter.setFilterProcessesUrl("/login"); // 로그인 엔드포인트
+        return filter;
     }
 
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
+    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
-    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
-        return (request, response, authentication) -> {
-            response.sendRedirect("/");
-        };
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
+    public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-                .requestMatchers(PathRequest
-                        .toStaticResources()
-                        .atCommonLocations()
-                );
+                .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**");
     }
-
-
 }
