@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import susussg.pengreenlive.user.Mapper.UserMapper;
 import susussg.pengreenlive.user.domain.LocalLogin;
@@ -31,6 +32,7 @@ public class AccountService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     UserMapper userMapper;
@@ -44,6 +46,8 @@ public class AccountService {
     @Transactional
     public void createLocalUser(SignupFormDTO signupForm) {
         userMapper.insertUser(signupForm);
+        signupForm.setUserPw(passwordEncoder.encode(signupForm.getUserPw()));
+
         int result = userMapper.insertLocalLogin(signupForm);
         log.info("createLocalUser {}", result);
     }
