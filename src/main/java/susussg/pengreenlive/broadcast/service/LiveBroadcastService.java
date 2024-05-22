@@ -12,5 +12,5 @@ public interface LiveBroadcastService {
 
     List<LiveBroadcastProductDTO> getBroadcastProducts(long broadcastId);
 
-    void addNotice(NoticeDTO notice);
+    NoticeDTO addNotice(NoticeDTO notice);
 }
