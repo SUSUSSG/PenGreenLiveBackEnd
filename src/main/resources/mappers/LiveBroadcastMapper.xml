@@ -39,4 +39,12 @@
         DELETE FROM TB_NOTICE WHERE NOTICE_SEQ = #{noticeSeq}
     </delete>
 
+<!--    자주 묻는 질문과 답-->
+    <insert id="insertFaq" parameterType="susussg.pengreenlive.broadcast.dto.FaqDTO">
+        INSERT INTO TB_FAQ (BROADCAST_SEQ, QUESTION_TITLE, QUESTION_ANSWER) VALUES (#{broadcastSeq}, #{questionTitle}, #{questionAnswer})
+    </insert>
+    <select id="selectFaqRecent" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.FaqDTO">
+        SELECT * FROM TB_FAQ WHERE BROADCAST_SEQ = #{broadcastId} ORDER BY FAQ_SEQ DESC LIMIT 1;
+    </select>
+
 </mapper>
