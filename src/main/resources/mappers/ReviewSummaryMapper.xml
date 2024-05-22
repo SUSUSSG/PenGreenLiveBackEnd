@@ -9,5 +9,13 @@
       WHERE PRODUCT_SEQ = #{productSeq}
   </select>
 
+  <select id="getReviewContentsByProductSeqAndDate" resultType="map">
+    SELECT DATE(REVIEW_TIME) as reviewDate, GROUP_CONCAT(REVIEW_CONTENT SEPARATOR ' ') as combinedContent
+    FROM TB_REVIEW
+    WHERE PRODUCT_SEQ = #{productSeq}
+      AND REVIEW_TIME >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+    GROUP BY DATE(REVIEW_TIME)
+  </select>
+
 
 </mapper>
