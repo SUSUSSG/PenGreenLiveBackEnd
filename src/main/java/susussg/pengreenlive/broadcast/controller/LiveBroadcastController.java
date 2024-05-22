@@ -2,6 +2,7 @@ package susussg.pengreenlive.broadcast.controller;
 
 import io.lettuce.core.dynamic.annotation.Param;
 import lombok.extern.log4j.Log4j2;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,5 +56,11 @@ public class LiveBroadcastController {
     public ResponseEntity<FaqDTO> addFaq(@RequestBody FaqDTO faqDTO) {
         FaqDTO newFaq = liveBroadcastService.addFaq(faqDTO);
         return ResponseEntity.ok(newFaq);
+    }
+
+    @DeleteMapping("live-faq/delete/{faqId}")
+    public ResponseEntity<String> removeFaq(@PathVariable long faqId) {
+        liveBroadcastService.removeFaq(faqId);
+        return ResponseEntity.ok("자주 묻는 질문 삭제 성공");
     }
 }
