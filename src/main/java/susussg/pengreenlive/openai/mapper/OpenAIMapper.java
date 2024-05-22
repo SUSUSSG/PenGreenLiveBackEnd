@@ -13,7 +13,7 @@ public interface OpenAIMapper {
 
     List<ScheduledBroadcastDTO> getBroadcastsByKeyword(String keyword);
 
-    List<AiBroadcastPromptDTO> getBroadcastDetailsBySeq(Long broadcastSeq);
+    AiBroadcastPromptDTO getBroadcastDetailsBySeq(Long broadcastSeq);
 
 
 }

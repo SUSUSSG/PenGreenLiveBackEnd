@@ -53,9 +53,16 @@ public class OpenAIController {
     public List<ScheduledBroadcastDTO> getBroadcastsByKeyword(@RequestParam String keyword) {
         return openAIQueryService.getBroadcastsByKeyword(keyword);
     }
-    @GetMapping("/broadcast-details")
-    public List<AiBroadcastPromptDTO> getBroadcastDetailsBySeq(@RequestParam Long broadcastSeq) {
-        return openAIQueryService.getBroadcastDetailsBySeq(broadcastSeq);
+    @GetMapping("/generate-prompt")
+    public String getBroadcastDetailsBySeq(@RequestParam Long broadcastSeq) {
+        AiBroadcastPromptDTO aiBroadcastPromptDTO = openAIQueryService.getBroadcastDetailsBySeq(broadcastSeq);
+
+        try {
+            return openAIService.generateBroadcastScript(aiBroadcastPromptDTO);
+        } catch (Exception e) {
+            log.error("Exception occurred while generating broadcast script: " + e.getMessage());
+            return "프롬프트 생성 중 오류가 발생했습니다.";
+        }
     }
     @PostMapping("/review-check")
     public String checkReviewForHarmfulness(@RequestBody String reviewContent) {

@@ -115,6 +115,7 @@
       P.PRODUCT_NM,
       P.LIST_PRICE,
       P.BRAND,
-      P.PRODUCT_IMAGE;
+      P.PRODUCT_IMAGE
+    LIMIT 1
   </select>
 </mapper>

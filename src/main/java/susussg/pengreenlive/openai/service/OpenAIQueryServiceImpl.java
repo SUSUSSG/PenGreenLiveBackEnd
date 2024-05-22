@@ -25,7 +25,7 @@ public class OpenAIQueryServiceImpl implements OpenAIQueryService {
     }
 
     @Override
-    public List<AiBroadcastPromptDTO> getBroadcastDetailsBySeq(Long broadcastSeq) {
+    public AiBroadcastPromptDTO getBroadcastDetailsBySeq(Long broadcastSeq) {
         return openAIMapper.getBroadcastDetailsBySeq(broadcastSeq);
     }
 }

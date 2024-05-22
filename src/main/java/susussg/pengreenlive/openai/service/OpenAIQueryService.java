@@ -8,6 +8,6 @@ import susussg.pengreenlive.openai.dto.RecentOrderDTO;
 public interface OpenAIQueryService {
     List<RecentOrderDTO> getRecentOrders(String userUuid);
     List<ScheduledBroadcastDTO> getBroadcastsByKeyword(String keyword);
-    List<AiBroadcastPromptDTO> getBroadcastDetailsBySeq(Long broadcastSeq);
+    AiBroadcastPromptDTO getBroadcastDetailsBySeq(Long broadcastSeq);
 
 }
