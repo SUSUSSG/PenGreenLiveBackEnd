@@ -3,14 +3,17 @@ package susussg.pengreenlive.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 import susussg.pengreenlive.user.dto.SignupFormDTO;
 import susussg.pengreenlive.user.service.AccountService;
-
+import org.springframework.beans.factory.annotation.Value;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -50,14 +53,36 @@ public class AccountController {
         }
     }
 
-    @PostMapping("/request-authcode")
-    public ResponseEntity<?> sendPhoneVerificationCode(@RequestBody Map<String, String> form) {
-        String phoneNumber = form.get("phoneNumber");
-        log.info("/request-authcode {}", phoneNumber);
+    @PostMapping("/sms/request-authcode")
+    public ResponseEntity<?> sendAuthCode(@RequestParam String phoneNumber) {
+        log.info("/sms/request-authcode {}", phoneNumber);
+
         try {
-            return ResponseEntity.ok().body("available");
+            SingleMessageSentResponse response = accountService.sendVerificationCode(phoneNumber);
+            if (response.getStatusCode().equals("2000")) {
+                return ResponseEntity.ok("SMS 발송 성공.");
+            } else {
+                return ResponseEntity.status(500).body("SMS 발송 실패.");
+            }
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("failed");
+            return ResponseEntity.status(500).body("서버 오류: " + e.getMessage());
         }
     }
+
+    @PostMapping("/sms/verify")
+    public ResponseEntity<?> verifyCode(@RequestParam String phoneNumber, @RequestParam String code) {
+        log.info("/sms/verify {} {}", phoneNumber, code);
+
+        try {
+            boolean isVerified = accountService.verifyCode(phoneNumber, code);
+
+            if (isVerified) {
+                return ResponseEntity.ok("인증 성공.");
+            } else {
+                return ResponseEntity.status(400).body("잘못된 인증번호.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("서버 오류: " + e.getMessage());
+        }
+     }
 }
