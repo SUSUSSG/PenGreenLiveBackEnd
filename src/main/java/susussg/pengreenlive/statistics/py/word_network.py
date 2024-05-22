@@ -12,7 +12,7 @@ import sys
 
 def generate_image(review):
     try:
-        font_path = 'SCDream5.otf'
+        font_path = '/opt/susussg-backend/py/SCDream5.otf'
         font_prop = font_manager.FontProperties(fname=font_path)
         okt = Okt()
         josa_list = ['은', '는', '이', '가', '을', '를', '에', '의', '와', '과', '도', '으로', '에서', '에게', '한테', '부터', '까지', '마다', '밖에']

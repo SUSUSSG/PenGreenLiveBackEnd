@@ -18,7 +18,7 @@ public class PythonServiceImpl implements PythonService {
 
     @Override
     public Map<String, String> generateImage(String review) throws IOException, InterruptedException {
-        String pythonScriptPath = "word_network.py";
+        String pythonScriptPath = "/opt/susussg-backend/py/word_network.py";
 
         ObjectMapper objectMapper = new ObjectMapper();
         String reviewJson = objectMapper.writeValueAsString(review);
