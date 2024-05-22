@@ -2,6 +2,7 @@ package susussg.pengreenlive.broadcast.service;
 
 import susussg.pengreenlive.broadcast.dto.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,4 +20,8 @@ public interface BroadcastService {
     List<PrepareBroadcastInfoDTO> getUpcomingBroadcastInfo(long vendorId);
 
     List<BroadcastDTO> getBroadcastsByVendorAndDateRange(long vendorSeq, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    void startBroadcast(BroadcastTimeDTO broadcastTimeDTO);
+
+    void endBroadcast(BroadcastTimeDTO broadcastTimeDTO);
 }

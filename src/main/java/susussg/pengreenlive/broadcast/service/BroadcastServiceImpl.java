@@ -13,6 +13,7 @@ import susussg.pengreenlive.util.Service.ImageService;
 import susussg.pengreenlive.util.Service.S3Service;
 
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
@@ -189,5 +190,16 @@ public class BroadcastServiceImpl implements BroadcastService {
     @Transactional
     public List<BroadcastDTO> getBroadcastsByVendorAndDateRange(long vendorSeq, LocalDateTime startDateTime, LocalDateTime endDateTime){
         return broadcastMapper.getBroadcastsByVendorAndDateRange(vendorSeq, startDateTime, endDateTime);
+    }
+
+    @Override
+    @Transactional
+    public void startBroadcast(BroadcastTimeDTO broadcastTimeDTO) {
+        broadcastMapper.updateBroadcastStartTime(broadcastTimeDTO);
+    }
+
+    @Override
+    public void endBroadcast(BroadcastTimeDTO broadcastTimeDTO) {
+        broadcastMapper.updateBroadcastEndTime(broadcastTimeDTO);
     }
 }
