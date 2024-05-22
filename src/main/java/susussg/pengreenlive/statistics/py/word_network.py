@@ -56,7 +56,7 @@ def generate_image(review):
         pos = nx.spring_layout(G, k=0.3)
         nx.draw_networkx_edges(G, pos, alpha=0.3)
         for word, (x, y) in pos.items():
-            plt.text(x, y, word, fontsize=G.nodes[word]['size']*30, ha='center', va='center', fontproperties=font_prop, color=random_colors[word])
+            plt.text(x, y, word, fontsize=G.nodes[word]['size']*40, ha='center', va='center', fontproperties=font_prop, color=random_colors[word])
 
         plt.axis('off')
         img_buf = io.BytesIO()

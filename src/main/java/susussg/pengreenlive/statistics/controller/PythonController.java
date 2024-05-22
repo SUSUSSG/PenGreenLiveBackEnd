@@ -26,7 +26,7 @@ public class PythonController {
 
     @PostMapping("/review-semantic")
     public ResponseEntity<Map<String, String>> generateImage(@RequestParam("productSeq") Long productSeq) throws IOException, InterruptedException {
-        String reviews = reviewSummaryService.summarizeReviewsByProductSeq(productSeq);
+        String reviews = reviewSummaryService.ReviewsByProductSeq(productSeq);
         Map<String, String> result = pythonService.generateImage(reviews);
         return ResponseEntity.ok(result);
     }
