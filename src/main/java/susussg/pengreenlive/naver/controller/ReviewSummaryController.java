@@ -1,5 +1,6 @@
 package susussg.pengreenlive.naver.controller;
 
+import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,12 @@ public class ReviewSummaryController {
     log.info("summary: " + summary);
 
     return ResponseEntity.ok(summary);
+  }
+
+  @GetMapping("/reviewlist")
+  public ResponseEntity<List<String>> getReviewByProduct(@RequestParam Long productSeq) {
+    List<String> reviewsList = reviewSummaryService.getReviewByProduct(productSeq);
+    return ResponseEntity.ok(reviewsList);
   }
 
 

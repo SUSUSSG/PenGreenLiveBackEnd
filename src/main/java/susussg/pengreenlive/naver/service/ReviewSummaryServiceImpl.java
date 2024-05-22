@@ -44,6 +44,7 @@ public class ReviewSummaryServiceImpl implements ReviewSummaryService {
     return reviewcontent;
   }
 
+  @Override
   public String SummarizeReviews(String review) {
     DocumentDTO document = new DocumentDTO(review);
     OptionDTO option = new OptionDTO("ko", "general", 0, 2);
@@ -112,5 +113,10 @@ public class ReviewSummaryServiceImpl implements ReviewSummaryService {
       log.error("Failed to send request to Naver API", e);
       throw new RuntimeException("Failed to send request to Naver API", e);
     }
+  }
+
+  @Override
+  public List<String> getReviewByProduct(Long productSeq) {
+    return reviewSummaryMapper.getReviewContentsByProductSeq(productSeq);
   }
 }
