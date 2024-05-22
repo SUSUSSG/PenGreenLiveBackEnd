@@ -52,8 +52,6 @@ public class ReviewSummaryServiceImpl implements ReviewSummaryService {
     SummaryRequestDTO summaryRequest = new SummaryRequestDTO(document, option);
     String requestBody = new Gson().toJson(summaryRequest);
 
-    log.info("Request Body: " + requestBody);
-
     try {
       URL url = new URL("https://naveropenapi.apigw.ntruss.com/text-summary/v1/summarize");
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -101,7 +99,6 @@ public class ReviewSummaryServiceImpl implements ReviewSummaryService {
 
         JSONObject jsonResponse = new JSONObject(response.toString());
         String summary = jsonResponse.getString("summary");
-        log.info("Summary: " + summary);
         return summary;
 
       } catch (IOException e) {
