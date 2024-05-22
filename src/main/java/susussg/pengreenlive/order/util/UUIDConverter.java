@@ -7,22 +7,21 @@ import java.nio.ByteBuffer;
 import java.util.UUID;
 
 @Converter(autoApply = false)
-public class UUIDConverter implements AttributeConverter<String, byte[]> {
+public class UUIDConverter implements AttributeConverter<UUID, byte[]> {
 
     @Override
-    public byte[] convertToDatabaseColumn(String uuid) {
+    public byte[] convertToDatabaseColumn(UUID uuid) {
         if (uuid == null) {
             return null;
         }
-        UUID u = UUID.fromString(uuid);
         ByteBuffer byteBuffer = ByteBuffer.wrap(new byte[16]);
-        byteBuffer.putLong(u.getMostSignificantBits());
-        byteBuffer.putLong(u.getLeastSignificantBits());
+        byteBuffer.putLong(uuid.getMostSignificantBits());
+        byteBuffer.putLong(uuid.getLeastSignificantBits());
         return byteBuffer.array();
     }
 
     @Override
-    public String convertToEntityAttribute(byte[] dbData) {
+    public UUID convertToEntityAttribute(byte[] dbData) {
         if (dbData == null) {
             return null;
         }
@@ -30,6 +29,6 @@ public class UUIDConverter implements AttributeConverter<String, byte[]> {
         long high = byteBuffer.getLong();
         long low = byteBuffer.getLong();
         UUID uuid = new UUID(high, low);
-        return uuid.toString();
+        return uuid;
     }
 }
