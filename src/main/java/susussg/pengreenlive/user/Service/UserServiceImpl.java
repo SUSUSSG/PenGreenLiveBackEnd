@@ -1,4 +1,4 @@
-package susussg.pengreenlive.user.Service;
+package susussg.pengreenlive.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

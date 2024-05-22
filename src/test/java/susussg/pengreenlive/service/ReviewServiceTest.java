@@ -29,7 +29,6 @@ public class ReviewServiceTest {
     List<ReviewDTO> reviewDTOList = reviewService.findOrdersByUser(userUUID);
 
     log.info("주문목록" + reviewDTOList);
-
   }
 
   @Test

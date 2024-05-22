@@ -4,6 +4,7 @@
 
     <resultMap id="ProductDetailsMap" type="susussg.pengreenlive.statistics.dto.ProductDetailsDTO">
         <id property="productCd" column="PRODUCT_CD"/>
+        <result property="productSeq" column="PRODUCT_SEQ"/>
         <result property="productNm" column="PRODUCT_NM"/>
         <result property="greenProductId" column="GREEN_PRODUCT_ID"/>
         <result property="listPrice" column="LIST_PRICE"/>
@@ -42,6 +43,7 @@
         SELECT
             P.PRODUCT_NM,
             P.PRODUCT_CD,
+            P.PRODUCT_SEQ,
             IFNULL(SUM(O.ORDER_PAYED_PRICE), 0) AS TOTAL_SALES
         FROM
             TB_PRODUCT P
@@ -52,7 +54,7 @@
         WHERE
             CSP.CHANNEL_SEQ = #{channelSeq}
         GROUP BY
-            P.PRODUCT_NM, P.PRODUCT_CD
+            P.PRODUCT_NM, P.PRODUCT_CD, P.PRODUCT_SEQ
         ORDER BY
             TOTAL_SALES DESC
     </select>
@@ -84,6 +86,7 @@
 
     <select id="findProductDetailsByProductCd" parameterType="string" resultMap="ProductDetailsMap">
         SELECT
+            P.PRODUCT_SEQ,
             P.PRODUCT_CD,
             P.PRODUCT_NM,
             P.GREEN_PRODUCT_ID,

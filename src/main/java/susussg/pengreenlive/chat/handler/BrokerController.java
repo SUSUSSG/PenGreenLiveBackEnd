@@ -16,8 +16,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import susussg.pengreenlive.chat.dto.MessageDto;
-import susussg.pengreenlive.user.Service.UserService;
-import susussg.pengreenlive.user.Service.UserServiceImpl;
+import susussg.pengreenlive.user.service.UserService;
+import susussg.pengreenlive.user.service.UserServiceImpl;
 import susussg.pengreenlive.util.DTO.BanwordValidationResultDTO;
 import susussg.pengreenlive.util.Service.BanwordService;
 

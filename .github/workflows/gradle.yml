@@ -66,7 +66,9 @@ jobs:
           echo "toss.secretKey=${{secrets.TOSS_SECRETKEY}}" >> ./src/main/resources/application-secret.properties
           echo "toss.customerKey=${{secrets.TOSS_CUSTOMERKEY}}" >> ./src/main/resources/application-secret.properties
           echo "openai.api.key=${{secrets.OPENAI_API_KEY}}" >> ./src/main/resources/application-secret.properties
-
+          echo "naver.api.key.id=${{secrets.NAVER_API_KEY_ID}}" >> ./src/main/resources/application-secret.properties
+          echo "naver.api.key.secret=${{secrets.NAVER_API_KEY_SECRET}}" >> ./src/main/resources/application-secret.properties
+          echo "python.env.url=${{secrets.PYTHON_ENV_URL}}" >> ./src/main/resources/application-secret.properties
 
           ./gradlew build -x test
 

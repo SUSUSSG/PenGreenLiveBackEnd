@@ -20,7 +20,7 @@ public class Order {
 
     @Convert(converter = UUIDConverter.class)
     @Column(name = "USER_UUID", columnDefinition = "BINARY(16)")
-    private String userUUID;
+    private String userUuid;
 
     @OneToOne(optional = true)
     @JoinColumn(name = "PRODUCT_SEQ", referencedColumnName = "PRODUCT_SEQ")

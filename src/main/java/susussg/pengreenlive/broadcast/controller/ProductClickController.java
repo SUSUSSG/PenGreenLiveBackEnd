@@ -12,17 +12,17 @@ public class ProductClickController {
     @Autowired
     private ProductClickService productClickService;
 
-    @PostMapping
-    public ResponseEntity<Void> createProductClick(@RequestParam Long broadcastSeq, @RequestParam Long productSeq) {
-        productClickService.addProductClick(broadcastSeq, productSeq);
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping
+//    public ResponseEntity<Void> createProductClick(@RequestParam Long broadcastSeq, @RequestParam Long productSeq) {
+//        productClickService.addProductClick(broadcastSeq, productSeq);
+//        return ResponseEntity.ok().build();
+//    }
 
-    @PostMapping("/broadcast/{broadcastSeq}")
-    public ResponseEntity<Void> createProductClickByBroadcast(@PathVariable Long broadcastSeq) {
-        productClickService.addProductClicksForBroadcast(broadcastSeq);
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/broadcast/{broadcastSeq}")
+//    public ResponseEntity<Void> createProductClickByBroadcast(@PathVariable Long broadcastSeq) {
+//        productClickService.addProductClicksForBroadcast(broadcastSeq);
+//        return ResponseEntity.ok().build();
+//    }
 
     @PostMapping("/broadcast/{broadcastSeq}/product/{productSeq}/increment-click")
     public ResponseEntity<Void> incrementProductClick(@PathVariable Long broadcastSeq, @PathVariable Long productSeq) {
@@ -34,5 +34,10 @@ public class ProductClickController {
     public ResponseEntity<Void> updateAverageClicks(@PathVariable Long broadcastSeq) {
         productClickService.updateAverageProductClicks(broadcastSeq);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/updateConversionRates/{broadcastSeq}")
+    public void updateConversionRates(@PathVariable long broadcastSeq) {
+        productClickService.updateConversionRates(broadcastSeq);
     }
 }

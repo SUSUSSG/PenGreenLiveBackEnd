@@ -11,4 +11,21 @@
     SELECT CHANNEL_NM FROM susussg.TB_CHANNEL WHERE VENDOR_SEQ like #{vendorSeq}
   </select>
 
+  <insert id="insertUser" parameterType="susussg.pengreenlive.user.dto.SignupFormDTO" useGeneratedKeys="true" keyProperty="userUuid">
+    INSERT INTO TB_USER (USER_UUID, USER_NM, USER_GENDER, USER_BIRTH_DT, USER_TEL, USER_EMAIL, USER_ADDRESS, OPTIONAL_AGREEMENT_YN)
+    VALUES (UUID_TO_BIN(UUID()), #{userNm}, #{userGender}, #{userBirthDt}, #{userTel}, #{userEmail}, #{userAddress}, #{optionalAgreementYn});
+
+    <selectKey keyProperty="userUuid" resultType="String" order="AFTER">
+      SELECT BIN_TO_UUID(USER_UUID) FROM TB_USER WHERE USER_EMAIL = #{userEmail} AND USER_TEL = #{userTel} ORDER BY CREATE_ACCOUNT_DT DESC LIMIT 1;
+    </selectKey>
+  </insert>
+
+  <insert id="insertLocalLogin" parameterType="susussg.pengreenlive.user.dto.SignupFormDTO">
+    INSERT INTO TB_LOCAL_LOGIN (USER_UUID, USER_ID, USER_PW)
+    VALUES (UUID_TO_BIN(#{userUuid}), #{userId}, #{userPw})
+  </insert>
+
+  <select id="selectByUserId" parameterType="String" resultType="int">
+    SELECT COUNT(*) FROM TB_LOCAL_LOGIN WHERE USER_ID=#{userId}
+  </select>
 </mapper>
