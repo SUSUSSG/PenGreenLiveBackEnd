@@ -14,6 +14,7 @@ public class LiveBroadcastProductDTO {
     private String productImage;
     private String productNm;
     private String productCd;
+    private String brand;
     private int listPrice;
     private int discountRate;
     private int discountPrice;
