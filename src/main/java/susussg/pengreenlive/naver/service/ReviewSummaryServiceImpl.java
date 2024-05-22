@@ -99,7 +99,6 @@ public class ReviewSummaryServiceImpl implements ReviewSummaryService {
 
         JSONObject jsonResponse = new JSONObject(response.toString());
         String summary = jsonResponse.getString("summary");
-        log.info("Summary: " + summary);
         return summary;
 
       } catch (IOException e) {
