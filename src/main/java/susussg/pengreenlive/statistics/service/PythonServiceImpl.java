@@ -17,14 +17,13 @@ public class PythonServiceImpl implements PythonService {
     private String PATH;
 
     @Override
-    public Map<String, String> generateImage(String review)
-        throws IOException, InterruptedException {
-        String pythonScriptPath = "src/main/java/susussg/pengreenlive/statistics/py/word_network.py";
+    public Map<String, String> generateImage(String review) throws IOException, InterruptedException {
+        String pythonScriptPath = "/opt/susussg-backend/py/word_network.py";
 
         ObjectMapper objectMapper = new ObjectMapper();
         String reviewJson = objectMapper.writeValueAsString(review);
 
-        String pythonPath = PATH; // TODO : 배포 시 서버 내 주소로 변경
+        String pythonPath = PATH;
 
         ProcessBuilder processBuilder = new ProcessBuilder(pythonPath, pythonScriptPath, reviewJson);
         processBuilder.redirectErrorStream(true);
@@ -34,21 +33,28 @@ public class PythonServiceImpl implements PythonService {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                output.append(line);
+                output.append(line).append("\n");
             }
         }
 
         int exitCode = process.waitFor();
         if (exitCode != 0) {
             log.error("Python script execution failed with exit code: " + exitCode);
+            log.error("Script output: " + output.toString());
+            log.info("Script output: " + output.toString());
+
             throw new RuntimeException("Python script execution failed with exit code: " + exitCode);
         }
 
         String result = output.toString();
+        log.info("Python script output: " + result);
+
         Map<String, String> resultMap = objectMapper.readValue(result, Map.class);
 
         if (resultMap.containsKey("error")) {
             log.error("Error from Python script: " + resultMap.get("error"));
+            log.info("Error from Python script: " + resultMap.get("error"));
+
             throw new RuntimeException("Error from Python script: " + resultMap.get("error"));
         }
 

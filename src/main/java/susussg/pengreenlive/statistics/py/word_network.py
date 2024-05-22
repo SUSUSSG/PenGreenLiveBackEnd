@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib import font_manager
 from konlpy.tag import Okt
 from collections import Counter, defaultdict
+import traceback
 import networkx as nx
 import random
 import json
@@ -11,7 +12,7 @@ import sys
 
 def generate_image(review):
     try:
-        font_path = 'src/main/java/susussg/pengreenlive/statistics/py/SCDream5.otf'
+        font_path = '/opt/susussg-backend/py/SCDream5.otf'
         font_prop = font_manager.FontProperties(fname=font_path)
         okt = Okt()
         josa_list = ['은', '는', '이', '가', '을', '를', '에', '의', '와', '과', '도', '으로', '에서', '에게', '한테', '부터', '까지', '마다', '밖에']
@@ -62,8 +63,9 @@ def generate_image(review):
         img_buf.close()
         return img_base64
     except Exception as e:
-        print(json.dumps({"error": str(e)}))
-        return None
+         print(json.dumps({"error": str(e)}))
+         traceback.print_exc()
+         return None
 
 if __name__ == '__main__':
     try:
@@ -75,3 +77,4 @@ if __name__ == '__main__':
             print(json.dumps({"error": "Error generating image"}))
     except Exception as e:
         print(json.dumps({"error": str(e)}))
+        traceback.print_exc()
