@@ -19,4 +19,7 @@ public interface LiveBroadcastService {
 
     FaqDTO addFaq(FaqDTO faq);
     void removeFaq(long faqId);
+
+    List<NoticeDTO> getAllNotice(long broadcastId);
+    List<FaqDTO> getAllFaq(long broadcastId);
 }

@@ -67,4 +67,14 @@ public class LiveBroadcastServiceImpl implements LiveBroadcastService {
     public void removeFaq(long faqId) {
         liveBroadcastMapper.deleteFaq(faqId);
     }
+
+    @Override
+    public List<NoticeDTO> getAllNotice(long broadcastId) {
+        return liveBroadcastMapper.selectNotice(broadcastId);
+    }
+
+    @Override
+    public List<FaqDTO> getAllFaq(long broadcastId) {
+        return liveBroadcastMapper.selectFaq(broadcastId);
+    }
 }
