@@ -47,4 +47,9 @@ public class LiveBroadcastServiceImpl implements LiveBroadcastService {
         }
         return liveBroadcastMapper.selectNoticeRecent(notice.getBroadcastSeq());
     }
+
+    @Override
+    public void removeNotice(long noticeId) {
+        liveBroadcastMapper.deleteNotice(noticeId);
+    }
 }
