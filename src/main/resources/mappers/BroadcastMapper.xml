@@ -68,4 +68,12 @@
         WHERE C.VENDOR_SEQ = #{vendorSeq}
           AND B.BROADCAST_SCHEDULED_TIME BETWEEN #{startDateTime} AND #{endDateTime}
     </select>
+
+<!--    방송, 시작 종료 시간-->
+    <update id="updateBroadcastStartTime" parameterType="susussg.pengreenlive.broadcast.dto.BroadcastTimeDTO">
+        UPDATE TB_BROADCAST SET BROADCAST_START_TIME = #{time} WHERE BROADCAST_SEQ = #{broadcastId};
+    </update>
+    <update id="updateBroadcastEndTime" parameterType="susussg.pengreenlive.broadcast.dto.BroadcastTimeDTO">
+        UPDATE TB_BROADCAST SET BROADCAST_END_TIME = #{time} WHERE BROADCAST_SEQ = #{broadcastId};
+    </update>
 </mapper>
