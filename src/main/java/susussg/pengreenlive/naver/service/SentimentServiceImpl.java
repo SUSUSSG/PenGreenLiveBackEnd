@@ -8,13 +8,11 @@ import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import susussg.pengreenlive.naver.dto.SentimentRequestDTO;
-import susussg.pengreenlive.naver.mapper.ReviewSummaryMapper;
 
 @Log4j2
 @Service
@@ -28,7 +26,6 @@ public class SentimentServiceImpl implements SentimentService {
 
   @Override
   public String SentimentReviews(String content) {
-
     try {
       URL url = new URL("https://naveropenapi.apigw.ntruss.com/sentiment-analysis/v1/analyze");
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -61,22 +58,17 @@ public class SentimentServiceImpl implements SentimentService {
           Map<String, Object> responseMap = gson.fromJson(response.toString(), type);
           log.info("Response Map: " + responseMap);
 
-          StringBuilder sentimentSummary = new StringBuilder();
-
-          if (responseMap.containsKey("documentSentiment")) {
-            Map<String, Object> documentSentiment = (Map<String, Object>) responseMap.get("documentSentiment");
-            String documentSentimentValue = documentSentiment.get("sentiment").toString();
-            sentimentSummary.append("Document Sentiment: ").append(documentSentimentValue).append("\n");
-          }
-
-          if (responseMap.containsKey("sentences")) {
-            List<Map<String, Object>> sentences = (List<Map<String, Object>>) responseMap.get("sentences");
-            for (Map<String, Object> sentence : sentences) {
-              String sentenceSentiment = sentence.get("sentiment").toString();
-              sentimentSummary.append(sentenceSentiment).append("\n");
+          if (responseMap.containsKey("document")) {
+            Map<String, Object> document = (Map<String, Object>) responseMap.get("document");
+            if (document.containsKey("confidence")) {
+              Map<String, Object> confidence = (Map<String, Object>) document.get("confidence");
+              return "Document Confidence: " + gson.toJson(confidence);
+            } else {
+              throw new RuntimeException("Failed to extract confidence from response");
             }
+          } else {
+            throw new RuntimeException("Failed to extract document from response");
           }
-          return sentimentSummary.toString();
         }
       } else {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getErrorStream(), "utf-8"))) {
