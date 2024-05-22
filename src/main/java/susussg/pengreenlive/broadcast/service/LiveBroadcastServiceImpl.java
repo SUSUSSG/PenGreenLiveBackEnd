@@ -52,4 +52,14 @@ public class LiveBroadcastServiceImpl implements LiveBroadcastService {
     public void removeNotice(long noticeId) {
         liveBroadcastMapper.deleteNotice(noticeId);
     }
+
+    @Override
+    @Transactional
+    public FaqDTO addFaq(FaqDTO faq) {
+        int result = liveBroadcastMapper.insertFaq(faq);
+        if (result == 0) {
+            throw new RuntimeException("faq insert failed");
+        }
+        return liveBroadcastMapper.selectFaqRecent(faq.getBroadcastSeq());
+    }
 }

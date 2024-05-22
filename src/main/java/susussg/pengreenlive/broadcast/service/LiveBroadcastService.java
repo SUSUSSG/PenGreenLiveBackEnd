@@ -1,5 +1,6 @@
 package susussg.pengreenlive.broadcast.service;
 
+import susussg.pengreenlive.broadcast.dto.FaqDTO;
 import susussg.pengreenlive.broadcast.dto.LiveBroadcastInfoDTO;
 import susussg.pengreenlive.broadcast.dto.LiveBroadcastProductDTO;
 import susussg.pengreenlive.broadcast.dto.NoticeDTO;
@@ -15,4 +16,6 @@ public interface LiveBroadcastService {
     NoticeDTO addNotice(NoticeDTO notice);
 
     void removeNotice(long noticeId);
+
+    FaqDTO addFaq(FaqDTO faq);
 }
