@@ -70,4 +70,17 @@ public class BroadcastController {
 
 
 
+    // 방송시간 update
+    @PostMapping("update/broadcast-time")
+    public ResponseEntity<String> updateBroadcastTime(@RequestBody BroadcastTimeDTO broadcastTime) {
+        if (broadcastTime.getAction().equals("start")) {
+            broadcastService.startBroadcast(broadcastTime);
+            return ResponseEntity.ok("시작 시간 반영 성공");
+        } else if (broadcastTime.getAction().equals("end")) {
+            broadcastService.endBroadcast(broadcastTime);
+            return ResponseEntity.ok("종료 시간 반영 성공");
+        } else {
+            return ResponseEntity.ok("시간 반영 실패");
+        }
+    }
 }
