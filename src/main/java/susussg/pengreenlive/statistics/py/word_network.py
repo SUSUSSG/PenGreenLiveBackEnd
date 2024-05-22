@@ -8,10 +8,6 @@ import json
 import io
 import base64
 import sys
-import logging
-
-# 로깅 설정
-logging.basicConfig(filename='error.log', level=logging.ERROR, format='%(asctime)s %(message)s')
 
 def generate_image(review):
     try:
@@ -66,7 +62,7 @@ def generate_image(review):
         img_buf.close()
         return img_base64
     except Exception as e:
-        logging.error("Error generating image: %s", str(e))
+        print(json.dumps({"error": str(e)}))
         return None
 
 if __name__ == '__main__':
@@ -76,7 +72,6 @@ if __name__ == '__main__':
         if img_base64 is not None:
             print(json.dumps({"image": img_base64}))
         else:
-            print(json.dumps({"error": "Error generating image, see error.log for details"}))
+            print(json.dumps({"error": "Error generating image"}))
     except Exception as e:
-        logging.error("Error in main execution: %s", str(e))
-        print(json.dumps({"error": "Error in main execution, see error.log for details"}))
+        print(json.dumps({"error": str(e)}))

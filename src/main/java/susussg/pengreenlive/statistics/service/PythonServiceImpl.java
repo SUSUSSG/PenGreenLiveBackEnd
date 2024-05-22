@@ -26,14 +26,12 @@ public class PythonServiceImpl implements PythonService {
 
         String pythonPath = PATH; // TODO : 배포 시 서버 내 주소로 변경
 
-        ProcessBuilder processBuilder = new ProcessBuilder(pythonPath, pythonScriptPath,
-            reviewJson);
+        ProcessBuilder processBuilder = new ProcessBuilder(pythonPath, pythonScriptPath, reviewJson);
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
 
         StringBuilder output = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(
-            new InputStreamReader(process.getInputStream()))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 output.append(line);
@@ -42,10 +40,18 @@ public class PythonServiceImpl implements PythonService {
 
         int exitCode = process.waitFor();
         if (exitCode != 0) {
-            throw new RuntimeException(
-                "Python script execution failed with exit code: " + exitCode);
+            log.error("Python script execution failed with exit code: " + exitCode);
+            throw new RuntimeException("Python script execution failed with exit code: " + exitCode);
         }
 
-        return objectMapper.readValue(output.toString(), Map.class);
+        String result = output.toString();
+        Map<String, String> resultMap = objectMapper.readValue(result, Map.class);
+
+        if (resultMap.containsKey("error")) {
+            log.error("Error from Python script: " + resultMap.get("error"));
+            throw new RuntimeException("Error from Python script: " + resultMap.get("error"));
+        }
+
+        return resultMap;
     }
 }
