@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO;
+import susussg.pengreenlive.openai.dto.AiBroadcastPromptDTO;
 import susussg.pengreenlive.openai.dto.ChatRequestDTO;
 import susussg.pengreenlive.openai.dto.ChatResponseDTO;
 import susussg.pengreenlive.openai.dto.RecentOrderDTO;
@@ -52,7 +53,10 @@ public class OpenAIController {
     public List<ScheduledBroadcastDTO> getBroadcastsByKeyword(@RequestParam String keyword) {
         return openAIQueryService.getBroadcastsByKeyword(keyword);
     }
-
+    @GetMapping("/broadcast-details")
+    public List<AiBroadcastPromptDTO> getBroadcastDetailsBySeq(@RequestParam Long broadcastSeq) {
+        return openAIQueryService.getBroadcastDetailsBySeq(broadcastSeq);
+    }
     @PostMapping("/review-check")
     public String checkReviewForHarmfulness(@RequestBody String reviewContent) {
         try {
