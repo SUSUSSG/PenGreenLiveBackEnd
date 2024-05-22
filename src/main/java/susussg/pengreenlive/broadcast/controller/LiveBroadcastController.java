@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import susussg.pengreenlive.broadcast.dto.FaqDTO;
 import susussg.pengreenlive.broadcast.dto.LiveBroadcastInfoDTO;
 import susussg.pengreenlive.broadcast.dto.LiveBroadcastProductDTO;
 import susussg.pengreenlive.broadcast.dto.NoticeDTO;
@@ -48,5 +49,11 @@ public class LiveBroadcastController {
     public ResponseEntity<String> removeNotice(@PathVariable long noticeId) {
         liveBroadcastService.removeNotice(noticeId);
         return ResponseEntity.ok("공지 삭제 성공");
+    }
+
+    @PostMapping("live-faq/add")
+    public ResponseEntity<FaqDTO> addFaq(@RequestBody FaqDTO faqDTO) {
+        FaqDTO newFaq = liveBroadcastService.addFaq(faqDTO);
+        return ResponseEntity.ok(newFaq);
     }
 }
