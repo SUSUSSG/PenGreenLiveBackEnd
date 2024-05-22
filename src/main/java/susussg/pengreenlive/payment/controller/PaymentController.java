@@ -1,4 +1,4 @@
-package susussg.pengreenlive.payment;
+package susussg.pengreenlive.payment.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
