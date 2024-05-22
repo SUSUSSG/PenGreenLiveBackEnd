@@ -81,4 +81,10 @@ public class AccountServiceTest {
         UUID uuid = new UUID(high, low);
         return uuid.toString();
     }
+
+    // sms 문자 인증
+    @Test
+    public void testSMS() {
+        accountService.sendSms("01096543115");
+    }
 }
