@@ -16,15 +16,19 @@ public class SentimentReviewController {
   @Autowired
   private final SentimentService sentimentService;
 
-  public SentimentReviewController(SentimentService sentimentService) {
+  @Autowired
+  private final ReviewSummaryService reviewSummaryService;
+
+  public SentimentReviewController(SentimentService sentimentService,
+      ReviewSummaryService reviewSummaryService) {
     this.sentimentService = sentimentService;
+    this.reviewSummaryService = reviewSummaryService;
   }
 
   @PostMapping("/review/sentiment")
   public ResponseEntity<String> sentimentReviewsByProductSeq(@RequestParam Long productSeq) {
 
-    String reviews = sentimentService.ReviewsByProductSeq(productSeq);
-
+    String reviews = reviewSummaryService.ReviewsByProductSeq(productSeq);
     String summary = sentimentService.SentimentReviews(reviews);
     log.info("summary: " + summary);
 

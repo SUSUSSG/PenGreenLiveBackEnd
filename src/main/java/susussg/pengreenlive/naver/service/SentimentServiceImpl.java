@@ -20,23 +20,11 @@ import susussg.pengreenlive.naver.mapper.ReviewSummaryMapper;
 @Service
 public class SentimentServiceImpl implements SentimentService {
 
-  private final ReviewSummaryMapper reviewSummaryMapper;
-
   @Value("${naver.api.key.id}")
   private String apiKeyId;
 
   @Value("${naver.api.key.secret}")
   private String apiKeySecret;
-
-  public SentimentServiceImpl(ReviewSummaryMapper reviewSummaryMapper) {
-    this.reviewSummaryMapper = reviewSummaryMapper;
-  }
-
-  @Override
-  public String ReviewsByProductSeq(Long productSeq) {
-    List<String> content = reviewSummaryMapper.getReviewContentsByProductSeq(productSeq);
-    return String.join("", content);
-  }
 
   @Override
   public String SentimentReviews(String content) {
@@ -70,7 +58,25 @@ public class SentimentServiceImpl implements SentimentService {
           }
 
           Type type = new TypeToken<Map<String, Object>>() {}.getType();
-          return gson.fromJson(response.toString(), type).toString();
+          Map<String, Object> responseMap = gson.fromJson(response.toString(), type);
+          log.info("Response Map: " + responseMap);
+
+          StringBuilder sentimentSummary = new StringBuilder();
+
+          if (responseMap.containsKey("documentSentiment")) {
+            Map<String, Object> documentSentiment = (Map<String, Object>) responseMap.get("documentSentiment");
+            String documentSentimentValue = documentSentiment.get("sentiment").toString();
+            sentimentSummary.append("Document Sentiment: ").append(documentSentimentValue).append("\n");
+          }
+
+          if (responseMap.containsKey("sentences")) {
+            List<Map<String, Object>> sentences = (List<Map<String, Object>>) responseMap.get("sentences");
+            for (Map<String, Object> sentence : sentences) {
+              String sentenceSentiment = sentence.get("sentiment").toString();
+              sentimentSummary.append(sentenceSentiment).append("\n");
+            }
+          }
+          return sentimentSummary.toString();
         }
       } else {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getErrorStream(), "utf-8"))) {
@@ -84,6 +90,7 @@ public class SentimentServiceImpl implements SentimentService {
         }
       }
     } catch (Exception e) {
+      log.error("Exception occurred while analyzing sentiment", e);
       throw new RuntimeException("Exception occurred while analyzing sentiment", e);
     }
   }
