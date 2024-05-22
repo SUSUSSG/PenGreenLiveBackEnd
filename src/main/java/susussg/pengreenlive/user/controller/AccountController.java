@@ -49,4 +49,15 @@ public class AccountController {
             return ResponseEntity.internalServerError().body("failed");
         }
     }
+
+    @PostMapping("/request-authcode")
+    public ResponseEntity<?> sendPhoneVerificationCode(@RequestBody Map<String, String> form) {
+        String phoneNumber = form.get("phoneNumber");
+        log.info("/request-authcode {}", phoneNumber);
+        try {
+            return ResponseEntity.ok().body("available");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("failed");
+        }
+    }
 }

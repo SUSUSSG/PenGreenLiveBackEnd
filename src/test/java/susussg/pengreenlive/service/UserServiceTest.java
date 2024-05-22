@@ -6,7 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import susussg.pengreenlive.user.Service.UserService;
+import susussg.pengreenlive.user.service.UserService;
 import susussg.pengreenlive.util.DTO.BanwordValidationResultDTO;
 
 @Log4j2
