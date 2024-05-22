@@ -43,4 +43,10 @@ public class LiveBroadcastController {
         NoticeDTO newNotice = liveBroadcastService.addNotice(noticeDTO);
         return ResponseEntity.ok(newNotice);
     }
+
+    @DeleteMapping("live-notice/delete/{noticeId}")
+    public ResponseEntity<String> removeNotice(@PathVariable long noticeId) {
+        liveBroadcastService.removeNotice(noticeId);
+        return ResponseEntity.ok("공지 삭제 성공");
+    }
 }
