@@ -16,4 +16,13 @@ public interface LiveBroadcastMapper {
     List<FaqDTO> selectFaq(long broadcastId);
 
     List<LiveBroadcastProductDTO> selectBroadcastProduct(long broadcastId);
+
+
+    int insertNotice(NoticeDTO notice);
+    NoticeDTO selectNoticeRecent(long broadcastId);
+    void deleteNotice(long noticeId);
+
+    int insertFaq(FaqDTO faq);
+    FaqDTO selectFaqRecent(long broadcastId);
+    void deleteFaq(long faqId);
 }
