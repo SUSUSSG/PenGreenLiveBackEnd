@@ -27,7 +27,13 @@
                  LEFT JOIN TB_BROADCAST_PRODUCT BP ON BP.PRODUCT_SEQ = P.PRODUCT_SEQ
         WHERE BROADCAST_SEQ = #{broadcastId}
     </select>
+
+
     <insert id="insertNotice" parameterType="susussg.pengreenlive.broadcast.dto.NoticeDTO">
         INSERT INTO TB_NOTICE (BROADCAST_SEQ, NOTICE_CONTENT) VALUES (#{broadcastSeq}, #{noticeContent})
     </insert>
+    <select id="selectNoticeRecent" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.NoticeDTO">
+        SELECT * FROM TB_NOTICE WHERE BROADCAST_SEQ = #{broadcastId} ORDER BY NOTICE_SEQ DESC LIMIT 1;
+    </select>
+
 </mapper>

@@ -18,4 +18,6 @@ public interface LiveBroadcastMapper {
     List<LiveBroadcastProductDTO> selectBroadcastProduct(long broadcastId);
 
     int insertNotice(NoticeDTO notice);
+
+    NoticeDTO selectNoticeRecent(long broadcastId);
 }
