@@ -12,6 +12,7 @@ import susussg.pengreenlive.broadcast.dto.LiveBroadcastProductDTO;
 import susussg.pengreenlive.broadcast.dto.NoticeDTO;
 import susussg.pengreenlive.broadcast.service.LiveBroadcastService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,5 +63,17 @@ public class LiveBroadcastController {
     public ResponseEntity<String> removeFaq(@PathVariable("faqId") long faqId) {
         liveBroadcastService.removeFaq(faqId);
         return ResponseEntity.ok("자주 묻는 질문 삭제 성공");
+    }
+
+    @GetMapping("live-broadcast-info/{broadcastId}/details")
+    public ResponseEntity<Map<String, Object>> getBroadcastDetails(@PathVariable long broadcastId) {
+        Map<String, Object> response = new HashMap<>();
+        List<NoticeDTO> notices = liveBroadcastService.getAllNotice(broadcastId);
+        List<FaqDTO> faqs = liveBroadcastService.getAllFaq(broadcastId);
+
+        response.put("notices", notices);
+        response.put("faqs", faqs);
+
+        return ResponseEntity.ok(response);
     }
 }
