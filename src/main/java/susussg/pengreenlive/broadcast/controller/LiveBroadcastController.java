@@ -40,7 +40,6 @@ public class LiveBroadcastController {
 
     @PostMapping("live-notice/add")
     public ResponseEntity<NoticeDTO> addNotice(@RequestBody NoticeDTO noticeDTO) {
-        log.info("공지 등록 컨트롤러 호출");
         NoticeDTO newNotice = liveBroadcastService.addNotice(noticeDTO);
         return ResponseEntity.ok(newNotice);
     }
