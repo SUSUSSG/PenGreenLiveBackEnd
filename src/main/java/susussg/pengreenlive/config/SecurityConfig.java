@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import susussg.pengreenlive.login.service.CustomAuthenticationFilter;
 
@@ -24,12 +26,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/login", "/signup", "/public/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                    .requestMatchers("/login", "/signup", "/public/**").permitAll()
+                    .anyRequest().authenticated()
+            )
+            .formLogin(formLogin -> formLogin
+                    .loginProcessingUrl("/login")
+                    .successHandler(customAuthenticationSuccessHandler())
+                    .failureHandler(customAuthenticationFailerHandler())
+                    .permitAll()
+            )
+            .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -56,5 +64,21 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
                 .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**");
+    }
+
+    // 로그인 성공
+    @Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return (request, response, authentication) -> {
+            response.sendRedirect("/");
+        };
+    }
+
+    // 로그인 실패
+    @Bean
+    public AuthenticationFailureHandler customAuthenticationFailerHandler() {
+        return (request, response, authentication) -> {
+            response.sendRedirect("/login?error=true");
+        };
     }
 }
