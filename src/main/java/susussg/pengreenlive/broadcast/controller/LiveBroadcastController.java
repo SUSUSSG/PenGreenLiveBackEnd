@@ -28,13 +28,13 @@ public class LiveBroadcastController {
     }
 
     @GetMapping("live-broadcast-info/{broadcastId}")
-    public ResponseEntity<LiveBroadcastInfoDTO> fetchBasicBroadcastInfo(@PathVariable long broadcastId){
+    public ResponseEntity<LiveBroadcastInfoDTO> fetchBasicBroadcastInfo(@PathVariable("broadcastId") long broadcastId){
         LiveBroadcastInfoDTO basicBroadcastInfo = liveBroadcastService.getBroadcastInfo(broadcastId);
         return ResponseEntity.ok().body(basicBroadcastInfo);
     }
 
     @GetMapping("live-broadcast-product/{broadcastId}")
-    public ResponseEntity<List<LiveBroadcastProductDTO>> fetchLiveBroadcastProduct(@PathVariable long broadcastId){
+    public ResponseEntity<List<LiveBroadcastProductDTO>> fetchLiveBroadcastProduct(@PathVariable("broadcastId") long broadcastId){
         log.info("생방송상품 컨트롤러 호출");
         List<LiveBroadcastProductDTO> liveBroadcastProduct = liveBroadcastService.getBroadcastProducts(broadcastId);
         return ResponseEntity.ok().body(liveBroadcastProduct);
@@ -47,7 +47,7 @@ public class LiveBroadcastController {
     }
 
     @DeleteMapping("live-notice/delete/{noticeId}")
-    public ResponseEntity<String> removeNotice(@PathVariable long noticeId) {
+    public ResponseEntity<String> removeNotice(@PathVariable("noticeId") long noticeId) {
         liveBroadcastService.removeNotice(noticeId);
         return ResponseEntity.ok("공지 삭제 성공");
     }
@@ -59,7 +59,7 @@ public class LiveBroadcastController {
     }
 
     @DeleteMapping("live-faq/delete/{faqId}")
-    public ResponseEntity<String> removeFaq(@PathVariable long faqId) {
+    public ResponseEntity<String> removeFaq(@PathVariable("faqId") long faqId) {
         liveBroadcastService.removeFaq(faqId);
         return ResponseEntity.ok("자주 묻는 질문 삭제 성공");
     }
