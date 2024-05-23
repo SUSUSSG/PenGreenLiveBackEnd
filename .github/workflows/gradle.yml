@@ -71,6 +71,8 @@ jobs:
           echo "python.env.url=${{secrets.PYTHON_ENV_URL}}" >> ./src/main/resources/application-secret.properties
           echo "coolsms.api.key=${{secrets.COOLSMS_API_KEY}}" >> ./src/main/resources/application-secret.properties
           echo "coolsms.api.secret=${{secrets.COOLSMS_API_SECRET}}" >> ./src/main/resources/application-secret.properties
+          echo "api.certKeyc=${{secrets.API_CERTKEYC}}" >> ./src/main/resources/application-secret.properties
+
           ./gradlew build -x test
 
       - name: Deploy to Remote Server
