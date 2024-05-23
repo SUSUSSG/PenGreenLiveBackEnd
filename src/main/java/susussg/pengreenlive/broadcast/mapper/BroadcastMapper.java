@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import susussg.pengreenlive.broadcast.dto.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,5 +24,9 @@ public interface BroadcastMapper {
     List<BroadcastDTO> getBroadcastsByVendorAndDateRange(@Param("vendorSeq") long vendorSeq,
                                                          @Param("startDateTime") LocalDateTime startDateTime,
                                                          @Param("endDateTime") LocalDateTime endDateTime);
+
+    // 방송 시작 및 종료
+    int updateBroadcastStartTime(BroadcastTimeDTO broadcastTimeDTO);
+    int updateBroadcastEndTime(BroadcastTimeDTO broadcastTimeDTO);
 
 }
