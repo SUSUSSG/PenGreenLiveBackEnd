@@ -23,21 +23,21 @@ public class GreenProductService {
         put("01", "인증");
         put("02", "취소(재약정중)");
         put("03", "인증포기");
-        put("04", "인증만료");
+        put("04", "인증만료"); //TODO 인증 만료인 경우 프론트에서 값 삽입 전에 취소 처리
         put("05", "사용안함");
     }};
 
     private static final Map<String, String> RESPONSE_CODE_MAP = new HashMap<>() {{
-        put("", "null");
-        put("09", "1");
-        put("15", "2");
-        put("63", "3");
-        put("0915", "4");
-        put("091563", "5");
-        put("0963", "6");
-        put("1563", "7");
+        put("", "null"); // 인증 사항 없음
+        put("09", "1"); // 환경표지인증
+        put("15", "2"); // GR인증
+        put("63", "3"); // 저탄소인증
+        put("0915", "4"); // 환경표지 및 GR인증(복수인증)
+        put("091563", "5"); // 환경표지 및 GR인증 및 저탄소인증(복수인증)
+        put("0963", "6"); // 환경표지 및 저탄소인증(복수인증)
+        put("1563", "7"); // GR인증 및 저탄소인증(복수인증)
     }};
-
+    
     @Value("${api.certKeyc}")
     private String certKeyc;
 
