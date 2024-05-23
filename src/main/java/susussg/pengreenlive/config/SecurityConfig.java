@@ -1,5 +1,6 @@
 package susussg.pengreenlive.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +15,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import susussg.pengreenlive.login.dto.Member;
 import susussg.pengreenlive.login.service.CustomAuthenticationFilter;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+@EnableRedisHttpSession
+public class SecurityConfig  {
 
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
@@ -28,13 +33,11 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                    .requestMatchers("/login", "/**").permitAll()
+                    .requestMatchers("/**").permitAll()
                     .anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin
                     .loginProcessingUrl("/login")
-                    .successHandler(customAuthenticationSuccessHandler())
-                    .failureHandler(customAuthenticationFailerHandler())
                     .permitAll()
             )
             .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -63,22 +66,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-                .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**");
+                .requestMatchers("/static/**", "/scss/**", "/js/**", "/images/**", "/video/**", "/**");
     }
 
-    // 로그인 성공
-    @Bean
-    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
-        return (request, response, authentication) -> {
-            response.sendRedirect("/");
-        };
-    }
-
-    // 로그인 실패
-    @Bean
-    public AuthenticationFailureHandler customAuthenticationFailerHandler() {
-        return (request, response, authentication) -> {
-            response.sendRedirect("/login?error=true");
-        };
-    }
 }
