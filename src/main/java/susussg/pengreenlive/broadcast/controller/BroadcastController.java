@@ -71,7 +71,7 @@ public class BroadcastController {
 
 
     // 방송시간 update
-    @PostMapping("update/broadcast-time")
+    @PatchMapping("update/broadcast-time")
     public ResponseEntity<String> updateBroadcastTime(@RequestBody BroadcastTimeDTO broadcastTime) {
         if (broadcastTime.getAction().equals("start")) {
             broadcastService.startBroadcast(broadcastTime);
