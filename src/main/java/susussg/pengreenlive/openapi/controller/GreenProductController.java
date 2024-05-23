@@ -11,17 +11,18 @@ import susussg.pengreenlive.openapi.service.GreenProductService;
 @Log4j2
 @RestController
 public class GreenProductController {
+
     @Autowired
     private GreenProductService greenProductService;
 
     @GetMapping("/green-product")
-    public String getGreenProductInfo(@RequestParam String prodlxid) {
-        String productInfo = greenProductService.getGreenProductInfo(prodlxid);
-        String productImage = greenProductService.getProductImage(prodlxid);
+    public String getGreenProductInfo(@RequestParam String prodIxid) {
+        String productInfo = greenProductService.getGreenProductInfo(prodIxid);
+        String productImage = greenProductService.getProductImage(prodIxid);
 
         JSONObject responseJson = new JSONObject();
         responseJson.put("productInfo", new JSONObject(productInfo));
-        responseJson.put("productImage", productImage);
+        responseJson.put("productImage", productImage); // Base64 encoded image string
 
         return responseJson.toString();
     }
