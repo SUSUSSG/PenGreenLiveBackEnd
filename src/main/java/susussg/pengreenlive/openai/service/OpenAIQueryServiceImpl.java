@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO;
+import susussg.pengreenlive.openai.dto.AiBroadcastPromptDTO;
 import susussg.pengreenlive.openai.dto.RecentOrderDTO;
 import susussg.pengreenlive.openai.mapper.OpenAIMapper;
 
@@ -21,5 +22,10 @@ public class OpenAIQueryServiceImpl implements OpenAIQueryService {
     @Override
     public List<ScheduledBroadcastDTO> getBroadcastsByKeyword(String keyword) {
         return openAIMapper.getBroadcastsByKeyword(keyword);
+    }
+
+    @Override
+    public AiBroadcastPromptDTO getBroadcastDetailsBySeq(Long broadcastSeq) {
+        return openAIMapper.getBroadcastDetailsBySeq(broadcastSeq);
     }
 }

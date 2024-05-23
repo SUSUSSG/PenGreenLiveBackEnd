@@ -1,8 +1,10 @@
 package susussg.pengreenlive.naver.controller;
 
+import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,5 +35,11 @@ public class SentimentReviewController {
     log.info("summary: " + summary);
 
     return ResponseEntity.ok(summary);
+  }
+
+  @GetMapping("/review/sentiment/daily")
+  public ResponseEntity<Map<String, Map<String, Double>>> getDailySentimentReviews(@RequestParam Long productSeq) {
+    Map<String, Map<String, Double>> dailySentiments = reviewSummaryService.getSentimentByDate(productSeq);
+    return ResponseEntity.ok(dailySentiments);
   }
 }

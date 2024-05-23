@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import susussg.pengreenlive.openai.dto.AiBroadcastPromptDTO;
 
 @Service
 public class OpenAIService {
@@ -125,7 +126,6 @@ public class OpenAIService {
         }
     }
 
-    // 새로운 메소드 추가
     public String checkReviewForHarmfulness(String reviewContent) throws Exception {
         logger.info("Starting review harmfulness check for content: " + reviewContent);
 
@@ -204,5 +204,72 @@ public class OpenAIService {
         } else {
             throw new Exception("Invalid response format");
         }
+    }
+
+    public String generateBroadcastScript(AiBroadcastPromptDTO broadcastDTO) throws Exception {
+        String prompt = "#ROLE\n"
+            + "당신은 라이브커머스 프롬프트 시나리오 작가입니다.\n\n"
+            + "#ACT\n\n"
+            + "-방송 정보와 상품 정보, 친환경 인증 정보, 사진, 방송 구매 혜택 등 정보를 전달해주면, 가능한 길게 쇼호스트의 대본을 작성해주세요.\n"
+            + "-멘트는 실제 홈쇼핑 방송에서 사용되는 친근한 구어체 말투로 작성해주세요.\n"
+            + "-할인율과 친환경 사항에 대해 강조해주세요.\n"
+            + "-10분 이상 읽을 수 있도록 길게 작성해주세요.\n"
+            + "-문단의 시작에 쇼호스트의 행동을 대괄호 안에 작성하여 지시해주세요.\n\n"
+            + "방송 제목: " + broadcastDTO.getBroadcastTitle() + "\n"
+            + "방송 요약: " + broadcastDTO.getBroadcastSummary() + "\n"
+            + "채널 이름: " + broadcastDTO.getChannelNm() + "\n"
+            + "상품 이름: " + broadcastDTO.getProductNm() + "\n"
+            + "상품 가격: " + broadcastDTO.getListPrice() + "원\n"
+            + "브랜드: " + broadcastDTO.getBrand() + "\n"
+            + "방송 구매 혜택: " + broadcastDTO.getBenefitContent() + "\n"
+            + "할인율: " + broadcastDTO.getDiscountRate() + "%\n"
+            + "할인 가격: " + broadcastDTO.getDiscountPrice() + "원\n"
+            + "친환경 인증 이유: " + broadcastDTO.getCertificationReason() + "\n"
+            + "라벨 이름: " + broadcastDTO.getLabelNm() + "\n"
+            + "라벨 설명: " + broadcastDTO.getLabelDescription();
+
+        Map<String, Object> userMessageMap = new HashMap<>();
+        userMessageMap.put("role", "user");
+        userMessageMap.put("content", prompt);
+
+        messages.add(userMessageMap);
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("model", "gpt-4o");
+        body.put("messages", messages);
+        body.put("max_tokens", 3000);
+
+        String requestBody = toJson(body);
+
+        URL url = new URL("https://api.openai.com/v1/chat/completions");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Authorization", "Bearer " + apiKey);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            byte[] input = requestBody.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        StringBuilder response = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+            String responseLine;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+        }
+
+        String responseBody = response.toString();
+        String finalResponse = parseResponse(responseBody);
+
+        // 응답을 반환한 후에 messages 초기화 및 시스템 메시지 다시 추가
+        initializeMessages();
+
+        logger.info("Response Body: " + responseBody);
+        logger.info("finalResponse: " + finalResponse);
+
+        return finalResponse;
     }
 }
