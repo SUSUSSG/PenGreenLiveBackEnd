@@ -30,9 +30,9 @@
   </select>
 
   <select id="selectUserInfoByUserId" parameterType="String" resultType="susussg.pengreenlive.login.dto.UserDTO">
-    SELECT BIN_TO_UUID(u.USER_UUID), u.USER_NM, u.USER_GENDER, u.USER_BIRTH_DT, u.USER_TEL, u.USER_EMAIL, u.USER_ADDRESS,
+    SELECT BIN_TO_UUID(u.USER_UUID) AS USER_UUID, u.USER_NM, u.USER_GENDER, u.USER_BIRTH_DT, u.USER_TEL, u.USER_EMAIL, u.USER_ADDRESS,
            u.ACCOUNT_ACTIVE, u.OPTIONAL_AGREEMENT_YN,u.ROLE, ll.USER_ID, ll.USER_PW
     FROM TB_USER u JOIN TB_LOCAL_LOGIN ll ON u.USER_UUID=ll.USER_UUID
-    WHERE ll.USER_ID=#{USER_ID} AND u.ACCOUNT_ACTIVE = true
+    WHERE ll.USER_ID=#{userId} AND u.ACCOUNT_ACTIVE = true
   </select>
 </mapper>
