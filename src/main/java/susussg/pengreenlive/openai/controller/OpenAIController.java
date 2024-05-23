@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO;
+import susussg.pengreenlive.openai.dto.AiBroadcastPromptDTO;
 import susussg.pengreenlive.openai.dto.ChatRequestDTO;
 import susussg.pengreenlive.openai.dto.ChatResponseDTO;
 import susussg.pengreenlive.openai.dto.RecentOrderDTO;
@@ -52,7 +53,17 @@ public class OpenAIController {
     public List<ScheduledBroadcastDTO> getBroadcastsByKeyword(@RequestParam String keyword) {
         return openAIQueryService.getBroadcastsByKeyword(keyword);
     }
+    @GetMapping("/generate-prompt")
+    public String getBroadcastDetailsBySeq(@RequestParam Long broadcastSeq) {
+        AiBroadcastPromptDTO aiBroadcastPromptDTO = openAIQueryService.getBroadcastDetailsBySeq(broadcastSeq);
 
+        try {
+            return openAIService.generateBroadcastScript(aiBroadcastPromptDTO);
+        } catch (Exception e) {
+            log.error("Exception occurred while generating broadcast script: " + e.getMessage());
+            return "프롬프트 생성 중 오류가 발생했습니다.";
+        }
+    }
     @PostMapping("/review-check")
     public String checkReviewForHarmfulness(@RequestBody String reviewContent) {
         try {
