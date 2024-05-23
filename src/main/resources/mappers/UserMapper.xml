@@ -35,4 +35,9 @@
     FROM TB_USER u JOIN TB_LOCAL_LOGIN ll ON u.USER_UUID=ll.USER_UUID
     WHERE ll.USER_ID=#{userId} AND u.ACCOUNT_ACTIVE = true
   </select>
+
+  <select id="selectUserAddressByUUID" parameterType="String" resultType="String">
+    SELECT USER_ADDRESS FROM TB_USER WHERE USER_UUID=UUID_TO_BIN(#{userUuid})
+  </select>
+
 </mapper>

@@ -19,4 +19,9 @@ public class UserServiceImpl implements UserService{
     public String getChannelNmByVendorSeq(int vendorSeq) {
         return userMapper.selectChannelNmByVendorSeq(vendorSeq);
     }
+
+    @Override
+    public String getUserAddressByUUID(String uuid) {
+        return userMapper.selectUserAddressByUUID(uuid);
+    }
 }
