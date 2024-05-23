@@ -43,19 +43,13 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         response.setStatus(HttpServletResponse.SC_OK);
         Map<String, String> result = new HashMap<>();
 
-        User user = (User) authResult.getPrincipal();
-        Member member = Member.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .role(user.getAuthorities().toString())
-                .build();
+        Member member = (Member) authResult.getPrincipal();
 
         // SecurityContext에 Member 객체 저장
-        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(member, null, user.getAuthorities());
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(member, null, member.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
 
         request.getSession().setAttribute("user", member); // 세션에 Member 객체 저장
-        result.put("message", "Authentication Successful");
         result.put("user", objectMapper.writeValueAsString(member));
         log.info("session info {}", request.getSession().getAttribute("user"));
 
