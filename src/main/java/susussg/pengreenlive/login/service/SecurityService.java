@@ -27,17 +27,17 @@ public class SecurityService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("username={}", username);
+        log.info("username = {}", username);
         if (isNumeric(username)) {
             VendorDTO vendor = vendorMapper.selectVendorInfoByBusinessId(username);
-            log.info("vendor: {}", vendor);
+            log.info("vendor = {}", vendor);
 
             if (vendor != null) {
                 return buildVendorDetails(vendor);
             }
         } else {
             UserDTO user = userMapper.selectUserInfoByUserId(username);
-            log.info("user: {}", user);
+            log.info("user = {}", user);
 
             if (user != null) {
                 return buildUserDetails(user);
