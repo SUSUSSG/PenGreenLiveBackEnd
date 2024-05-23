@@ -14,6 +14,7 @@ import susussg.pengreenlive.config.aop.TimeTrace;
 import susussg.pengreenlive.main.DTO.LiveChanceCarouselDTO;
 import susussg.pengreenlive.main.DTO.MainCarouselDTO;
 import susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO;
+import susussg.pengreenlive.main.DTO.SubscribedChannelDTO;
 import susussg.pengreenlive.main.Service.MainService;
 
 @Log4j2
@@ -90,5 +91,16 @@ public class MainController {
 
         boolean exists = mainService.checkNotificationChannelExists(userUUID, channelSeq);
         return ResponseEntity.ok(exists);
+    }
+
+    @GetMapping("/subscribed-channels")
+    public ResponseEntity<List<SubscribedChannelDTO>> getSubscribedChannels() {
+        log.info("call getSubscribedChannels");
+
+        List<SubscribedChannelDTO> channels = mainService.getSubscribedChannels(userUUID);
+        if (channels.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(channels);
     }
 }

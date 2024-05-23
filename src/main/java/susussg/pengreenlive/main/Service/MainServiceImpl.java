@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import susussg.pengreenlive.main.DTO.LiveChanceCarouselDTO;
 import susussg.pengreenlive.main.DTO.MainCarouselDTO;
 import susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO;
+import susussg.pengreenlive.main.DTO.SubscribedChannelDTO;
 import susussg.pengreenlive.main.Mapper.MainMapper;
 
 @Service
@@ -63,5 +64,10 @@ public class MainServiceImpl implements MainService {
     public boolean checkNotificationChannelExists(String userUuid, Long channelSeq) {
         Integer count = mainMapper.checkNotificationChannelExists(userUuid, channelSeq);
         return count != null && count > 0;
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<SubscribedChannelDTO> getSubscribedChannels(String userUuid) {
+        return mainMapper.selectSubscribedChannels(userUuid);
     }
 }

@@ -151,4 +151,20 @@
     WHERE USER_UUID = UUID_TO_BIN(#{userUuid})
       AND CHANNEL_SEQ = #{channelSeq}
   </delete>
+
+  <select id="selectSubscribedChannels" parameterType="String" resultType="susussg.pengreenlive.main.DTO.SubscribedChannelDTO">
+    SELECT
+      CH.CHANNEL_SEQ,
+      CH.CHANNEL_NM,
+      CH.CHANNEL_URL,
+      CH.CHANNEL_IMAGE,
+      CH.CHANNEL_INFO
+    FROM
+      TB_NOTIFICATION_CHANNEL NC
+        JOIN
+      TB_CHANNEL CH ON NC.CHANNEL_SEQ = CH.CHANNEL_SEQ
+    WHERE
+      NC.USER_UUID = UUID_TO_BIN(#{userUuid})
+  </select>
+
 </mapper>
