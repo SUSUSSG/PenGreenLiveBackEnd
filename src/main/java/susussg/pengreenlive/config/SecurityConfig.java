@@ -36,10 +36,6 @@ public class SecurityConfig  {
                     .requestMatchers("/**").permitAll()
                     .anyRequest().authenticated()
             )
-            .formLogin(formLogin -> formLogin
-                    .loginProcessingUrl("/login")
-                    .permitAll()
-            )
             .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
