@@ -71,6 +71,10 @@ dependencies {
 
 	// 문자 인증
 	implementation 'net.nurigo:sdk:4.3.0'
+
+	// security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 }
 
 tasks.named('test') {

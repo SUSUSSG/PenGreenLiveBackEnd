@@ -85,6 +85,7 @@ public class AccountServiceTest {
     // sms 문자 인증
     @Test
     public void testSMS() {
-        accountService.sendSms("01096543115");
+
+        accountService.sendVerificationCode("01096543115");
     }
 }
