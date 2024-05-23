@@ -8,6 +8,7 @@
     FROM TB_REVIEW R
            JOIN TB_USER U ON R.USER_UUID = U.USER_UUID
     WHERE R.PRODUCT_SEQ = #{productSeq}
+    ORDER BY 2 DESC;
 
   </select>
 
