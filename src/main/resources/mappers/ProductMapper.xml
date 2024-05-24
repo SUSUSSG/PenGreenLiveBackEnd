@@ -81,5 +81,9 @@
     WHERE VENDOR_SEQ = #{vendorSeq} AND PRODUCT_SEQ = #{productSeq};
   </delete>
 
+  <select id="insertProductGreenLabel" parameterType="susussg.pengreenlive.dashboard.DTO.GreenLabelDTO">
+    INSERT INTO TB_PRODUCT_GREEN_LABEL (PRODUCT_SEQ, LABEL_ID_SEQ, CERTIFICATION_REASON, CERTIFICATION_EXPIRATION_DATE)
+    VALUES (#{productSeq}, #{labelIdSeq}, #{certificationReason}, #{certificationExpirationDate})
+  </select>
 
 </mapper>

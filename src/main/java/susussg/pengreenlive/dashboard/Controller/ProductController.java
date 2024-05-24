@@ -59,7 +59,7 @@ public class ProductController {
     return ResponseEntity.ok(productCategoryCodes);
   }
 
-  @PutMapping("/{productSeq}")
+  @PutMapping("/product/{productSeq}")
   public ResponseEntity<String> updateProduct(@PathVariable Long productSeq, @RequestBody ProductDTO productDTO) {
     try {
       System.out.println("Updating product with productSeq: " + productSeq);

@@ -1,5 +1,6 @@
 package susussg.pengreenlive.dashboard.DTO;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,5 +25,10 @@ public class ProductDTO {
   private int productStock;
   private Long venderSeq;
   private Long channelSeq;
+
+  private long labelIdSeq;
+  private String certificationReason;
+  private String certificationExpirationDate;
+
 
 }
