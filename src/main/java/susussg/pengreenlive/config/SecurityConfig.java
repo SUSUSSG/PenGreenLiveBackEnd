@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,11 +20,14 @@ import susussg.pengreenlive.login.service.CustomAuthenticationFilter;
 @Slf4j
 @Configuration
 @EnableWebSecurity
-@EnableRedisHttpSession
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 86400)
 public class SecurityConfig  {
 
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
+
+//    @Autowired
+//    private CustomInvalidSessionStrategy customInvalidSessionStrategy;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -33,8 +37,19 @@ public class SecurityConfig  {
                     .requestMatchers("/**").permitAll()
                     .anyRequest().authenticated()
             )
-            .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+            .sessionManagement(session -> session
+                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                    .sessionFixation(fixation -> fixation.migrateSession())
+                    .invalidSessionUrl("/")
+//                    .invalidSessionStrategy(customInvalidSessionStrategy)
+                    .maximumSessions(1)
+                    .maxSessionsPreventsLogin(true)
+                    .expiredUrl("/session-expired"))
 
+                    .rememberMe(rememberMe -> rememberMe
+                    .key("uniqueAndSecret")
+                    .tokenValiditySeconds(86400));
         return http.build();
     }
 
