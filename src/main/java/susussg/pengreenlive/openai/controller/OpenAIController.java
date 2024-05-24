@@ -20,7 +20,7 @@ import susussg.pengreenlive.openai.service.OpenAIQueryService;
 import susussg.pengreenlive.openai.service.OpenAIService;
 
 @RestController
-@RequestMapping("/openai")
+@RequestMapping("/api/openai")
 @Log4j2
 public class OpenAIController {
 

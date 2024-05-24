@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/broadcasts/statistics")
+@RequestMapping("/api/broadcasts/statistics")
 @Log4j2
 public class BroadcastStatisticsController {
     @Autowired

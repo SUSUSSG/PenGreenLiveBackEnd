@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.broadcast.service.ProductClickService;
 
 @RestController
-@RequestMapping("/product-clicks")
+@RequestMapping("/api/product-clicks")
 public class ProductClickController {
 
     @Autowired
