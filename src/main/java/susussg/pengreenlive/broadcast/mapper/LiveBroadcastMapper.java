@@ -25,4 +25,6 @@ public interface LiveBroadcastMapper {
     int insertFaq(FaqDTO faq);
     FaqDTO selectFaqRecent(long broadcastId);
     void deleteFaq(long faqId);
+
+    LiveProductStatsDTO selectLiveProductStats(long broadcastId, long productId);
 }

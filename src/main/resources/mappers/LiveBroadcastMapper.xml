@@ -50,4 +50,15 @@
         DELETE FROM TB_FAQ WHERE FAQ_SEQ = #{faqSeq}
     </delete>
 
+    <select id="selectLiveProductStats" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.LiveProductStatsDTO">
+        SELECT
+            ps.PRODUCT_SEQ,
+            ps.PRODUCT_STOCK - IFNULL(SUM(o.ORDER_QTY), 0) AS REMAINING_STOCK,
+            COUNT(o.ORDER_SEQ) AS TOTAL_ORDERS,
+            IFNULL(SUM(o.ORDER_PAYED_PRICE), 0) AS TOTAL_ORDER_AMOUNT
+        FROM TB_PRODUCT_STOCK ps
+                 LEFT JOIN TB_ORDER o ON ps.PRODUCT_SEQ = o.PRODUCT_SEQ AND o.BROADCAST_SEQ = #{broadcastId}
+        WHERE ps.PRODUCT_SEQ = #{productId}
+        GROUP BY ps.PRODUCT_SEQ, ps.PRODUCT_STOCK;
+    </select>
 </mapper>
