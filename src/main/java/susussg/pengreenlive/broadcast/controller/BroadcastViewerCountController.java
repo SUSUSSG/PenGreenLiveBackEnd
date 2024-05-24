@@ -9,7 +9,7 @@ import susussg.pengreenlive.broadcast.service.BroadcastViewerCountService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/broadcast-viewer-count")
+@RequestMapping("/api/broadcast-viewer-count")
 public class BroadcastViewerCountController {
 
     @Autowired
