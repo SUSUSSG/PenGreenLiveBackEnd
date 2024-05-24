@@ -6,10 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.config.aop.TimeTrace;
 import susussg.pengreenlive.main.DTO.LiveChanceCarouselDTO;
 import susussg.pengreenlive.main.DTO.MainCarouselDTO;
@@ -93,8 +90,8 @@ public class MainController {
         return ResponseEntity.ok(exists);
     }
 
-    @GetMapping("/subscribed-channels")
-    public ResponseEntity<List<SubscribedChannelDTO>> getSubscribedChannels() {
+    @GetMapping("/subscribed-channels/{userUUID}")
+    public ResponseEntity<List<SubscribedChannelDTO>> getSubscribedChannels(@PathVariable("userUUID") String userUUID) {
         log.info("call getSubscribedChannels");
 
         List<SubscribedChannelDTO> channels = mainService.getSubscribedChannels(userUUID);
