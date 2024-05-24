@@ -60,7 +60,7 @@ public class BrandPayController {
         log.info("access token {}", response);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
-//    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     @GetMapping("/callback-auth")
     public ResponseEntity<String> callbackAuth(@RequestParam("code") String code,
                                                @RequestParam("customerKey") String customerKey) {
