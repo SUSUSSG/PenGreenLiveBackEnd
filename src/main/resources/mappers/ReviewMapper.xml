@@ -42,11 +42,13 @@
 
   <select id="findReviewedOrdersByUser" resultType="susussg.pengreenlive.order.dto.ReviewDTO">
     SELECT
+      o.ORDER_SEQ,
       o.ORDER_DATE,
       o.ORDER_PRODUCT_PRICE,
       o.ORDER_PAYED_PRICE,
       o.DELIVERY_STATUS,
       o.REVIEW_YN,
+      p.PRODUCT_SEQ,
       p.PRODUCT_NM,
       p.PRODUCT_IMAGE,
       r.REVIEW_CONTENT,
@@ -80,10 +82,11 @@
     );
   </insert>
 
-  <update id="updateReviewYn" parameterType="map">
+  <update id="updateReviewYn" parameterType="susussg.pengreenlive.order.dto.ReviewDTO">
     UPDATE TB_ORDER
-    SET REVIEW_YN = 1
-    WHERE USER_UUID = UUID_TO_BIN(#{userUuid}) AND PRODUCT_SEQ = #{productSeq} AND ORDER_SEQ=#{orderSeq}
+    SET REVIEW_YN = #{review.reviewYn}
+    WHERE USER_UUID = UUID_TO_BIN(#{review.userUUID})
+      AND PRODUCT_SEQ = #{review.productSeq}
+      AND ORDER_SEQ=#{review.orderSeq}
   </update>
-
 </mapper>
