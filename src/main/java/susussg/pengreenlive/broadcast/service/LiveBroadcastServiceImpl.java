@@ -77,4 +77,9 @@ public class LiveBroadcastServiceImpl implements LiveBroadcastService {
     public List<FaqDTO> getAllFaq(long broadcastId) {
         return liveBroadcastMapper.selectFaq(broadcastId);
     }
+
+    @Override
+    public LiveProductStatsDTO getLiveProductStats(long broadcastId, long productId) {
+        return liveBroadcastMapper.selectLiveProductStats(broadcastId, productId);
+    }
 }
