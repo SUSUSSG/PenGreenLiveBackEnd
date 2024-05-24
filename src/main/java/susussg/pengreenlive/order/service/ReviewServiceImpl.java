@@ -41,11 +41,11 @@ public class ReviewServiceImpl implements ReviewService {
     reviewMapper.deleteReviewByUserAndReviewSeq(userUuid, reviewSeq);
   }
 
-  @Override
-  @Transactional
-  public void addReview(ReviewDTO review) {
-    reviewMapper.insertReview(review);
-    reviewMapper.updateReviewYn(review.getUserUUID(), review.getProductSeq());
-  }
+    @Override
+    @Transactional
+    public void addReview(ReviewDTO review) {
+        reviewMapper.insertReview(review);
+        reviewMapper.updateReviewYn(review.getUserUUID(), review.getProductSeq(), review.getOrderSeq());
+    }
 
 }
