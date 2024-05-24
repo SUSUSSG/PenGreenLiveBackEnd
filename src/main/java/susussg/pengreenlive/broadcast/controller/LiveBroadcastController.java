@@ -6,10 +6,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import susussg.pengreenlive.broadcast.dto.FaqDTO;
-import susussg.pengreenlive.broadcast.dto.LiveBroadcastInfoDTO;
-import susussg.pengreenlive.broadcast.dto.LiveBroadcastProductDTO;
-import susussg.pengreenlive.broadcast.dto.NoticeDTO;
+import susussg.pengreenlive.broadcast.dto.*;
 import susussg.pengreenlive.broadcast.service.LiveBroadcastService;
 
 import java.util.HashMap;
@@ -66,7 +63,7 @@ public class LiveBroadcastController {
     }
 
     @GetMapping("live-broadcast-info/{broadcastId}/details")
-    public ResponseEntity<Map<String, Object>> getBroadcastDetails(@PathVariable long broadcastId) {
+    public ResponseEntity<Map<String, Object>> getBroadcastDetails(@PathVariable("broadcastId") long broadcastId) {
         Map<String, Object> response = new HashMap<>();
         List<NoticeDTO> notices = liveBroadcastService.getAllNotice(broadcastId);
         List<FaqDTO> faqs = liveBroadcastService.getAllFaq(broadcastId);
@@ -75,5 +72,11 @@ public class LiveBroadcastController {
         response.put("faqs", faqs);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("live-product-stats/{broadcastId}/{productId}")
+    public ResponseEntity<LiveProductStatsDTO> fetchLiveProductStats(@PathVariable("broadcastId") long broadcastId, @PathVariable("productId") long productId) {
+        LiveProductStatsDTO productStats = liveBroadcastService.getLiveProductStats(broadcastId, productId);
+        return ResponseEntity.ok().body(productStats);
     }
 }
