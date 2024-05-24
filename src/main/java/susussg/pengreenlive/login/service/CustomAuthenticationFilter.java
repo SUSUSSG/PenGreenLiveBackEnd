@@ -8,6 +8,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import susussg.pengreenlive.login.dto.Member;
 
 import jakarta.servlet.FilterChain;
@@ -44,15 +45,16 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Map<String, String> result = new HashMap<>();
 
         Member member = (Member) authResult.getPrincipal();
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("id", member.getUsername());
+        userInfo.put("name", member.getUserNm());
+        userInfo.put("uuid", member.getUserUuid());
 
-        // SecurityContext에 Member 객체 저장
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(member, null, member.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
+//        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
 
-        request.getSession().setAttribute("user", member); // 세션에 Member 객체 저장
-        result.put("user", objectMapper.writeValueAsString(member));
-        log.info("session info {}", request.getSession().getAttribute("user"));
-
+        result.put("user", objectMapper.writeValueAsString(userInfo));
         response.setContentType("application/json");
         response.getWriter().write(objectMapper.writeValueAsString(result));
     }
