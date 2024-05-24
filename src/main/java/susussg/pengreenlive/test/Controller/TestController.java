@@ -10,7 +10,7 @@ import susussg.pengreenlive.test.Service.TestService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/")
+@RequestMapping("/api")
 public class TestController {
 
   @Autowired

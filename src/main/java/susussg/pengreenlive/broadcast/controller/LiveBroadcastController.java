@@ -15,6 +15,7 @@ import java.util.Map;
 
 @RestController
 @Log4j2
+@RequestMapping("/api")
 public class LiveBroadcastController {
 
     @Autowired
