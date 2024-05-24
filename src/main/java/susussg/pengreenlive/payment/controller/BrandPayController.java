@@ -31,8 +31,8 @@ public class BrandPayController {
 
     @Value("${toss.clientKey}")
     private String clientKey;
-    private String customerKey = "CUSTOMER_KEY";
-
+//    private String customerKey = "f23a72e0-1347-11ef-b085-f220affc9a21";
+    ;
 
     @PostMapping("/access-token")
     public ResponseEntity<?> getAccessToken(@RequestBody Map<String, String> payload) {
@@ -47,7 +47,7 @@ public class BrandPayController {
 
         Map<String, String> body = new HashMap<>();
         body.put("grantType", "AuthorizationCode");
-        body.put("customerKey", customerKey);
+//        body.put("customerKey", customerKey);
         body.put("code", code);
 
         ResponseEntity<Map> response;
@@ -60,11 +60,13 @@ public class BrandPayController {
         log.info("access token {}", response);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
-    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+//    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     @GetMapping("/callback-auth")
     public ResponseEntity<String> callbackAuth(@RequestParam("code") String code,
                                                @RequestParam("customerKey") String customerKey) {
         String url = "https://api.tosspayments.com/v1/brandpay/authorizations/access-token";
+
+        log.info("/callback-auth {} {}", code, customerKey);
 
         HttpHeaders headers = new HttpHeaders();
         String auth = secretKey + ":";
@@ -91,6 +93,7 @@ public class BrandPayController {
             log.error("Exception: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
+
         if (response.getStatusCode().is2xxSuccessful()) {
             return ResponseEntity.ok("OK");
         } else {
@@ -104,13 +107,16 @@ public class BrandPayController {
         String orderId;
         String amount;
         String paymentKey;
-//        String customerKey;
+        String customerKey;
 
         try {
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
+            log.info("brandpay/confirm {}", requestData);
+
             paymentKey = (String) requestData.get("paymentKey");
             orderId = (String) requestData.get("orderId");
             amount = (String) requestData.get("amount");
+            customerKey = (String) requestData.get("customerKey");
         } catch (ParseException e) {
             throw new RuntimeException(e);
         };
