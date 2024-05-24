@@ -42,7 +42,6 @@
 
   <select id="findReviewedOrdersByUser" resultType="susussg.pengreenlive.order.dto.ReviewDTO">
     SELECT
-      o.ORDER_SEQ,
       o.ORDER_DATE,
       o.ORDER_PRODUCT_PRICE,
       o.ORDER_PAYED_PRICE,
@@ -52,13 +51,14 @@
       p.PRODUCT_IMAGE,
       r.REVIEW_CONTENT,
       r.REVIEW_TIME,
-     r.REVIEW_SEQ
+      r.REVIEW_SEQ
     FROM
       TB_ORDER o
         JOIN TB_PRODUCT p ON o.PRODUCT_SEQ = p.PRODUCT_SEQ
-        LEFT JOIN TB_REVIEW r ON o.PRODUCT_SEQ = r.PRODUCT_SEQ AND o.USER_UUID = r.USER_UUID
+        JOIN TB_REVIEW r ON o.ORDER_SEQ = r.ORDER_SEQ AND o.USER_UUID = r.USER_UUID
     WHERE
-      o.USER_UUID = UUID_TO_BIN(#{userUuid}) AND o.REVIEW_YN = 1
+      o.USER_UUID = UUID_TO_BIN(#{userUuid})
+      AND o.REVIEW_YN = 1
   </select>
 
   <delete id="deleteReviewByUserAndReviewSeq" parameterType="map">
