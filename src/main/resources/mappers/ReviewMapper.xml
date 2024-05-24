@@ -5,6 +5,7 @@
 
   <select id="findOrdersByUser" resultType="susussg.pengreenlive.order.dto.ReviewDTO">
     SELECT
+      o.ORDER_SEQ,
       o.ORDER_DATE,
       o.ORDER_PRODUCT_PRICE,
       o.ORDER_PAYED_PRICE,
@@ -22,6 +23,7 @@
 
   <select id="findUnreviewedOrdersByUser" resultType="susussg.pengreenlive.order.dto.ReviewDTO">
     SELECT
+      o.ORDER_SEQ,
       o.ORDER_DATE,
       o.ORDER_PRODUCT_PRICE,
       o.ORDER_PAYED_PRICE,
@@ -40,6 +42,7 @@
 
   <select id="findReviewedOrdersByUser" resultType="susussg.pengreenlive.order.dto.ReviewDTO">
     SELECT
+      o.ORDER_SEQ,
       o.ORDER_DATE,
       o.ORDER_PRODUCT_PRICE,
       o.ORDER_PAYED_PRICE,
@@ -64,14 +67,23 @@
   </delete>
 
   <insert id="insertReview" parameterType="susussg.pengreenlive.order.dto.ReviewDTO">
-    INSERT INTO TB_REVIEW (USER_UUID, PRODUCT_SEQ, REVIEW_CONTENT, REVIEW_TIME)
-    VALUES (UUID_TO_BIN(#{review.userUUID}), #{review.productSeq}, #{review.reviewContent}, #{review.reviewTime})
+    INSERT INTO TB_REVIEW (USER_UUID, PRODUCT_SEQ, REVIEW_CONTENT, REVIEW_TIME, ORDER_SEQ)
+    SELECT UUID_TO_BIN(#{review.userUUID}), #{review.productSeq}, #{review.reviewContent},
+           #{review.reviewTime}, #{review.orderSeq}
+    FROM DUAL
+    WHERE NOT EXISTS (
+      SELECT 1
+      FROM TB_REVIEW
+      WHERE ORDER_SEQ = #{review.orderSeq}
+        AND PRODUCT_SEQ = #{review.productSeq}
+        AND USER_UUID = UUID_TO_BIN(#{review.userUUID})
+    );
   </insert>
 
   <update id="updateReviewYn" parameterType="map">
     UPDATE TB_ORDER
     SET REVIEW_YN = 1
-    WHERE USER_UUID = UUID_TO_BIN(#{userUuid}) AND PRODUCT_SEQ = #{productSeq}
+    WHERE USER_UUID = UUID_TO_BIN(#{userUuid}) AND PRODUCT_SEQ = #{productSeq} AND ORDER_SEQ=#{orderSeq}
   </update>
 
 </mapper>
