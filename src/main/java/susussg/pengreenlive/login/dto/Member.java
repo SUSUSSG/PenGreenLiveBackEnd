@@ -1,21 +1,27 @@
 package susussg.pengreenlive.login.dto;
 
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import java.util.Collection;
 
-import java.io.Serializable;
+@ToString
+@Getter
+public class Member extends User {
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class Member implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private String userUuid;    // uuid
+    private String userNm;      // 이름
 
-    private String username;
-    private String password;
-    private String userUuid;
-    private String userNm;
-    private String role;
-    private String userId;
-    private String userPw;
+    public Member(String username, String password, Collection<? extends GrantedAuthority> authorities, String userNm, String userUuid) {
+        super(username, password, authorities);
+        this.userUuid = userUuid;
+        this.userNm = userNm;
+    }
+
+    public Member(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities,  String userNm, String userUuid) {
+        super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+        this.userUuid = userUuid;
+        this.userNm = userNm;
+    }
+
 }

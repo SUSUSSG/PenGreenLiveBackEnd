@@ -4,12 +4,7 @@ import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.order.dto.ReviewDTO;
 import susussg.pengreenlive.order.service.ReviewService;
 
@@ -43,9 +38,11 @@ public class ReviewController {
   }
 
   @DeleteMapping("/reviews/{userUuid}/{reviewSeq}")
-  public ResponseEntity<String> deleteReview(@PathVariable String userUuid, @PathVariable long reviewSeq) {
+  public ResponseEntity<String> deleteReview(@PathVariable String userUuid, @PathVariable long reviewSeq
+                                                , @RequestParam("productSeq") long productSeq, @RequestParam("orderSeq") long orderSeq) {
+
     try {
-      reviewService.deleteReview(userUuid, reviewSeq);
+      reviewService.deleteReview(userUuid, reviewSeq, productSeq, orderSeq);
       return ResponseEntity.ok("리뷰 삭제가 완료되었습니다.");
     } catch (Exception e) {
       return ResponseEntity.status(500).body("리뷰 삭제에 실패했습니다: " + e.getMessage());
@@ -61,6 +58,4 @@ public class ReviewController {
       return ResponseEntity.status(500).body("리뷰 등록에 실패했습니다: " + e.getMessage());
     }
   }
-
-
 }

@@ -17,4 +17,6 @@ public interface UserMapper {
     int selectByUserId(String userId);
 
     UserDTO selectUserInfoByUserId(String userId);
+
+    String selectUserAddressByUUID(String userUuid);
 }

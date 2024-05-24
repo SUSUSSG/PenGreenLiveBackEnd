@@ -22,7 +22,6 @@ public class OrderController {
     public ResponseEntity<?> create(@RequestBody OrderFormDTO orderForm) {
         log.info("OrderController {}", orderForm);
 
-        orderForm.setUserUUID("f23a72e0-1347-11ef-b085-f220affc9a21");
         try {
             Long orderSeq = orderService.persistOrder(orderForm);
             return ResponseEntity.ok().body(orderSeq);
