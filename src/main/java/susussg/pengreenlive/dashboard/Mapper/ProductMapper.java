@@ -29,4 +29,6 @@ public interface ProductMapper {
   void deleteChannelSalesProduct(Long vendorSeq, Long productSeq);
 
   void insertProductGreenLabel(GreenLabelDTO greenLabelDTO);
+
+  List<ProductDTO> selectProductWithLabels();
 }

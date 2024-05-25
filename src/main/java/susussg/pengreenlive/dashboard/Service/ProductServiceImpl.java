@@ -144,4 +144,9 @@ public class ProductServiceImpl implements ProductService{
       throw new RuntimeException("Product deletion from vendor's sales channel failed", e);
     }
   }
+
+  @Override
+  public List<ProductDTO> getAllProducts() {
+    return productMapper.selectProductWithLabels();
+  }
 }

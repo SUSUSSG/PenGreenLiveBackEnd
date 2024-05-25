@@ -16,5 +16,8 @@ public class GreenLabelDTO {
   private long labelIdSeq;
   private String certificationReason;
   private LocalDateTime certificationExpirationDate;
+  private String labelNm;
+  private String labelDescription;
+  private String labelImage;
 
 }

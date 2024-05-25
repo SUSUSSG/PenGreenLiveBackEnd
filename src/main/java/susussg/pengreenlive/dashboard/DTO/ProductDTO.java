@@ -1,6 +1,7 @@
 package susussg.pengreenlive.dashboard.DTO;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +30,7 @@ public class ProductDTO {
   private long labelIdSeq;
   private String certificationReason;
   private String certificationExpirationDate;
+  private List<GreenLabelDTO> labels;
 
 
 }
