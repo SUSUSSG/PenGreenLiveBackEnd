@@ -43,7 +43,7 @@ public class BanwordService {
         buildBanwordTrie(); // 기본 금칙어 로드 후 트라이 재구성
     }
 
-    @Scheduled(fixedDelay = 30000) // 30,000 milliseconds = 30 seconds
+    @Scheduled(fixedDelay = 3000) // 30,000 milliseconds = 30 seconds
     public void updateIndividualBanwordTrie() {
         buildBanwordTrie(); // 개별 금칙어 업데이트 후 트라이 재구성
     }
