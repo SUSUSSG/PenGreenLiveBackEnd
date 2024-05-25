@@ -11,4 +11,8 @@
     SELECT FORBIDDENWORD FROM susussg.TB_FORBIDDENWORD_INDIVIDUAL WHERE BROADCAST_SEQ = #{broadcastSeq}
   </select>
 
+  <insert id="insertForbiddenWord">
+    INSERT INTO susussg.TB_FORBIDDENWORD_INDIVIDUAL (BROADCAST_SEQ, FORBIDDENWORD)
+    VALUES (#{broadcastSeq}, #{forbiddenWord})
+  </insert>
 </mapper>

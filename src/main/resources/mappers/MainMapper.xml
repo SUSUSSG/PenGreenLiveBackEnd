@@ -71,6 +71,7 @@
     <if test="categoryCd != null and categoryCd != ''">
       AND BCT.CATEGORY_CD LIKE #{categoryCd}
     </if>
+    AND BC.BROADCAST_SCHEDULED_TIME >= NOW() - INTERVAL 1 HOUR
     )
     SELECT DISTINCT
     BROADCAST_SEQ,
@@ -119,6 +120,8 @@
     <if test="categoryCd != null and categoryCd != ''">
       AND BCT.CATEGORY_CD LIKE #{categoryCd}
     </if>
+    AND BC.BROADCAST_SCHEDULED_TIME > DATE_SUB(NOW(), INTERVAL 1 HOUR)
+
     )
     SELECT DISTINCT
     BROADCAST_SEQ,

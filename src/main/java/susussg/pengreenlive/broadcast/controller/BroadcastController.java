@@ -11,6 +11,7 @@ import susussg.pengreenlive.broadcast.service.BroadcastService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import susussg.pengreenlive.util.Service.ForbiddenWordService;
 
 @RestController
 @Log4j2
@@ -19,6 +20,9 @@ public class BroadcastController {
 
     @Autowired
     private final BroadcastService broadcastService;
+
+    @Autowired
+    ForbiddenWordService forbiddenWordService;
 
     public BroadcastController(BroadcastService broadcastService) {
         this.broadcastService = broadcastService;
@@ -83,5 +87,11 @@ public class BroadcastController {
         } else {
             return ResponseEntity.ok("시간 반영 실패");
         }
+    }
+
+    //추가 금칙어 등록
+    @PostMapping("forbidden-words")
+    public void addForbiddenWord(@RequestParam long broadcastSeq, @RequestParam String forbiddenWord) {
+        forbiddenWordService.addForbiddenWord(broadcastSeq, forbiddenWord);
     }
 }

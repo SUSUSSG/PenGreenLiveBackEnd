@@ -22,4 +22,9 @@ public class ForbiddenWordServiceImpl implements ForbiddenWordService {
     public List<ForbiddenWordDTO> getIndividualForbiddenWordList(int broadcastSeq) {
         return forbiddenWordMapper.selectIndividualForbiddenWordList(broadcastSeq);
     }
+
+    @Override
+    public void addForbiddenWord(long broadcastSeq, String forbiddenWord) {
+        forbiddenWordMapper.insertForbiddenWord(broadcastSeq, forbiddenWord);
+    }
 }

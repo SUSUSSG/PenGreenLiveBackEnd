@@ -10,4 +10,7 @@ public interface ForbiddenWordMapper {
     List<ForbiddenWordDTO> selectDefaultForbiddenWordList();
 
     List<ForbiddenWordDTO> selectIndividualForbiddenWordList(int broadcastSeq);
+
+    void insertForbiddenWord(long broadcastSeq, String forbiddenWord);
+
 }
