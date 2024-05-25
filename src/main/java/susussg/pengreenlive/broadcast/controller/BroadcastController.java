@@ -5,12 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import susussg.pengreenlive.broadcast.dto.*;
 import susussg.pengreenlive.broadcast.service.BroadcastService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @Log4j2
@@ -19,6 +22,9 @@ public class BroadcastController {
 
     @Autowired
     private final BroadcastService broadcastService;
+
+    private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+
 
     public BroadcastController(BroadcastService broadcastService) {
         this.broadcastService = broadcastService;
@@ -74,6 +80,7 @@ public class BroadcastController {
     // 방송시간 update
     @PatchMapping("update/broadcast-time")
     public ResponseEntity<String> updateBroadcastTime(@RequestBody BroadcastTimeDTO broadcastTime) {
+        log.info("시간 컨트롤러 호출");
         if (broadcastTime.getAction().equals("start")) {
             broadcastService.startBroadcast(broadcastTime);
             return ResponseEntity.ok("시작 시간 반영 성공");
@@ -84,4 +91,29 @@ public class BroadcastController {
             return ResponseEntity.ok("시간 반영 실패");
         }
     }
+
+    @GetMapping("/broadcast-end")
+    public ResponseEntity<String> endBroadcast() {
+        log.info("broadcast-end 호출");
+        for (SseEmitter emitter : emitters) {
+            try {
+                emitter.send(SseEmitter.event().name("broadcast-end").data("Broadcast has ended"));
+                emitter.complete();
+            } catch (IOException e) {
+                emitters.remove(emitter);
+            }
+        }
+        return ResponseEntity.ok("Broadcast end event sent to all clients");
+    }
+
+    @GetMapping("/subscribe")
+    public SseEmitter subscribe() {
+        log.info("SSE 구독 요청 정보가 들어옵니다"); // 로그 추가
+        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE); // 타임아웃을 무한대로 설정
+        emitters.add(emitter);
+        emitter.onCompletion(() -> emitters.remove(emitter));
+        emitter.onTimeout(() -> emitters.remove(emitter));
+        return emitter;
+    }
+
 }
