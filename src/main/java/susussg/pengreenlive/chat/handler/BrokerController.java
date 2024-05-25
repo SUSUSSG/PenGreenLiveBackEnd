@@ -95,6 +95,7 @@ public class BrokerController {
 
         log.info("# roomId = {}", roomId);
         log.info("# message = {}", message);
+        banwordService.updateIndividualBanwordTrie(Integer.parseInt(roomId));
 
         BanwordValidationResultDTO validationResult = banwordService.validate(message.getMessage());
         log.info("메시지 필터링 = {}", validationResult);
