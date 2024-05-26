@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import susussg.pengreenlive.login.service.SecurityService;
 import susussg.pengreenlive.mypage.DTO.HistoryDTO;
 import susussg.pengreenlive.mypage.Service.HistoryService;
 
@@ -18,12 +19,16 @@ public class HistoryController {
   @Autowired
   private final HistoryService historyService;
 
+  @Autowired
+  private SecurityService securityService;
+
   public HistoryController(HistoryService historyService) {
     this.historyService = historyService;
   }
 
   @GetMapping("/recently-viewed/broadcasts")
-  public List<HistoryDTO> getRecentBroadcasts(@RequestParam String userUUID) {
+  public List<HistoryDTO> getRecentBroadcasts() {
+    String userUUID = securityService.getCurrentUserUuid();
     return historyService.getRecentBroadcasts(userUUID);
   }
 }
