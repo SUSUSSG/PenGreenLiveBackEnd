@@ -20,4 +20,12 @@ public class HistoryServiceImpl implements HistoryService{
   public List<HistoryDTO> getRecentBroadcasts(String userUUID) {
     return historyMapper.getRecentBroadcasts(userUUID);
   }
+
+  @Override
+  public void saveUserBroadcastHistory(HistoryDTO historyDTO) {
+    int result = historyMapper.insertUserBroadcastHistory(historyDTO);
+    if (result != 1) {
+      throw new RuntimeException("save user broadcast history failed");
+    }
+  }
 }

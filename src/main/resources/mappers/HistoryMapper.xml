@@ -15,5 +15,9 @@
     ORDER BY hb.VIEWED_DATE DESC
   </select>
 
+    <insert id="insertUserBroadcastHistory" parameterType="susussg.pengreenlive.mypage.DTO.HistoryDTO">
+        INSERT INTO TB_HISTORY_BROADCAST (USER_UUID, BROADCAST_SEQ, VIEWED_DATE)
+        VALUES (UUID_TO_BIN(#{userUUID}), #{broadcastSeq}, #{viewedDate})
+    </insert>
 
 </mapper>
