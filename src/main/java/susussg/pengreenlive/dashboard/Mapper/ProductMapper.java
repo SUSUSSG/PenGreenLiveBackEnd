@@ -30,5 +30,5 @@ public interface ProductMapper {
 
   void insertProductGreenLabel(GreenLabelDTO greenLabelDTO);
 
-  List<ProductDTO> selectProductWithLabels();
+  List<ProductDTO> selectProductWithLabelsByVendor(@Param("vendorSeq") Long vendorSeq);
 }

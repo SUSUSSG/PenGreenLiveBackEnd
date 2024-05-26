@@ -146,7 +146,7 @@ public class ProductServiceImpl implements ProductService{
   }
 
   @Override
-  public List<ProductDTO> getAllProducts() {
-    return productMapper.selectProductWithLabels();
+  public List<ProductDTO> getAllProductsWithLabels(Long vendorSeq) {
+    return productMapper.selectProductWithLabelsByVendor(vendorSeq);
   }
 }

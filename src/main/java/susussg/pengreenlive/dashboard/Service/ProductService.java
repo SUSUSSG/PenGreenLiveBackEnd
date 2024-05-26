@@ -18,6 +18,7 @@ public interface ProductService {
 
   void deleteProduct(Long vendorSeq, Long productSeq);
 
-  List<ProductDTO> getAllProducts();
+  List<ProductDTO> getAllProductsWithLabels(Long vendorSeq);
+
 
 }

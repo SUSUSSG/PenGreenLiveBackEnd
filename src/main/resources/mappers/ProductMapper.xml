@@ -90,12 +90,15 @@
     <id property="productSeq" column="PRODUCT_SEQ" />
     <result property="productCd" column="PRODUCT_CD" />
     <result property="productNm" column="PRODUCT_NM" />
+    <result property="greenProductId" column="GREEN_PRODUCT_ID"/>
     <result property="listPrice" column="LIST_PRICE" />
     <result property="brand" column="BRAND" />
     <result property="productImage" column="PRODUCT_IMAGE" />
     <result property="categoryCd" column="CATEGORY_CD" />
+    <result property="productStock" column="PRODUCT_STOCK" />
     <collection property="labels" ofType="susussg.pengreenlive.dashboard.DTO.GreenLabelDTO">
       <id property="labelIdSeq" column="LABEL_ID_SEQ" />
+      <result property="productSeq" column="PRODUCT_SEQ" />
       <result property="labelNm" column="LABEL_NM" />
       <result property="labelDescription" column="LABEL_DESCRIPTION" />
       <result property="labelImage" column="LABEL_IMAGE" />
@@ -104,7 +107,7 @@
     </collection>
   </resultMap>
 
-  <select id="selectProductWithLabels" resultMap="ProductResultMap">
+  <select id="selectProductWithLabelsByVendor" resultMap="ProductResultMap">
     SELECT
       p.PRODUCT_SEQ,
       p.PRODUCT_CD,
@@ -114,6 +117,7 @@
       p.BRAND,
       p.PRODUCT_IMAGE,
       p.CATEGORY_CD,
+      s.PRODUCT_STOCK,
       g.LABEL_ID_SEQ,
       g.LABEL_NM,
       g.LABEL_DESCRIPTION,
@@ -122,10 +126,13 @@
       pg.CERTIFICATION_EXPIRATION_DATE
     FROM
       TB_PRODUCT p
-        JOIN
-      TB_PRODUCT_GREEN_LABEL pg ON p.PRODUCT_SEQ = pg.PRODUCT_SEQ
-        JOIN
-      TB_GREEN_LABEL g ON pg.LABEL_ID_SEQ = g.LABEL_ID_SEQ
+        LEFT JOIN TB_PRODUCT_STOCK s ON p.PRODUCT_SEQ = s.PRODUCT_SEQ
+        LEFT JOIN TB_PRODUCT_GREEN_LABEL pg ON p.PRODUCT_SEQ = pg.PRODUCT_SEQ
+        LEFT JOIN TB_GREEN_LABEL g ON pg.LABEL_ID_SEQ = g.LABEL_ID_SEQ
+        INNER JOIN TB_CHANNEL_SALES_PRODUCT csp ON p.PRODUCT_SEQ = csp.PRODUCT_SEQ
+    WHERE
+      csp.VENDOR_SEQ = #{vendorSeq}
   </select>
+
 
 </mapper>

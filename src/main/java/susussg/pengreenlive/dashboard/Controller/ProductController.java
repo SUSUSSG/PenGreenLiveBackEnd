@@ -81,8 +81,8 @@ public class ProductController {
   }
 
   @GetMapping("/product-list-label")
-  public List<ProductDTO> getAllProductsLabel() {
-    return productService.getAllProducts();
+  public List<ProductDTO> getAllProductsWithLabels(@RequestParam Long vendorSeq) {
+    return productService.getAllProductsWithLabels(vendorSeq);
   }
 
 
