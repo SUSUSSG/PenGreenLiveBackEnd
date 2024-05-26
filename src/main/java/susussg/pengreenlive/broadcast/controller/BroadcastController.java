@@ -92,12 +92,12 @@ public class BroadcastController {
         }
     }
 
-    @GetMapping("/broadcast-end")
-    public ResponseEntity<String> endBroadcast() {
+    @GetMapping("/broadcast-end/{broadcastId}")
+    public ResponseEntity<String> endBroadcast(@PathVariable("broadcastId") long broadcastId) {
         log.info("broadcast-end 호출");
         for (SseEmitter emitter : emitters) {
             try {
-                emitter.send(SseEmitter.event().name("broadcast-end").data("Broadcast has ended"));
+                emitter.send(SseEmitter.event().name("broadcast-end").data(broadcastId));
                 emitter.complete();
             } catch (IOException e) {
                 emitters.remove(emitter);
