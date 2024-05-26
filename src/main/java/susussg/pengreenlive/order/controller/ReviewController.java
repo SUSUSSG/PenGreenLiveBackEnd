@@ -47,10 +47,12 @@ public class ReviewController {
   }
 
   @DeleteMapping("/reviews/{reviewSeq}")
-  public ResponseEntity<String> deleteReview(@PathVariable long reviewSeq) {
+  public ResponseEntity<String> deleteReview(@PathVariable long reviewSeq
+          , @RequestParam("productSeq") long productSeq, @RequestParam("orderSeq") long orderSeq) {
+
     try {
       String userUuid = securityService.getCurrentUserUuid();
-      reviewService.deleteReview(userUuid, reviewSeq);
+      reviewService.deleteReview(userUuid, reviewSeq, productSeq, orderSeq);
       return ResponseEntity.ok("리뷰 삭제가 완료되었습니다.");
     } catch (Exception e) {
       return ResponseEntity.status(500).body("리뷰 삭제에 실패했습니다: " + e.getMessage());
@@ -60,6 +62,8 @@ public class ReviewController {
   @PostMapping("/reviews")
   public ResponseEntity<String> addReview(@RequestBody ReviewDTO review) {
     try {
+      String userUuid = securityService.getCurrentUserUuid();
+      review.setUserUUID(userUuid);
       reviewService.addReview(review);
       return ResponseEntity.ok("리뷰 등록이 완료되었습니다.");
     } catch (Exception e) {
