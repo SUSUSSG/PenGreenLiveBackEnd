@@ -22,15 +22,14 @@ public class BanwordService {
     private PayloadTrie<BanwordDTO> banwordTrie;
     private List<ForbiddenWordDTO> defaultForbiddenWords;
 
-    private static int currentBroadcastSeq = 6;
     @PostConstruct
     public void init() {
         loadDefaultForbiddenWords();
-        updateIndividualBanwordTrie();
     }
-    private void buildBanwordTrie() {
+
+    private void buildBanwordTrie(int broadcastSeq) {
         List<ForbiddenWordDTO> allForbiddenWords = new ArrayList<>(defaultForbiddenWords);
-        List<ForbiddenWordDTO> individualForbiddenWords = forbiddenWordService.getIndividualForbiddenWordList(currentBroadcastSeq); // 예시로 6번 방송.
+        List<ForbiddenWordDTO> individualForbiddenWords = forbiddenWordService.getIndividualForbiddenWordList(broadcastSeq);
         allForbiddenWords.addAll(individualForbiddenWords);
 
         PayloadTrie.PayloadTrieBuilder<BanwordDTO> trieBuilder = PayloadTrie.<BanwordDTO>builder();
@@ -40,15 +39,11 @@ public class BanwordService {
 
     private void loadDefaultForbiddenWords() {
         defaultForbiddenWords = forbiddenWordService.getDefaultForbiddenWordList();
-        buildBanwordTrie(); // 기본 금칙어 로드 후 트라이 재구성
     }
 
-    @Scheduled(fixedDelay = 30000) // 30,000 milliseconds = 30 seconds
-    public void updateIndividualBanwordTrie() {
-        buildBanwordTrie(); // 개별 금칙어 업데이트 후 트라이 재구성
+    public void updateIndividualBanwordTrie(int broadcastSeq) {
+        buildBanwordTrie(broadcastSeq); // 개별 금칙어 업데이트 후 트라이 재구성
     }
-
-
 
     public BanwordValidationResultDTO validate(String originSentence) {
         Collection<PayloadEmit<BanwordDTO>> banwordResult = banwordTrie.parseText(originSentence);

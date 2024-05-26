@@ -3,6 +3,7 @@ package susussg.pengreenlive.dashboard.Mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import susussg.pengreenlive.dashboard.DTO.GreenLabelDTO;
 import susussg.pengreenlive.dashboard.DTO.ProductDTO;
 import susussg.pengreenlive.dashboard.DTO.VendorProductListDTO;
 
@@ -26,4 +27,8 @@ public interface ProductMapper {
   void updateProductStock(@Param("productSeq") Long productSeq, @Param("productStock") int productStock);
 
   void deleteChannelSalesProduct(Long vendorSeq, Long productSeq);
+
+  void insertProductGreenLabel(GreenLabelDTO greenLabelDTO);
+
+  List<ProductDTO> selectProductWithLabelsByVendor(@Param("vendorSeq") Long vendorSeq);
 }
