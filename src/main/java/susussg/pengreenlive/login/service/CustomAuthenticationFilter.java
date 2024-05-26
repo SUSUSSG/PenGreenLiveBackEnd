@@ -8,6 +8,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import susussg.pengreenlive.login.dto.Member;
 
 import jakarta.servlet.FilterChain;
@@ -43,22 +44,23 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         response.setStatus(HttpServletResponse.SC_OK);
         Map<String, String> result = new HashMap<>();
 
-        User user = (User) authResult.getPrincipal();
-        Member member = Member.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .role(user.getAuthorities().toString())
-                .build();
+        Member member = (Member) authResult.getPrincipal();
+
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("id", member.getUsername());
+        userInfo.put("name", member.getUserNm());
+        userInfo.put("uuid", member.getUserUuid());
+        userInfo.put("role", member.getAuthorities().toString());
 
         // SecurityContext에 Member 객체 저장
-        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(member, null, user.getAuthorities());
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(member, null, member.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
+        log.info("생성된 세션 아이디 {}", request.getSession().getId());
 
-        request.getSession().setAttribute("user", member); // 세션에 Member 객체 저장
-        result.put("message", "Authentication Successful");
-        result.put("user", objectMapper.writeValueAsString(member));
-        log.info("session info {}", request.getSession().getAttribute("user"));
+        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+        log.info("session info {}", SecurityContextHolder.getContext().getAuthentication());
 
+        result.put("user", objectMapper.writeValueAsString(userInfo));
         response.setContentType("application/json");
         response.getWriter().write(objectMapper.writeValueAsString(result));
     }
