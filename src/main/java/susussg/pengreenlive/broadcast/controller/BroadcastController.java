@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import susussg.pengreenlive.util.Service.ForbiddenWordService;
+
 
 @RestController
 @Log4j2
@@ -23,7 +25,12 @@ public class BroadcastController {
     @Autowired
     private final BroadcastService broadcastService;
 
+
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+
+
+    @Autowired
+    ForbiddenWordService forbiddenWordService;
 
 
     public BroadcastController(BroadcastService broadcastService) {
@@ -92,6 +99,7 @@ public class BroadcastController {
         }
     }
 
+
     @GetMapping("/broadcast-end/{broadcastId}")
     public ResponseEntity<String> endBroadcast(@PathVariable("broadcastId") long broadcastId) {
         log.info("broadcast-end 호출");
@@ -114,6 +122,13 @@ public class BroadcastController {
         emitter.onCompletion(() -> emitters.remove(emitter));
         emitter.onTimeout(() -> emitters.remove(emitter));
         return emitter;
+    }
+
+
+    //추가 금칙어 등록
+    @PostMapping("forbidden-words")
+    public void addForbiddenWord(@RequestParam long broadcastSeq, @RequestParam String forbiddenWord) {
+        forbiddenWordService.addForbiddenWord(broadcastSeq, forbiddenWord);
     }
 
 }

@@ -7,4 +7,6 @@ public interface ForbiddenWordService {
 
     List<ForbiddenWordDTO> getDefaultForbiddenWordList();
     List<ForbiddenWordDTO> getIndividualForbiddenWordList(int broadcastSeq);
+    void addForbiddenWord(long broadcastSeq, String forbiddenWord);
+
 }
