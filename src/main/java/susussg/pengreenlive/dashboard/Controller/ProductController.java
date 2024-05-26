@@ -59,7 +59,7 @@ public class ProductController {
     return ResponseEntity.ok(productCategoryCodes);
   }
 
-  @PutMapping("/{productSeq}")
+  @PutMapping("/product/{productSeq}")
   public ResponseEntity<String> updateProduct(@PathVariable Long productSeq, @RequestBody ProductDTO productDTO) {
     try {
       System.out.println("Updating product with productSeq: " + productSeq);
@@ -78,6 +78,11 @@ public class ProductController {
     } catch (Exception e) {
       return ResponseEntity.status(500).body("상품 삭제에 실패했습니다 " + e.getMessage());
     }
+  }
+
+  @GetMapping("/product-list-label")
+  public List<ProductDTO> getAllProductsWithLabels(@RequestParam Long vendorSeq) {
+    return productService.getAllProductsWithLabels(vendorSeq);
   }
 
 

@@ -81,5 +81,58 @@
     WHERE VENDOR_SEQ = #{vendorSeq} AND PRODUCT_SEQ = #{productSeq};
   </delete>
 
+  <select id="insertProductGreenLabel" parameterType="susussg.pengreenlive.dashboard.DTO.GreenLabelDTO">
+    INSERT INTO TB_PRODUCT_GREEN_LABEL (PRODUCT_SEQ, LABEL_ID_SEQ, CERTIFICATION_REASON, CERTIFICATION_EXPIRATION_DATE)
+    VALUES (#{productSeq}, #{labelIdSeq}, #{certificationReason}, #{certificationExpirationDate})
+  </select>
+
+  <resultMap id="ProductResultMap" type="susussg.pengreenlive.dashboard.DTO.ProductDTO">
+    <id property="productSeq" column="PRODUCT_SEQ" />
+    <result property="productCd" column="PRODUCT_CD" />
+    <result property="productNm" column="PRODUCT_NM" />
+    <result property="greenProductId" column="GREEN_PRODUCT_ID"/>
+    <result property="listPrice" column="LIST_PRICE" />
+    <result property="brand" column="BRAND" />
+    <result property="productImage" column="PRODUCT_IMAGE" />
+    <result property="categoryCd" column="CATEGORY_CD" />
+    <result property="productStock" column="PRODUCT_STOCK" />
+    <collection property="labels" ofType="susussg.pengreenlive.dashboard.DTO.GreenLabelDTO">
+      <id property="labelIdSeq" column="LABEL_ID_SEQ" />
+      <result property="productSeq" column="PRODUCT_SEQ" />
+      <result property="labelNm" column="LABEL_NM" />
+      <result property="labelDescription" column="LABEL_DESCRIPTION" />
+      <result property="labelImage" column="LABEL_IMAGE" />
+      <result property="certificationReason" column="CERTIFICATION_REASON" />
+      <result property="certificationExpirationDate" column="CERTIFICATION_EXPIRATION_DATE" />
+    </collection>
+  </resultMap>
+
+  <select id="selectProductWithLabelsByVendor" resultMap="ProductResultMap">
+    SELECT
+      p.PRODUCT_SEQ,
+      p.PRODUCT_CD,
+      p.GREEN_PRODUCT_ID,
+      p.PRODUCT_NM,
+      p.LIST_PRICE,
+      p.BRAND,
+      p.PRODUCT_IMAGE,
+      p.CATEGORY_CD,
+      s.PRODUCT_STOCK,
+      g.LABEL_ID_SEQ,
+      g.LABEL_NM,
+      g.LABEL_DESCRIPTION,
+      g.LABEL_IMAGE,
+      pg.CERTIFICATION_REASON,
+      pg.CERTIFICATION_EXPIRATION_DATE
+    FROM
+      TB_PRODUCT p
+        LEFT JOIN TB_PRODUCT_STOCK s ON p.PRODUCT_SEQ = s.PRODUCT_SEQ
+        LEFT JOIN TB_PRODUCT_GREEN_LABEL pg ON p.PRODUCT_SEQ = pg.PRODUCT_SEQ
+        LEFT JOIN TB_GREEN_LABEL g ON pg.LABEL_ID_SEQ = g.LABEL_ID_SEQ
+        INNER JOIN TB_CHANNEL_SALES_PRODUCT csp ON p.PRODUCT_SEQ = csp.PRODUCT_SEQ
+    WHERE
+      csp.VENDOR_SEQ = #{vendorSeq}
+  </select>
+
 
 </mapper>
