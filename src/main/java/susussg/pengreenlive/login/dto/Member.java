@@ -1,21 +1,26 @@
 package susussg.pengreenlive.login.dto;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 
 import java.io.Serializable;
+import java.util.Collection;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class Member implements Serializable {
+@Getter
+@Setter
+@ToString
+@JsonAutoDetect
+public class Member extends User implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String username;
-    private String password;
-    private String userUuid;
-    private String userNm;
-    private String role;
-    private String userId;
-    private String userPw;
+    private String userUuid;    // uuid
+    private String userNm;      // 이름
+
+    public Member(String username, String password, Collection<? extends GrantedAuthority> authorities, String userNm, String userUuid) {
+        super(username, password, authorities);
+        this.userUuid = userUuid;
+        this.userNm = userNm;
+    }
 }

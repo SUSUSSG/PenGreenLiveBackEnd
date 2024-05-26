@@ -1,14 +1,20 @@
 package susussg.pengreenlive.login.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import susussg.pengreenlive.login.dto.Member;
 import susussg.pengreenlive.login.dto.UserDTO;
 import susussg.pengreenlive.login.dto.VendorDTO;
 import susussg.pengreenlive.login.role.MemberRole;
@@ -51,20 +57,35 @@ public class SecurityService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
         if (!user.getAccountActive()) {
             authorities.add(new SimpleGrantedAuthority(MemberRole.DEACTIVE.getValue()));
-            return new User(user.getUserId(), user.getUserPw(), authorities);
+            return new Member(user.getUserId(), user.getUserPw(), authorities, user.getUserNm(), user.getUserUuid());
         }
         authorities.add(new SimpleGrantedAuthority(MemberRole.USER.getValue()));
-        return new User(user.getUserId(), user.getUserPw(), authorities);
+        return new Member(user.getUserId(), user.getUserPw(), authorities, user.getUserNm(), user.getUserUuid());
     }
 
     private UserDetails buildVendorDetails(VendorDTO vendor) {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         authorities.add(new SimpleGrantedAuthority(MemberRole.VENDOR.getValue()));
-        return new User(vendor.getBusinessId(), vendor.getVendorPw(), authorities);
+        return new Member(vendor.getBusinessId(), vendor.getVendorPw(), authorities, vendor.getVendorNm(), vendor.getBusinessId());
     }
 
     private boolean isNumeric(String str) {
         return str.chars().allMatch(Character::isDigit);
+    }
+
+    public String getCurrentUserUuid() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member member = (Member) authentication.getPrincipal();
+        return member.getUserUuid();
+    }
+
+    public Authentication convertJsonToAuthentication(String json) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.readValue(json, UsernamePasswordAuthenticationToken.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to deserialize JSON to Authentication object", e);
+        }
     }
 }
