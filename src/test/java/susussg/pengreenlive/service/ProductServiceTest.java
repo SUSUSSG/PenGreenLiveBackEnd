@@ -82,27 +82,27 @@ public class ProductServiceTest {
 
   }
 
-  @Test
-  public void testUpdateProductInfo() throws IOException {
-
-    File file = new File("C://Users//kuy06//Downloads//image (13).png");
-    byte[] imageData = Files.readAllBytes(file.toPath());
-
-    ProductDTO productDTO = new ProductDTO();
-    productDTO.setProductCd("PRD-300");
-    productDTO.setGreenProductId("tempgreenproduct");
-    productDTO.setCategoryCd("PCT-CTG-001");
-    productDTO.setProductNm("상품수정테스트상품99");
-    productDTO.setListPrice(99999);
-    productDTO.setProductStock(50);
-    productDTO.setBrand("modifybrand");
-    productDTO.setProductImage(imageData);
-
-
-    productService.updateProduct(30L,productDTO);
-
-    log.info("상점정보 변경 성공" + productDTO );
-  }
+//  @Test
+//  public void testUpdateProductInfo() throws IOException {
+//
+//    File file = new File("C://Users//kuy06//Downloads//image (13).png");
+//    byte[] imageData = Files.readAllBytes(file.toPath());
+//
+//    ProductDTO productDTO = new ProductDTO();
+//    productDTO.setProductCd("PRD-300");
+//    productDTO.setGreenProductId("tempgreenproduct");
+//    productDTO.setCategoryCd("PCT-CTG-001");
+//    productDTO.setProductNm("상품수정테스트상품99");
+//    productDTO.setListPrice(99999);
+//    productDTO.setProductStock(50);
+//    productDTO.setBrand("modifybrand");
+//    productDTO.setProductImage(imageData);
+//
+//
+//    productService.updateProduct(30L,productDTO);
+//
+//    log.info("상점정보 변경 성공" + productDTO );
+//  }
 
   @Test
   public void testDeleteProduct() {

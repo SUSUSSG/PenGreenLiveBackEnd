@@ -2,6 +2,7 @@ package susussg.pengreenlive.dashboard.Service;
 
 import java.util.List;
 import susussg.pengreenlive.dashboard.DTO.ProductDTO;
+import susussg.pengreenlive.dashboard.DTO.ProductUpdateDTO;
 import susussg.pengreenlive.dashboard.DTO.VendorProductListDTO;
 
 public interface ProductService {
@@ -14,7 +15,7 @@ public interface ProductService {
 
   List<VendorProductListDTO> findProductsByVendor(Long venderSeq);
 
-  void updateProduct(Long productSeq, ProductDTO productDTO);
+  void updateProduct(Long productSeq, ProductUpdateDTO productUpdateDTO);
 
   void deleteProduct(Long vendorSeq, Long productSeq);
 

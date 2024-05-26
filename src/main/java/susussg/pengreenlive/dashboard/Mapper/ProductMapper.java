@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import susussg.pengreenlive.dashboard.DTO.GreenLabelDTO;
 import susussg.pengreenlive.dashboard.DTO.ProductDTO;
+import susussg.pengreenlive.dashboard.DTO.ProductUpdateDTO;
 import susussg.pengreenlive.dashboard.DTO.VendorProductListDTO;
 
 @Mapper
@@ -22,7 +23,9 @@ public interface ProductMapper {
 
   List<ProductDTO> selectAllCategoryCodes();
 
-  void updateProduct(ProductDTO productDTO);
+  void updateProduct(ProductUpdateDTO productUpdateDTO);
+
+  ProductUpdateDTO getProductById(Long productSeq);
 
   void updateProductStock(@Param("productSeq") Long productSeq, @Param("productStock") int productStock);
 

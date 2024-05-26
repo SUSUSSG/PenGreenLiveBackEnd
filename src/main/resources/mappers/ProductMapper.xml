@@ -58,14 +58,14 @@
     FROM TB_PRODUCT_CATEGORY
   </select>
 
-  <update id="updateProduct" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
+  <update id="updateProduct" parameterType="susussg.pengreenlive.dashboard.DTO.ProductUpdateDTO">
     UPDATE TB_PRODUCT
     SET PRODUCT_CD = #{productCd},
         GREEN_PRODUCT_ID = #{greenProductId},
         PRODUCT_NM = #{productNm},
         LIST_PRICE = #{listPrice},
         BRAND = #{brand},
-        PRODUCT_IMAGE = #{base64Image},
+        PRODUCT_IMAGE = #{productImage},
         CATEGORY_CD = #{categoryCd}
     WHERE PRODUCT_SEQ = #{productSeq};
   </update>
@@ -75,6 +75,20 @@
     SET PRODUCT_STOCK = #{productStock}
     WHERE PRODUCT_SEQ = #{productSeq};
   </update>
+
+  <select id="getProductById" resultType="susussg.pengreenlive.dashboard.DTO.ProductUpdateDTO">
+    SELECT
+      PRODUCT_SEQ,
+      PRODUCT_CD,
+      GREEN_PRODUCT_ID,
+      PRODUCT_NM,
+      LIST_PRICE,
+      BRAND,
+      PRODUCT_IMAGE,
+      CATEGORY_CD
+    FROM TB_PRODUCT
+    WHERE PRODUCT_SEQ = #{productSeq}
+  </select>
 
   <delete id="deleteChannelSalesProduct" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO">
     DELETE FROM TB_CHANNEL_SALES_PRODUCT
