@@ -134,7 +134,7 @@
     </select>
 
     <select id="getAveragePurchaseQuantity" resultType="int">
-        SELECT AVG(BS.AVG_PURCHASE_AMOUNT)
+        SELECT AVG(BS.TOTAL_SALES_QTY)
         FROM TB_BROADCAST_STATISTICS BS
                  INNER JOIN TB_BROADCAST B ON BS.BROADCAST_SEQ = B.BROADCAST_SEQ
         WHERE B.CHANNEL_SEQ = #{vendorSeq}
