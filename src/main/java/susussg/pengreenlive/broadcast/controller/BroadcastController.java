@@ -3,6 +3,7 @@ package susussg.pengreenlive.broadcast.controller;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.broadcast.dto.*;
@@ -91,7 +92,20 @@ public class BroadcastController {
 
     //추가 금칙어 등록
     @PostMapping("forbidden-words")
-    public void addForbiddenWord(@RequestParam long broadcastSeq, @RequestParam String forbiddenWord) {
-        forbiddenWordService.addForbiddenWord(broadcastSeq, forbiddenWord);
+    public ResponseEntity<String> addForbiddenWord(@RequestParam("broadcastSeq") String broadcastSeq, @RequestParam("forbiddenWord") String forbiddenWord) {
+        try {
+            long broadcastSeqLong = Long.parseLong(broadcastSeq);
+            log.info("금칙어 추가 broadcast id :" + broadcastSeqLong + " 금지어 : " + forbiddenWord);
+            forbiddenWordService.addForbiddenWord(broadcastSeqLong, forbiddenWord);
+            return ResponseEntity.ok("금칙어가 성공적으로 등록되었습니다.");
+        } catch (NumberFormatException e) {
+            log.error("Invalid broadcastSeq format: " + broadcastSeq, e);
+            return ResponseEntity.badRequest().body("방송 시퀀스 형식이 잘못되었습니다.");
+        } catch (Exception e) {
+            log.error("금칙어 등록 중 에러 발생:", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("금칙어 등록 중 에러가 발생했습니다.");
+        }
     }
+
+
 }
