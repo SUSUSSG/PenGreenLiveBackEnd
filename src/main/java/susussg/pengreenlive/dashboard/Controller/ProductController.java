@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.dashboard.DTO.ProductDTO;
+import susussg.pengreenlive.dashboard.DTO.ProductUpdateDTO;
 import susussg.pengreenlive.dashboard.DTO.VendorProductListDTO;
 import susussg.pengreenlive.dashboard.Service.ProductService;
 
@@ -60,10 +61,10 @@ public class ProductController {
   }
 
   @PutMapping("/product/{productSeq}")
-  public ResponseEntity<String> updateProduct(@PathVariable Long productSeq, @RequestBody ProductDTO productDTO) {
+  public ResponseEntity<String> updateProduct(@PathVariable Long productSeq, @RequestBody ProductUpdateDTO productUpdateDTO) {
     try {
       System.out.println("Updating product with productSeq: " + productSeq);
-      productService.updateProduct(productSeq, productDTO);
+      productService.updateProduct(productSeq, productUpdateDTO);
       return ResponseEntity.ok("Product successfully updated");
     } catch (Exception e) {
       return ResponseEntity.status(500).body("Failed to update product: " + e.getMessage());
