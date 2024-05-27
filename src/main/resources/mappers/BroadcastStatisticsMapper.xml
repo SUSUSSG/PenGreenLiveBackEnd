@@ -179,5 +179,24 @@
         WHERE broadcast_seq = #{broadcastSeq}
     </update>
 
+    <!-- Check if a user has liked a broadcast -->
+    <select id="checkUserLike" resultType="int">
+        SELECT COUNT(*) FROM TB_USER_LIKES
+        WHERE USER_UUID = uuid_to_bin(#{userUuid})
+          AND BROADCAST_SEQ = #{broadcastSeq}
+    </select>
+
+    <!-- Add a user like record -->
+    <insert id="addUserLike">
+        INSERT INTO TB_USER_LIKES (USER_UUID, BROADCAST_SEQ)
+        VALUES (uuid_to_bin(#{userUuid}), #{broadcastSeq})
+    </insert>
+
+    <!-- Remove a user like record -->
+    <delete id="removeUserLike">
+        DELETE FROM TB_USER_LIKES
+        WHERE USER_UUID = uuid_to_bin(#{userUuid})
+          AND BROADCAST_SEQ = #{broadcastSeq}
+    </delete>
 
 </mapper>

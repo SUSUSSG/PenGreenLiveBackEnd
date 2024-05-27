@@ -32,5 +32,6 @@ public interface BroadcastStatisticsService {
 
     long getAveragePurchaseAmount(long vendorSeq, LocalDate startDate, LocalDate endDate);
 
-
+    void toggleLike(String userUuid, Long broadcastSeq);
+    boolean isLikedByUser(String userUuid, Long broadcastSeq);
 }

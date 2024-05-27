@@ -2,7 +2,6 @@ package susussg.pengreenlive.broadcast.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import susussg.pengreenlive.broadcast.dto.BroadcastStatistics;
 
 import java.time.LocalDate;
@@ -13,19 +12,29 @@ import java.util.List;
 public interface BroadcastStatisticsMapper {
 
     void insertBroadcastStatistics(BroadcastStatistics broadcastStatistics);
+
     void decrementLikesCount(long broadcastSeq);
+
     void updateLikesCount(long broadcastSeq);
-    void updateAverageViewerCount(@Param("broadcastSeq") long broadcastSeq,@Param("averageViewerCount") int averageViewerCount);
-    void updateMaxViewerCount(@Param("broadcastSeq")long broadcastSeq, @Param("maxViewerCount") int maxViewerCount);
+
+    void updateAverageViewerCount(@Param("broadcastSeq") long broadcastSeq, @Param("averageViewerCount") int averageViewerCount);
+
+    void updateMaxViewerCount(@Param("broadcastSeq") long broadcastSeq, @Param("maxViewerCount") int maxViewerCount);
+
     BroadcastStatistics findById(long broadcastSeq);
+
     void updateBroadcastStatistics(@Param("broadcastId") long broadcastId, @Param("statistics") BroadcastStatistics statistics);
+
     void incrementViewsCount(@Param("broadcastSeq") long broadcastSeq);
+
     List<BroadcastStatistics> getStatisticsByDateRange(@Param("startDate") String startDate, @Param("endDate") String endDate);
+
     List<BroadcastStatistics> getStatisticsByVendorAndDateRange(
             @Param("vendorSeq") long vendorSeq,
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate
     );
+
     int getAverageBroadcastDuration(@Param("vendorSeq") long vendorSeq,
                                     @Param("startDate") LocalDate startDate,
                                     @Param("endDate") LocalDate endDate);
@@ -56,4 +65,9 @@ public interface BroadcastStatisticsMapper {
 
     void updateAvgViewingTime(@Param("broadcastSeq") Long broadcastSeq, @Param("avgViewingTime") Integer avgViewingTime);
 
+    Integer checkUserLike(@Param("userUuid") String userUuid, @Param("broadcastSeq") Long broadcastSeq);
+
+    void addUserLike(@Param("userUuid") String userUuid, @Param("broadcastSeq") Long broadcastSeq);
+
+    void removeUserLike(@Param("userUuid") String userUuid, @Param("broadcastSeq") Long broadcastSeq);
 }

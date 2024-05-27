@@ -14,22 +14,20 @@ import susussg.pengreenlive.broadcast.service.BroadcastStatisticsService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/broadcasts/statistics")
 @Log4j2
 public class BroadcastStatisticsController {
+
     @Autowired
     private BroadcastStatisticsService broadcastStatisticsService;
 
     /**
-     * 방송통계를 생성합니다.
-     * @param broadcastStatistics
-     * @return
+     * 방송 통계를 생성합니다.
+     * @param broadcastStatistics 방송 통계 정보
+     * @return 응답 상태
      */
     @PostMapping
     public ResponseEntity<Void> createBroadcastStatistics(@RequestBody BroadcastStatistics broadcastStatistics) {
@@ -39,8 +37,8 @@ public class BroadcastStatisticsController {
 
     /**
      * 특정 방송 통계를 조회합니다.
-     * @param broadcastSeq
-     * @return
+     * @param broadcastSeq 방송 시퀀스 ID
+     * @return 방송 통계 정보
      */
     @GetMapping("/{broadcastSeq}")
     public ResponseEntity<BroadcastStatistics> getBroadcastStatistics(@PathVariable("broadcastSeq") long broadcastSeq) {
@@ -54,8 +52,8 @@ public class BroadcastStatisticsController {
 
     /**
      * 특정 방송 통계테이블의 좋아요 개수를 1 증가시킵니다.
-     * @param broadcastSeq
-     * @return
+     * @param broadcastSeq 방송 시퀀스 ID
+     * @return 응답 상태
      */
     @PatchMapping("/{broadcastSeq}/likes/increment")
     public ResponseEntity<Void> updateLikesCount(@PathVariable("broadcastSeq") long broadcastSeq) {
@@ -65,8 +63,8 @@ public class BroadcastStatisticsController {
 
     /**
      * 특정 방송 통계테이블의 좋아요 개수를 1 감소시킵니다.
-     * @param broadcastSeq
-     * @return
+     * @param broadcastSeq 방송 시퀀스 ID
+     * @return 응답 상태
      */
     @PatchMapping("/{broadcastSeq}/likes/decrement")
     public ResponseEntity<Void> decrementLikesCount(@PathVariable("broadcastSeq") long broadcastSeq) {
@@ -75,10 +73,10 @@ public class BroadcastStatisticsController {
     }
 
     /**
-     * 특정 방송 통계 테이블의 평균 시청자수를 업데이트합니다.
-     * @param broadcastSeq
-     * @param averageViewerCount
-     * @return
+     * 특정 방송 통계 테이블의 평균 시청자 수를 업데이트합니다.
+     * @param broadcastSeq 방송 시퀀스 ID
+     * @param averageViewerCount 평균 시청자 수
+     * @return 응답 상태
      */
     @PatchMapping("/{broadcastSeq}/average-viewer")
     public ResponseEntity<Void> updateAverageViewerCount(@PathVariable("broadcastSeq") long broadcastSeq, @RequestParam int averageViewerCount) {
@@ -87,10 +85,10 @@ public class BroadcastStatisticsController {
     }
 
     /**
-     * 특정 방송 통계테이블의 최대 시청자수를 업데이트합니다.
-     * @param broadcastSeq
-     * @param maxViewerCount
-     * @return
+     * 특정 방송 통계테이블의 최대 시청자 수를 업데이트합니다.
+     * @param broadcastSeq 방송 시퀀스 ID
+     * @param maxViewerCount 최대 시청자 수
+     * @return 응답 상태
      */
     @PatchMapping("/{broadcastSeq}/max-viewer")
     public ResponseEntity<Void> updateMaxViewerCount(@PathVariable("broadcastSeq") long broadcastSeq, @RequestParam int maxViewerCount) {
@@ -100,9 +98,9 @@ public class BroadcastStatisticsController {
 
     /**
      * 평균 시청자, 최고 시청자, 방송 진행 시간을 업데이트합니다.
-     * @param broadcastSeq
-     * @param statistics
-     * @return
+     * @param broadcastSeq 방송 시퀀스 ID
+     * @param statistics 방송 통계 정보
+     * @return 응답 상태
      */
     @PatchMapping("/{broadcastSeq}")
     public ResponseEntity<Void> updateBroadcastStatistics(
@@ -114,61 +112,49 @@ public class BroadcastStatisticsController {
     }
 
     /**
-     * 누적 시청자 수 증가
-     * @param broadcastSeq
-     * @param
-     * @param
-     * @param
-     * @return
+     * 누적 시청자 수를 증가시킵니다.
+     * @param broadcastSeq 방송 시퀀스 ID
+     * @param viewedBroadcastsCookie 시청한 방송 쿠키
+     * @param response 응답 객체
+     * @return 응답 상태
      */
     @PatchMapping("/{broadcastSeq}/viewsCount")
-    public ResponseEntity incrementViewsCount(@PathVariable("broadcastSeq") long broadcastSeq) {
-//        @CookieValue(value = "viewedBroadcasts", required = false) Cookie viewedBroadcastsCookie,
-//        HttpServletResponse response,
-//        HttpServletRequest request
-//        // 초기 쿠키 값 설정
-//        String cookieName = "viewedBroadcasts";
-//        String cookieValue = "";
-//        boolean isNewCookie = true;
-//
-//        // 기존 쿠키가 있는지 확인
-//        if (viewedBroadcastsCookie != null) {
-//            cookieValue = viewedBroadcastsCookie.getValue();
-//            isNewCookie = false;
-//        }
-//
-//        // 방송 시퀀스가 쿠키 값에 없는 경우
-//        if (!cookieValue.contains("[" + broadcastSeq + "]")) {
-//            // 조회수 증가
-//            broadcastStatisticsService.incrementViewsCount(broadcastSeq);
-//
-//            // 쿠키 값 업데이트
-//            if (!cookieValue.isEmpty()) {
-//                cookieValue += "_";
-//            }
-//            cookieValue += "[" + broadcastSeq + "]";
-//
-//            // 새로운 쿠키 생성 또는 기존 쿠키 업데이트
-//            Cookie newViewedBroadcastsCookie = new Cookie(cookieName, cookieValue);
-//            newViewedBroadcastsCookie.setMaxAge(3600); // 1시간 유효
-//            newViewedBroadcastsCookie.setPath("/"); // 전체 경로에 대해 쿠키 유효
-//
-//            // 응답에 새로운 쿠키 추가
-//            response.addCookie(newViewedBroadcastsCookie);
-//        }
-        broadcastStatisticsService.incrementViewsCount(broadcastSeq);
+    public ResponseEntity<Void> incrementViewsCount(@PathVariable("broadcastSeq") long broadcastSeq,
+                                                    @CookieValue(value = "viewedBroadcasts", required = false) Cookie viewedBroadcastsCookie,
+                                                    HttpServletResponse response) {
+        String cookieName = "viewedBroadcasts";
+        String cookieValue = "";
+        boolean isNewCookie = true;
 
-        // 조회수 증가가 필요 없는 경우에도 OK 응답 반환
+        if (viewedBroadcastsCookie != null) {
+            cookieValue = viewedBroadcastsCookie.getValue();
+            isNewCookie = false;
+        }
+
+        if (!cookieValue.contains("[" + broadcastSeq + "]")) {
+            broadcastStatisticsService.incrementViewsCount(broadcastSeq);
+
+            if (!cookieValue.isEmpty()) {
+                cookieValue += "_";
+            }
+            cookieValue += "[" + broadcastSeq + "]";
+
+            Cookie newViewedBroadcastsCookie = new Cookie(cookieName, cookieValue);
+            newViewedBroadcastsCookie.setMaxAge(3600);
+            newViewedBroadcastsCookie.setPath("/");
+
+            response.addCookie(newViewedBroadcastsCookie);
+        }
+
         return ResponseEntity.ok().build();
     }
 
-
     /**
      * 특정 판매자의 기간별 방송 통계를 조회합니다.
-     * @param vendorSeq
-     * @param startDate
-     * @param endDate
-     * @return
+     * @param vendorSeq 판매자 시퀀스 ID
+     * @param startDate 시작 날짜
+     * @param endDate 종료 날짜
+     * @return 방송 통계 리스트
      */
     @GetMapping("/vendor/{vendorSeq}")
     public ResponseEntity<List<BroadcastStatistics>> getStatistics(
@@ -184,7 +170,13 @@ public class BroadcastStatisticsController {
         return ResponseEntity.ok(statistics);
     }
 
-    // 평균 방송 진행 시간
+    /**
+     * 평균 방송 진행 시간을 조회합니다.
+     * @param vendorSeq 판매자 시퀀스 ID
+     * @param startDate 시작 날짜
+     * @param endDate 종료 날짜
+     * @return 평균 방송 진행 시간
+     */
     @GetMapping("/average-broadcast-duration")
     public ResponseEntity<Integer> getAverageBroadcastDuration(
             @RequestParam long vendorSeq,
@@ -194,7 +186,13 @@ public class BroadcastStatisticsController {
         return ResponseEntity.ok(avgBroadcastDuration);
     }
 
-    // 평균 시청자 수
+    /**
+     * 평균 시청자 수를 조회합니다.
+     * @param vendorSeq 판매자 시퀀스 ID
+     * @param startDate 시작 날짜
+     * @param endDate 종료 날짜
+     * @return 평균 시청자 수
+     */
     @GetMapping("/average-viewer-count")
     public ResponseEntity<Integer> getAverageViewerCount(
             @RequestParam long vendorSeq,
@@ -204,7 +202,13 @@ public class BroadcastStatisticsController {
         return ResponseEntity.ok(avgViewerCount);
     }
 
-    // 평균 구매 개수
+    /**
+     * 평균 구매 개수를 조회합니다.
+     * @param vendorSeq 판매자 시퀀스 ID
+     * @param startDate 시작 날짜
+     * @param endDate 종료 날짜
+     * @return 평균 구매 개수
+     */
     @GetMapping("/average-purchase-quantity")
     public ResponseEntity<Integer> getAveragePurchaseQuantity(
             @RequestParam long vendorSeq,
@@ -214,7 +218,13 @@ public class BroadcastStatisticsController {
         return ResponseEntity.ok(avgPurchaseQuantity);
     }
 
-    // 평균 상품 클릭수
+    /**
+     * 평균 상품 클릭 수를 조회합니다.
+     * @param vendorSeq 판매자 시퀀스 ID
+     * @param startDate 시작 날짜
+     * @param endDate 종료 날짜
+     * @return 평균 상품 클릭 수
+     */
     @GetMapping("/average-product-clicks")
     public ResponseEntity<Integer> getAverageProductClicks(
             @RequestParam long vendorSeq,
@@ -224,7 +234,13 @@ public class BroadcastStatisticsController {
         return ResponseEntity.ok(avgProductClicks);
     }
 
-    // 평균 방송 시청 시간
+    /**
+     * 평균 방송 시청 시간을 조회합니다.
+     * @param vendorSeq 판매자 시퀀스 ID
+     * @param startDate 시작 날짜
+     * @param endDate 종료 날짜
+     * @return 평균 방송 시청 시간
+     */
     @GetMapping("/average-viewing-time")
     public ResponseEntity<Integer> getAverageViewingTime(
             @RequestParam long vendorSeq,
@@ -234,7 +250,13 @@ public class BroadcastStatisticsController {
         return ResponseEntity.ok(avgViewingTime);
     }
 
-    // 평균 좋아요 수
+    /**
+     * 평균 좋아요 수를 조회합니다.
+     * @param vendorSeq 판매자 시퀀스 ID
+     * @param startDate 시작 날짜
+     * @param endDate 종료 날짜
+     * @return 평균 좋아요 수
+     */
     @GetMapping("/average-likes-count")
     public ResponseEntity<Integer> getAverageLikesCount(
             @RequestParam long vendorSeq,
@@ -244,7 +266,13 @@ public class BroadcastStatisticsController {
         return ResponseEntity.ok(avgLikesCount);
     }
 
-    // 평균 구매 금액
+    /**
+     * 평균 구매 금액을 조회합니다.
+     * @param vendorSeq 판매자 시퀀스 ID
+     * @param startDate 시작 날짜
+     * @param endDate 종료 날짜
+     * @return 평균 구매 금액
+     */
     @GetMapping("/average-purchase-amount")
     public ResponseEntity<Long> getAveragePurchaseAmount(
             @RequestParam long vendorSeq,
@@ -254,7 +282,27 @@ public class BroadcastStatisticsController {
         return ResponseEntity.ok(avgPurchaseAmount);
     }
 
+    /**
+     * 특정 방송의 좋아요를 토글합니다.
+     * @param broadcastSeq 방송 시퀀스 ID
+     * @param userUuid 사용자 UUID
+     * @return 응답 상태
+     */
+    @PatchMapping("/{broadcastSeq}/likes/toggle")
+    public ResponseEntity<Void> toggleLike(@PathVariable("broadcastSeq") Long broadcastSeq, @RequestParam("USER_UUID") String userUuid) {
+        broadcastStatisticsService.toggleLike(userUuid, broadcastSeq);
+        return ResponseEntity.ok().build();
+    }
 
-
-
+    /**
+     * 특정 방송에 대해 사용자가 좋아요를 눌렀는지 확인합니다.
+     * @param broadcastSeq 방송 시퀀스 ID
+     * @param userUuid 사용자 UUID
+     * @return 좋아요 여부
+     */
+    @GetMapping("/{broadcastSeq}/likes/check")
+    public ResponseEntity<Boolean> checkLike(@PathVariable("broadcastSeq") Long broadcastSeq, @RequestParam("USER_UUID") String userUuid) {
+        boolean isLiked = broadcastStatisticsService.isLikedByUser(userUuid, broadcastSeq);
+        return ResponseEntity.ok(isLiked);
+    }
 }
