@@ -72,7 +72,13 @@ jobs:
           echo "coolsms.api.key=${{secrets.COOLSMS_API_KEY}}" >> ./src/main/resources/application-secret.properties
           echo "coolsms.api.secret=${{secrets.COOLSMS_API_SECRET}}" >> ./src/main/resources/application-secret.properties
           echo "api.certKeyc=${{secrets.API_CERTKEYC}}" >> ./src/main/resources/application-secret.properties
+          echo "spring.session.redis.flush-mode=on_save" >> ./src/main/resources/application-secret.properties
+          echo "spring.session.redis.cleanup-cron=60 * * * * *" >> ./src/main/resources/application-secret.properties
+          echo "server.servlet.session.persistent=false" >> ./src/main/resources/application-secret.properties
+          echo "spring.session.redis.repository-type=default" >> ./src/main/resources/application-secret.properties
 
+          
+          
           ./gradlew build -x test
 
       - name: Deploy to Remote Server
