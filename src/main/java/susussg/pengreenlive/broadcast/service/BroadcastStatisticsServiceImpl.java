@@ -5,13 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import susussg.pengreenlive.broadcast.dto.BroadcastStatistics;
 import susussg.pengreenlive.broadcast.mapper.BroadcastStatisticsMapper;
-import susussg.pengreenlive.broadcast.service.BroadcastStatisticsService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class BroadcastStatisticsServiceImpl implements BroadcastStatisticsService {
@@ -110,5 +107,23 @@ public class BroadcastStatisticsServiceImpl implements BroadcastStatisticsServic
     @Override
     public long getAveragePurchaseAmount(long vendorSeq, LocalDate startDate, LocalDate endDate) {
         return broadcastStatisticsMapper.getAveragePurchaseAmount(vendorSeq, startDate, endDate);
+    }
+
+    @Override
+    @Transactional
+    public void toggleLike(String userUuid, Long broadcastSeq) {
+        if (broadcastStatisticsMapper.checkUserLike(userUuid, broadcastSeq) > 0) {
+            broadcastStatisticsMapper.decrementLikesCount(broadcastSeq);
+            broadcastStatisticsMapper.removeUserLike(userUuid, broadcastSeq);
+        } else {
+            broadcastStatisticsMapper.updateLikesCount(broadcastSeq);
+            broadcastStatisticsMapper.addUserLike(userUuid, broadcastSeq);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isLikedByUser(String userUuid, Long broadcastSeq) {
+        return broadcastStatisticsMapper.checkUserLike(userUuid, broadcastSeq) > 0;
     }
 }
