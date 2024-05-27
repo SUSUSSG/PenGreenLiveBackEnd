@@ -20,9 +20,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import susussg.pengreenlive.login.dto.Member;
 import susussg.pengreenlive.login.service.CustomAuthenticationFilter;
 import susussg.pengreenlive.login.service.CustomOncePerRequestFilter;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 
 @Slf4j
@@ -33,6 +39,10 @@ public class SecurityConfig  {
 
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
+
+    @Autowired
+    private CorsConfigurationSource corsConfigurationSource;
+
 
     @PostConstruct
     public void init() {
@@ -51,7 +61,6 @@ public class SecurityConfig  {
             .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(customOncePerRequestFilter(), CustomAuthenticationFilter.class);
 
-
         return http.build();
     }
 
@@ -59,7 +68,7 @@ public class SecurityConfig  {
     public CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
         CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
         filter.setAuthenticationManager(authenticationManagerBean(authenticationConfiguration));
-        filter.setFilterProcessesUrl("/login");
+        filter.setFilterProcessesUrl("/api/login");
         return filter;
     }
 
@@ -87,4 +96,5 @@ public class SecurityConfig  {
     public SecurityContextRepository securityContextRepository() {
         return new HttpSessionSecurityContextRepository();
     }
+
 }

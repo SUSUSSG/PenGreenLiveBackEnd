@@ -62,6 +62,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         result.put("user", objectMapper.writeValueAsString(userInfo));
         response.setContentType("application/json");
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         response.getWriter().write(objectMapper.writeValueAsString(result));
     }
 
@@ -70,6 +72,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         Map<String, String> result = new HashMap<>();
         result.put("message", "Authentication Failed");
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setContentType("application/json");
         response.getWriter().write(objectMapper.writeValueAsString(result));
     }
