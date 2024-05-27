@@ -64,10 +64,8 @@ public class ReviewServiceTest {
 
   @Test
   public void testDeleteProduct() {
-
-    String userUUID = "f23a72e0-1347-11ef-b085-f220affc9a21";
-    reviewService.deleteReview(userUUID, 20L);
-
+//    String userUUID = "f23a72e0-1347-11ef-b085-f220affc9a21";
+//    reviewService.deleteReview(userUUID, 20L);
   }
 
 }

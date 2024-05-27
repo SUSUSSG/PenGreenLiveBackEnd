@@ -12,7 +12,7 @@ public interface ReviewService {
 
   List<ReviewDTO> findReviewedOrdersByUser(String userUuid);
 
-  void deleteReview(String userUuid, long reviewSeq);
+  void deleteReview(String userUuid, long reviewSeq, long productSeq, long orderSeq);
 
   void addReview(ReviewDTO review);
 }

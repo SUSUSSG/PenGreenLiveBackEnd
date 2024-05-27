@@ -1,5 +1,7 @@
 package susussg.pengreenlive.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +14,8 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import susussg.pengreenlive.login.service.CustomUsernamePasswordAuthenticationTokenDeserializer;
 
 @Configuration
 @EnableRedisRepositories
@@ -42,16 +46,22 @@ public class RedisConfig {
         return stringRedisTemplate;
     }
     @Bean
-    public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
-        return new GenericJackson2JsonRedisSerializer();
+    public RedisSerializer<Object> springSessionDefaultRedisSerializer(ObjectMapper objectMapper) {
+        objectMapper.registerModule(new SimpleModule().addDeserializer(
+                UsernamePasswordAuthenticationToken.class,
+                new CustomUsernamePasswordAuthenticationTokenDeserializer()));
+
+        return new GenericJackson2JsonRedisSerializer(objectMapper);
     }
 
+
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory, RedisSerializer<Object> springSessionDefaultRedisSerializer) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setValueSerializer(springSessionDefaultRedisSerializer);
         return template;
     }
+
 }

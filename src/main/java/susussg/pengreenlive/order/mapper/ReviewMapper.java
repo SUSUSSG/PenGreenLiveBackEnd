@@ -18,6 +18,6 @@ public interface ReviewMapper {
 
   void insertReview(@Param("review") ReviewDTO review);
 
-  void updateReviewYn(@Param("userUuid") String userUuid, @Param("productSeq") long productSeq);
+  void updateReviewYn(@Param("review") ReviewDTO review);
 
 }

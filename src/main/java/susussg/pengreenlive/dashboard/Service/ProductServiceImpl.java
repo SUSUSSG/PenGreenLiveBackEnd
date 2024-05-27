@@ -1,6 +1,7 @@
 package susussg.pengreenlive.dashboard.Service;
 
 import jakarta.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import susussg.pengreenlive.dashboard.DTO.GreenLabelDTO;
 import susussg.pengreenlive.dashboard.DTO.ProductDTO;
+import susussg.pengreenlive.dashboard.DTO.ProductUpdateDTO;
 import susussg.pengreenlive.dashboard.DTO.VendorProductListDTO;
 import susussg.pengreenlive.dashboard.Mapper.ProductMapper;
 import susussg.pengreenlive.util.Service.ByteArrayMultipartFile;
@@ -19,7 +21,7 @@ import susussg.pengreenlive.util.Service.DateUtil;
 
 @Log4j2
 @Service
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
   private final ProductMapper productMapper;
 
@@ -47,7 +49,8 @@ public class ProductServiceImpl implements ProductService{
         byte[] imageBytes = Base64.getDecoder().decode(productDTO.getBase64Image());
 
         byte[] compressedImage = imageService.compressAndResizeImage(imageBytes, 400, 1f);
-        MultipartFile multipartFile = new ByteArrayMultipartFile(compressedImage, "productImage", "product.jpg", "image/jpeg");
+        MultipartFile multipartFile = new ByteArrayMultipartFile(compressedImage, "productImage",
+            "product.jpg", "image/jpeg");
         String url = s3Service.uploadFile(multipartFile, "product");
 
         productDTO.setBase64Image(url);
@@ -63,7 +66,8 @@ public class ProductServiceImpl implements ProductService{
       greenLabelDTO.setCertificationReason(productDTO.getCertificationReason());
 
       // 날짜 문자열을 LocalDateTime으로 변환하여 설정
-      greenLabelDTO.setCertificationExpirationDate(DateUtil.parseToLocalDateTime(productDTO.getCertificationExpirationDate()));
+      greenLabelDTO.setCertificationExpirationDate(
+          DateUtil.parseToLocalDateTime(productDTO.getCertificationExpirationDate()));
 
       // 라벨 시퀀스 값에 따른 분기 처리
       switch (labelIdSeq.intValue()) {
@@ -114,26 +118,35 @@ public class ProductServiceImpl implements ProductService{
   }
 
   @Override
-  public void updateProduct(Long productSeq, ProductDTO productDTO) {
+  public void updateProduct(Long productSeq, ProductUpdateDTO productUpdateDTO) {
     try {
-      if (productDTO.getBase64Image() != null) {
-        byte[] imageBytes = Base64.getDecoder().decode(productDTO.getBase64Image());
+      // 이미지가 존재하고 수정된 경우에만 새로운 이미지 업로드 수행
+      if (productUpdateDTO.getBase64Image() != null && !productUpdateDTO.getBase64Image().isEmpty()) {
+        byte[] imageBytes = Base64.getDecoder().decode(productUpdateDTO.getBase64Image());
 
-        byte[] compressedImage = imageService.compressAndResizeImage(imageBytes,400,1f);
+        byte[] compressedImage = imageService.compressAndResizeImage(imageBytes, 400, 1f);
         MultipartFile multipartFile = new ByteArrayMultipartFile(compressedImage, "productImage", "product.jpg", "image/jpeg");
         String url = s3Service.uploadFile(multipartFile, "product");
 
-        productDTO.setBase64Image(url);
+        productUpdateDTO.setProductImage(url);
       }
 
-      productDTO.setProductSeq(productSeq);
-      productMapper.updateProduct(productDTO);
-      productMapper.updateProductStock(productSeq, productDTO.getProductStock());
+      // 이미지가 수정되지 않은 경우 기존 이미지 URL을 유지
+      if (productUpdateDTO.getBase64Image() == null || productUpdateDTO.getBase64Image().isEmpty()) {
+        // 이전에 저장된 제품 정보를 가져와서 productImage 값을 설정
+        ProductUpdateDTO existingProduct = productMapper.getProductById(productSeq);
+        productUpdateDTO.setProductImage(existingProduct.getProductImage());
+      }
+
+      productUpdateDTO.setProductSeq(productSeq);
+      productMapper.updateProduct(productUpdateDTO);
+      productMapper.updateProductStock(productSeq, productUpdateDTO.getProductStock());
     } catch (Exception e) {
       e.printStackTrace();
       throw new RuntimeException("Product update failed", e);
     }
   }
+
 
   @Override
   public void deleteProduct(Long vendorSeq, Long productSeq) {
