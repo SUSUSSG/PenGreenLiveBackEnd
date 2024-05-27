@@ -3,6 +3,7 @@ package susussg.pengreenlive.mypage.Controller;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import susussg.pengreenlive.login.service.SecurityService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.mypage.DTO.HistoryDTO;
@@ -16,12 +17,16 @@ public class HistoryController {
   @Autowired
   private final HistoryService historyService;
 
+  @Autowired
+  private SecurityService securityService;
+
   public HistoryController(HistoryService historyService) {
     this.historyService = historyService;
   }
 
   @GetMapping("/recently-viewed/broadcasts")
-  public List<HistoryDTO> getRecentBroadcasts(@RequestParam String userUUID) {
+  public List<HistoryDTO> getRecentBroadcasts() {
+    String userUUID = securityService.getCurrentUserUuid();
     return historyService.getRecentBroadcasts(userUUID);
   }
 

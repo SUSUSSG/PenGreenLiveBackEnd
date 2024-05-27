@@ -34,18 +34,24 @@ public class ReviewServiceImpl implements ReviewService {
     return reviewMapper.findReviewedOrdersByUser(userUuid);
   }
 
+    @Override
+    @Transactional
+    public void deleteReview(String userUuid, long reviewSeq, long productSeq, long orderSeq) {
+        ReviewDTO review = ReviewDTO.builder()
+                .userUUID(userUuid)
+                .productSeq(productSeq)
+                .orderSeq(orderSeq)
+                .reviewYn(false)
+                .build();
+        reviewMapper.deleteReviewByUserAndReviewSeq(userUuid, reviewSeq);
+        reviewMapper.updateReviewYn(review);
+    }
 
-
-  @Override
-  public void deleteReview(String userUuid, long reviewSeq) {
-    reviewMapper.deleteReviewByUserAndReviewSeq(userUuid, reviewSeq);
-  }
-
-  @Override
-  @Transactional
-  public void addReview(ReviewDTO review) {
-    reviewMapper.insertReview(review);
-    reviewMapper.updateReviewYn(review.getUserUUID(), review.getProductSeq());
-  }
-
+    @Override
+    @Transactional
+    public void addReview(ReviewDTO review) {
+        reviewMapper.insertReview(review);
+        review.setReviewYn(true);
+        reviewMapper.updateReviewYn(review);
+    }
 }

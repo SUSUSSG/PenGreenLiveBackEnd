@@ -1,10 +1,13 @@
 package susussg.pengreenlive.order.controller;
 
 import java.util.List;
+
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import susussg.pengreenlive.login.service.SecurityService;
 import susussg.pengreenlive.order.dto.ReviewDTO;
 import susussg.pengreenlive.order.service.ReviewService;
 
@@ -16,6 +19,9 @@ public class ReviewController {
   @Autowired
   private final ReviewService reviewService;
 
+  @Autowired
+  private SecurityService securityService;
+
   public ReviewController(ReviewService reviewService) {
     this.reviewService = reviewService;
   }
@@ -26,22 +32,27 @@ public class ReviewController {
     return ResponseEntity.ok(orders);
   }
 
-  @GetMapping("/unreviewed-orders/{userUuid}")
-  public ResponseEntity<List<ReviewDTO>> getUnreviewedOrdersByUser(@PathVariable String userUuid) {
+  @GetMapping("/unreviewed-orders")
+  public ResponseEntity<List<ReviewDTO>> getUnreviewedOrdersByUser() {
+    String userUuid = securityService.getCurrentUserUuid();
     List<ReviewDTO> orders = reviewService.findUnreviewedOrdersByUser(userUuid);
     return ResponseEntity.ok(orders);
   }
 
-  @GetMapping("/reviewed-orders/{userUuid}")
-  public ResponseEntity<List<ReviewDTO>> getReviewedOrdersByUser(@PathVariable String userUuid) {
+  @GetMapping("/reviewed-orders")
+  public ResponseEntity<List<ReviewDTO>> getReviewedOrdersByUser() {
+    String userUuid = securityService.getCurrentUserUuid();
     List<ReviewDTO> orders = reviewService.findReviewedOrdersByUser(userUuid);
     return ResponseEntity.ok(orders);
   }
 
-  @DeleteMapping("/reviews/{userUuid}/{reviewSeq}")
-  public ResponseEntity<String> deleteReview(@PathVariable String userUuid, @PathVariable long reviewSeq) {
+  @DeleteMapping("/reviews/{reviewSeq}")
+  public ResponseEntity<String> deleteReview(@PathVariable long reviewSeq
+          , @RequestParam("productSeq") long productSeq, @RequestParam("orderSeq") long orderSeq) {
+
     try {
-      reviewService.deleteReview(userUuid, reviewSeq);
+      String userUuid = securityService.getCurrentUserUuid();
+      reviewService.deleteReview(userUuid, reviewSeq, productSeq, orderSeq);
       return ResponseEntity.ok("리뷰 삭제가 완료되었습니다.");
     } catch (Exception e) {
       return ResponseEntity.status(500).body("리뷰 삭제에 실패했습니다: " + e.getMessage());
@@ -51,12 +62,12 @@ public class ReviewController {
   @PostMapping("/reviews")
   public ResponseEntity<String> addReview(@RequestBody ReviewDTO review) {
     try {
+      String userUuid = securityService.getCurrentUserUuid();
+      review.setUserUUID(userUuid);
       reviewService.addReview(review);
       return ResponseEntity.ok("리뷰 등록이 완료되었습니다.");
     } catch (Exception e) {
       return ResponseEntity.status(500).body("리뷰 등록에 실패했습니다: " + e.getMessage());
     }
   }
-
-
 }
