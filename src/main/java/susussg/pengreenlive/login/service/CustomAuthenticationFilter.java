@@ -2,6 +2,7 @@ package susussg.pengreenlive.login.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -23,6 +24,8 @@ import java.util.Map;
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    @Value("${FRONT.URL}")
+    private String frontUrl;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -62,7 +65,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         result.put("user", objectMapper.writeValueAsString(userInfo));
         response.setContentType("application/json");
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+        response.setHeader("Access-Control-Allow-Origin", frontUrl);
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.getWriter().write(objectMapper.writeValueAsString(result));
     }
