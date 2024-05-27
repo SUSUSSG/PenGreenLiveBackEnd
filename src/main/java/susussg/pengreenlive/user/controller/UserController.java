@@ -48,7 +48,7 @@ public class UserController {
 
         try {
             String uuid = securityService.getCurrentUserUuid();
-
+            user.setUserUUID(uuid);
             userService.updateUserInfo(user);
 
             return ResponseEntity.ok().body("success");
@@ -69,5 +69,6 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
         }
+
     }
 }
