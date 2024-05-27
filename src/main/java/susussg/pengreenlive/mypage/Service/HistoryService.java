@@ -7,4 +7,6 @@ public interface HistoryService {
 
   List<HistoryDTO> getRecentBroadcasts(String userUUID);
 
+  void saveUserBroadcastHistory(HistoryDTO historyDTO);
+
 }
