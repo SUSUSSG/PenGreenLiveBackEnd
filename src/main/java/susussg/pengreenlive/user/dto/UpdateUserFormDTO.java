@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateUserFormDTO {
-
     private String userUUID;
     private LocalDate userBirthDt;
     private String userTel;
@@ -20,5 +19,6 @@ public class UpdateUserFormDTO {
     private String userAddress;
     private String userId;
     private String userPw;
-
+    private byte[] userProfileImgFile;
+    private String userProfileImg;
 }
