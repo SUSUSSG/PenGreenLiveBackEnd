@@ -3,11 +3,9 @@ package susussg.pengreenlive.mypage.Controller;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import susussg.pengreenlive.login.service.SecurityService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.mypage.DTO.HistoryDTO;
 import susussg.pengreenlive.mypage.Service.HistoryService;
 
@@ -30,5 +28,11 @@ public class HistoryController {
   public List<HistoryDTO> getRecentBroadcasts() {
     String userUUID = securityService.getCurrentUserUuid();
     return historyService.getRecentBroadcasts(userUUID);
+  }
+
+  @PostMapping("/user/view-history")
+  public ResponseEntity<String> saveUserBroadcastHistory(@RequestBody HistoryDTO historyDTO) {
+    historyService.saveUserBroadcastHistory(historyDTO);
+    return ResponseEntity.ok("사용자 시청 기록 저장");
   }
 }

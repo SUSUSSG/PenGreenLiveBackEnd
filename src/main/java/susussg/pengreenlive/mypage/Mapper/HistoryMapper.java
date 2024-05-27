@@ -8,4 +8,6 @@ import susussg.pengreenlive.mypage.DTO.HistoryDTO;
 public interface HistoryMapper {
 
   List<HistoryDTO> getRecentBroadcasts(String userUUID);
+
+  int insertUserBroadcastHistory(HistoryDTO history);
 }
