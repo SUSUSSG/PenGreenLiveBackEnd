@@ -46,13 +46,13 @@
         USER_TEL = COALESCE(NULLIF(#{userTel}, USER_TEL), USER_TEL),
         USER_ADDRESS = COALESCE(NULLIF(#{userAddress}, USER_ADDRESS), USER_ADDRESS),
         USER_EMAIL = COALESCE(NULLIF(#{userEmail}, USER_EMAIL), USER_EMAIL),
---         B_PROFILE_PIC = #{bProfilePic}
+        USER_PROFILE_IMG = COALESCE(NULLIF(#{userProfileImg}, USER_PROFILE_IMG), USER_PROFILE_IMG)
     WHERE USER_UUID = #{userUUID}
   </update>
 
   <select id="selectUserInfoByUserUUID" parameterType="String" resultType="susussg.pengreenlive.user.dto.UpdateUserFormDTO">
     SELECT u.USER_NM, u.USER_GENDER, u.USER_BIRTH_DT, u.USER_TEL, u.USER_EMAIL, u.USER_ADDRESS,
-            ll.USER_ID, ll.USER_PW
+           u.USER_PROFILE_IMG, ll.USER_ID, ll.USER_PW
     FROM TB_USER u JOIN TB_LOCAL_LOGIN ll ON u.USER_UUID=ll.USER_UUID
     WHERE BIN_TO_UUID(u.USER_UUID)=#{userUUID}
   </select>
