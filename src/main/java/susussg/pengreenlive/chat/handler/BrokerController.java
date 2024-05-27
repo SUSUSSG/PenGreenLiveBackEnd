@@ -102,8 +102,7 @@ public class BrokerController {
 
         // Banword가 발견되면 메시지 대체
         if (!validationResult.getBanwordsFound().isEmpty()) {
-            String filteredMessage = message.getMessage()
-                .replaceAll(validationResult.getOriginalText(), "비속어가 포함된 채팅입니다.");
+            String filteredMessage = "비속어가 포함된 채팅입니다.😕";
             message.setMessage(filteredMessage);
         }
 
