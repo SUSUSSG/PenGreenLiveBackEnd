@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -20,6 +21,6 @@ public class BroadcastDTO {
     private String broadcastTitle;
     private String broadcastImage;
     private String broadcastSummary;
-    private Date broadcastScheduledTime;
+    private LocalDateTime broadcastScheduledTime;
     private String categoryCd;
 }

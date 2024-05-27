@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class BroadcastRegistrationRequestDTO {
     private String broadcastTitle;
     private String broadcastSummary;
-    private Date broadcastScheduledTime;
+    private LocalDateTime broadcastScheduledTime;
     private String categoryCd;
     private List<BroadcastProductDTO> registeredProducts;
     private List<String> notices;
