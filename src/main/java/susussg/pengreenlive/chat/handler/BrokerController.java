@@ -54,7 +54,7 @@ public class BrokerController {
         String sessionId = accessor.getSessionId();
 
 
-        if (userUUID == null && vendorSeq == null) {
+        if (userUUID == null || vendorSeq == null) {
             userNm = (String) redisTemplate.opsForHash().get(sessionId, "userNm");
 
             if (userNm == null) {
