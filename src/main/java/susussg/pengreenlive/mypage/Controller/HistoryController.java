@@ -29,10 +29,14 @@ public class HistoryController {
     String userUUID = securityService.getCurrentUserUuid();
     return historyService.getRecentBroadcasts(userUUID);
   }
-
   @PostMapping("/user/view-history")
   public ResponseEntity<String> saveUserBroadcastHistory(@RequestBody HistoryDTO historyDTO) {
     String userUUID = securityService.getCurrentUserUuid();
+    if (userUUID==null) {
+      ResponseEntity.ok("비회원 시청");
+      return null;
+    }
+
     historyDTO.setUserUUID(userUUID);
     historyService.saveUserBroadcastHistory(historyDTO);
     return ResponseEntity.ok("사용자 시청 기록 저장");
