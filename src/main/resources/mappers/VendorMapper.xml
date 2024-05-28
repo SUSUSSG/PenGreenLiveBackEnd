@@ -7,4 +7,32 @@
     FROM TB_VENDOR
     WHERE TB_VENDOR.BUSINESS_ID=#{businessId}
   </select>
+
+    <insert id="insertVendor" parameterType="susussg.pengreenlive.vendor.dto.VendorSignupFormDTO"
+            useGeneratedKeys="true" keyProperty="vendorSeq">
+        INSERT INTO TB_VENDOR (
+            BUSINESS_ID, VENDOR_NM, VENDOR_PW, VENDOR_TEL, VENDOR_EMAIL, COMPANY_NM, INDUSTRY, BUSINESS_TYPE,
+            REPRESENTATIVE_NM, ESTABLISHMENT_DT, HANDLED_ITEMS, COMPANY_TEL, CORPORATE_NUMBER, ENTERPRISE_TYPE,
+            COMPANY_ADDRESS, BUSINESS_CLASSIFICATION, REVENUE, FAX_NUMBER, WEBSITE_URL, OPTIONAL_AGREEMENT_CONSENT,
+            CHANNEL_SEQ)
+        VALUES (
+                   #{businessId}, #{vendorNm}, #{vendorPw}, #{vendorTel}, #{vendorEmail},
+                   #{companyNm}, #{industry}, #{businessType}, #{representativeNm}, #{establishmentDt},
+                   #{handledItems}, #{companyTel}, #{corporateNumber}, #{enterpriseType}, #{companyAddress},
+                   #{businessClassification}, #{revenue}, #{faxNumber}, #{websiteUrl}, #{optionalAgreementConsent}, 0
+               )
+    </insert>
+
+    <insert id="insertChannel" parameterType="Long">
+        INSERT INTO TB_CHANNEL (VENDOR_SEQ, CHANNEL_SEQ)
+        VALUES (#{vendorSeq}, #{vendorSeq})
+    </insert>
+
+    <update id="updateChannelSeq" parameterType="Long">
+        UPDATE TB_VENDOR
+        SET CHANNEL_SEQ = #{vendorSeq}
+        WHERE VENDOR_SEQ = #{vendorSeq}
+    </update>
+
+
 </mapper>

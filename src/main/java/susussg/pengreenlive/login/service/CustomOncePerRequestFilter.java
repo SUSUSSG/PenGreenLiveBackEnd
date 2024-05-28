@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -47,13 +46,23 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
 
                 Map<?, ?> principalMap = (Map<?, ?>) authenticationMap.get("principal");
                 String username = (String) principalMap.get("username");
-                String userUuid = (String) principalMap.get("userUuid");
                 String userNm = (String) principalMap.get("userNm");
 
-                Member member = new Member(username, "", authorities, userNm, userUuid);
+                // userUuid가 존재하는지 확인하여 user와 vendor를 구분
+                String userUuid = (String) principalMap.get("userUuid");
+
+                Member member;
+                if (userUuid != null) {
+                    // User의 경우
+                    member = new Member(username, "", authorities, userNm, userUuid);
+                } else {
+                    // Vendor의 경우
+                    member = new Member(username, "", authorities, userNm, null); // userUuid를 null로 설정
+                }
+
                 Authentication newAuth = new UsernamePasswordAuthenticationToken(member, null, authorities);
-                if (userUuid!=null)
-                    SecurityContextHolder.getContext().setAuthentication(newAuth);
+                SecurityContextHolder.getContext().setAuthentication(newAuth);
+
             } catch (Exception e) {
                 log.error("LinkedHashMap 처리 중 오류 발생", e);
             }
