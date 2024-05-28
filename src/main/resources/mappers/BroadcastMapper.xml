@@ -25,7 +25,7 @@
     </insert>
 
 <!--    채널 판매중 상품 목록 가져오기-->
-    <select id="selectChannelSalesProduct" parameterType="long" resultType="susussg.pengreenlive.broadcast.dto.ChannelSalesProductDTO">
+    <select id="selectChannelSalesProduct" parameterType="Long" resultType="susussg.pengreenlive.broadcast.dto.ChannelSalesProductDTO">
         SELECT P.PRODUCT_SEQ, PRODUCT_CD, PRODUCT_NM, PRODUCT_IMAGE, LIST_PRICE
         FROM TB_PRODUCT P
                  LEFT JOIN TB_CHANNEL_SALES_PRODUCT C ON P.PRODUCT_SEQ = C.PRODUCT_SEQ
