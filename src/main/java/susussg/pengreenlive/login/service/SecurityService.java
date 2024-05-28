@@ -93,6 +93,12 @@ public class SecurityService implements UserDetailsService {
         return member.getChannelSeq();
     }
 
+    public String getCurrentUserNm() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member member = (Member) authentication.getPrincipal();
+        return member.getUserNm();
+    }
+
     public Authentication convertJsonToAuthentication(String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
