@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -18,13 +19,7 @@ public class PrepareBroadcastInfoDTO {
     private String broadcastImage;
     private Date broadcastScheduledTime;
     //상품
-    private long productSeq;
-    private String productNm;
-    private String productImage;
-    private int listPrice;
-    //방송 판매 상품
-    private int discountRate;
-    private int discountPrice;
+    private List<LiveBroadcastProductDTO> productList;
 
 
 }

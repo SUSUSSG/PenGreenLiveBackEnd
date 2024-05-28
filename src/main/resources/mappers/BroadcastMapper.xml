@@ -34,31 +34,37 @@
     <select id="selectChannelName" parameterType="long" resultType="java.lang.String">
         SELECT CHANNEL_NM FROM TB_CHANNEL WHERE VENDOR_SEQ = #{vendorSeq};
     </select>
-    <select id="selectPrepareBroadcastInfo" resultType="susussg.pengreenlive.broadcast.dto.PrepareBroadcastInfoDTO" parameterType="long">
-        SELECT bp.BROADCAST_SEQ,
-               bp.PRODUCT_SEQ,
-               p.PRODUCT_NM,
-               p.LIST_PRICE,
-               bp.DISCOUNT_RATE,
-               bp.DISCOUNT_PRICE,
-               b.BROADCAST_TITLE,
-               b.BROADCAST_SCHEDULED_TIME,
-               b.BROADCAST_IMAGE,
-               p.PRODUCT_IMAGE
-        FROM TB_BROADCAST_PRODUCT bp
-                 JOIN TB_PRODUCT p ON bp.PRODUCT_SEQ = p.PRODUCT_SEQ
-                 JOIN(SELECT BROADCAST_SEQ, MAX(DISCOUNT_PRICE) AS MAX_DISCOUNT_PRICE
-                      FROM TB_BROADCAST_PRODUCT
-                      GROUP BY BROADCAST_SEQ) max_discount ON bp.BROADCAST_SEQ = max_discount.BROADCAST_SEQ
-                 JOIN TB_BROADCAST b ON bp.BROADCAST_SEQ = b.BROADCAST_SEQ
-                 JOIN TB_CHANNEL c ON b.CHANNEL_NM = c.CHANNEL_NM
-        WHERE bp.DISCOUNT_PRICE = max_discount.MAX_DISCOUNT_PRICE
-          AND bp.PRODUCT_SEQ = (SELECT MIN(PRODUCT_SEQ)
-                                FROM TB_BROADCAST_PRODUCT
-                                WHERE BROADCAST_SEQ = bp.BROADCAST_SEQ
-                                  AND DISCOUNT_PRICE = max_discount.MAX_DISCOUNT_PRICE)
-          AND b.BROADCAST_YN = FALSE
-          AND c.VENDOR_SEQ = #{vendorSeq}
+
+    <resultMap id="PrepareBroadcastInfoMap" type="susussg.pengreenlive.broadcast.dto.PrepareBroadcastInfoDTO">
+        <id property="broadcastSeq" column="BROADCAST_SEQ"/>
+        <result property="broadcastTitle" column="BROADCAST_TITLE"/>
+        <result property="broadcastImage" column="BROADCAST_IMAGE"/>
+        <result property="broadcastScheduledTime" column="BROADCAST_SCHEDULED_TIME"/>
+        <collection property="productList" ofType="susussg.pengreenlive.broadcast.dto.LiveBroadcastProductDTO">
+            <result property="productImage" column="PRODUCT_IMAGE"/>
+            <result property="productSeq" column="PRODUCT_SEQ"/>
+            <result property="productNm" column="PRODUCT_NM"/>
+            <result property="listPrice" column="LIST_PRICE"/>
+            <result property="discountRate" column="DISCOUNT_RATE"/>
+        </collection>
+    </resultMap>
+    <select id="selectPrepareBroadcastInfo" resultMap="PrepareBroadcastInfoMap" parameterType="long">
+        SELECT
+            B.BROADCAST_IMAGE,
+            B.BROADCAST_SEQ,
+            B.BROADCAST_SCHEDULED_TIME,
+            B.BROADCAST_TITLE,
+            BP.PRODUCT_SEQ,
+            BP.DISCOUNT_RATE,
+            P.PRODUCT_NM,
+            P.LIST_PRICE,
+            P.PRODUCT_IMAGE
+        FROM TB_BROADCAST B
+        JOIN TB_BROADCAST_PRODUCT BP ON B.BROADCAST_SEQ = BP.BROADCAST_SEQ
+        LEFT JOIN TB_PRODUCT P ON BP.PRODUCT_SEQ = P.PRODUCT_SEQ
+        WHERE
+            B.CHANNEL_NM = (SELECT CHANNEL_NM FROM TB_CHANNEL WHERE VENDOR_SEQ = #{vendorId})
+            AND B.BROADCAST_YN = 0;
     </select>
     <select id="getBroadcastsByVendorAndDateRange" resultType="susussg.pengreenlive.broadcast.dto.BroadcastDTO">
         SELECT B.BROADCAST_SEQ, C.VENDOR_SEQ, B.CHANNEL_NM, B.BROADCAST_TITLE,
