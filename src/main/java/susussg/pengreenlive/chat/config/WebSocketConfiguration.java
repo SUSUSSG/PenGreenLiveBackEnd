@@ -16,7 +16,7 @@ import susussg.pengreenlive.chat.handler.MyHandler;
 @RequiredArgsConstructor
 public class WebSocketConfiguration implements WebSocketConfigurer {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
