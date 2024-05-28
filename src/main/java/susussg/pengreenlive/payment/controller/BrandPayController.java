@@ -4,11 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import susussg.pengreenlive.login.service.SecurityService;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,10 +33,14 @@ public class BrandPayController {
 
     @Value("${toss.clientKey}")
     private String clientKey;
-    private String customerKey = "CUSTOMER_KEY";
+
+    @Autowired
+    private SecurityService securityService;
 
     @PostMapping("/access-token")
     public ResponseEntity<?> getAccessToken(@RequestBody Map<String, String> payload) {
+        String customerKey = securityService.getCurrentUserUuid();
+
         log.info("access");
         String code = payload.get("code");
         String url = "https://api.tosspayments.com/v1/brandpay/authorizations/access-token";
@@ -103,7 +109,7 @@ public class BrandPayController {
         String orderId;
         String amount;
         String paymentKey;
-//        String customerKey;
+        String customerKey = securityService.getCurrentUserUuid();
 
         try {
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
