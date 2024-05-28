@@ -1,10 +1,7 @@
 package susussg.pengreenlive.chat.handler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
@@ -15,23 +12,18 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import susussg.pengreenlive.login.service.SecurityService;
-import susussg.pengreenlive.util.Service.BanwordService;
-
 @Log4j2
+@RequiredArgsConstructor
 public class MyHandler extends TextWebSocketHandler {
 
     private final Map<String, WebSocketSession> sessions = new HashMap<>();
-
-
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     // 세션 저장
     public void storeSession(String sessionId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            String username = authentication.getName();
-            redisTemplate.opsForHash().put("stomp:session:sessions:" + sessionId, "session", username);
+        String username = (String) sessions.get(sessionId).getAttributes().get("username");
+        if (username != null) {
+            redisTemplate.opsForHash().put("spring:session:sessions:" + username, "stompSessionId", sessionId);
         }
     }
 
@@ -47,9 +39,10 @@ public class MyHandler extends TextWebSocketHandler {
         final String sessionId = session.getId();
         final String enteredMessage = String.format("{\"message\":\"%s님이 입장하셨습니다.\", \"writer\":\"System\"}", sessionId);
 
-        storeSession(sessionId);
         sessions.put(sessionId, session);
-    //    sendMessage(sessionId, new TextMessage(enteredMessage));
+        storeSession(sessionId);
+
+        //    sendMessage(sessionId, new TextMessage(enteredMessage));
     }
 
 
