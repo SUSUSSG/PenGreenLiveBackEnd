@@ -107,6 +107,7 @@ public class SecurityService implements UserDetailsService {
             return null;
         }
         Member member = (Member) authentication.getPrincipal();
+        log.info("내 이름은 {} ", member.getUserNm());
         return member.getUserNm();
     }
 

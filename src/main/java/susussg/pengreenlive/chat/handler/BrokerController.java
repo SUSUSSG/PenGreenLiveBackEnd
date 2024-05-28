@@ -84,13 +84,13 @@ public class BrokerController {
                 redisTemplate.opsForHash().put(sessionId, "userNm", userNm);
             }
         }
-
         if (vendorSeq != null) {
             String channelNm = userService.getChannelNmByVendorSeq(vendorSeq);
             redisTemplate.opsForHash().put(sessionId, "channelNm", userNm);
             message.setWriter(channelNm);
         } else {
             message.setWriter(userNm);
+            log.info("내 이름이 뭐게 {}", userNm);
         }
 
         log.info("# roomId = {}", roomId);
