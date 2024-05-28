@@ -9,6 +9,6 @@ import susussg.pengreenlive.order.domain.Product;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductStockDTO {
-    private Product product;
+    private Product Order;
     private int productStock;
 }

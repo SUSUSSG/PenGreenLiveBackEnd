@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,11 +23,13 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import susussg.pengreenlive.login.dto.Member;
 import susussg.pengreenlive.login.service.CustomAuthenticationFilter;
 import susussg.pengreenlive.login.service.CustomOncePerRequestFilter;
+import susussg.pengreenlive.login.service.CustomVendorAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -40,9 +43,6 @@ public class SecurityConfig  {
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
 
-    @Autowired
-    private CorsConfigurationSource corsConfigurationSource;
-
 
     @PostConstruct
     public void init() {
@@ -55,10 +55,12 @@ public class SecurityConfig  {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                    .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
                     .requestMatchers("/**").permitAll()
                     .anyRequest().authenticated()
             )
             .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(customVendorAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(customOncePerRequestFilter(), CustomAuthenticationFilter.class);
 
         return http.build();
@@ -69,6 +71,14 @@ public class SecurityConfig  {
         CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
         filter.setAuthenticationManager(authenticationManagerBean(authenticationConfiguration));
         filter.setFilterProcessesUrl("/api/login");
+        return filter;
+    }
+
+    @Bean
+    public CustomVendorAuthenticationFilter customVendorAuthenticationFilter() throws Exception {
+        CustomVendorAuthenticationFilter filter = new CustomVendorAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManagerBean(authenticationConfiguration));
+        filter.setFilterProcessesUrl("/api/vendor/login");
         return filter;
     }
 
@@ -96,5 +106,4 @@ public class SecurityConfig  {
     public SecurityContextRepository securityContextRepository() {
         return new HttpSessionSecurityContextRepository();
     }
-
 }

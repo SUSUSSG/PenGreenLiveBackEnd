@@ -1,42 +1,42 @@
 package susussg.pengreenlive.login.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import susussg.pengreenlive.login.dto.Member;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import susussg.pengreenlive.login.dto.Member;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+//@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+public class CustomVendorAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+
+        log.info("CustomVendorAuthenticationFilter: Request Parameter Map: {}", request.getParameterMap());
+        request.getParameterMap().forEach((key, value) -> {
+            log.info("Request Parameter: {} = {}", key, String.join(", ", value));
+        });
+
         try {
-//            if (!request.getContentType().equals("application/json")) {
-//                throw new RuntimeException("Content type is not application/json");
-//            }
-
-            log.info("확인 {} {}", request.getSession().getId(), request.getInputStream());
             Map<String, String> credentials = objectMapper.readValue(request.getInputStream(), Map.class);
-            log.info("확인2 {}", credentials);
-
             String username = credentials.get("username");
             String password = credentials.get("password");
+            log.info("로그인 정보 {} {}", username, password );
+
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
             return getAuthenticationManager().authenticate(authenticationToken);
@@ -55,7 +55,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("id", member.getUsername());
         userInfo.put("name", member.getUserNm());
-        userInfo.put("uuid", member.getUserUuid());
         userInfo.put("role", member.getAuthorities().toString());
 
         // SecurityContext에 Member 객체 저장
@@ -70,6 +69,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         response.setContentType("application/json");
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
         response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Expose-Headers", "Content-Length");
         response.getWriter().write(objectMapper.writeValueAsString(result));
     }
 

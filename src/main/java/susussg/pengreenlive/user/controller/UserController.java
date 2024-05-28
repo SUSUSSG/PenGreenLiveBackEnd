@@ -42,22 +42,6 @@ public class UserController {
         }
     }
 
-    @PatchMapping
-    public ResponseEntity<?> updateUserProfile(@RequestBody UpdateUserFormDTO user) {
-        log.info("/update {}", user);
-
-        try {
-            String uuid = securityService.getCurrentUserUuid();
-            user.setUserUUID(uuid);
-            userService.updateUserInfo(user);
-
-            return ResponseEntity.ok().body("success");
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
-        }
-    }
-
     @GetMapping
     public ResponseEntity<?> updateUserProfile() {
 
@@ -69,6 +53,24 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
         }
+    }
 
+    @PatchMapping
+    public ResponseEntity<?> updateUserProfile(@RequestBody UpdateUserFormDTO user) {
+        log.info("/update {}", user);
+
+
+//        try {
+//            String uuid = securityService.getCurrentUserUuid();
+//            user.setUserUUID(uuid);
+//            userService.updateUserInfo(user);
+//
+//            return ResponseEntity.ok().body("success");
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+//        }
+
+        return ResponseEntity.ok().body("null");
     }
 }
