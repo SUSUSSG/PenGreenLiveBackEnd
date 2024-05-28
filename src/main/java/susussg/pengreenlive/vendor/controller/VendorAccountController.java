@@ -1,19 +1,13 @@
 package susussg.pengreenlive.vendor.controller;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.nurigo.sdk.message.response.SingleMessageSentResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import susussg.pengreenlive.user.dto.SignupFormDTO;
-import susussg.pengreenlive.user.service.AccountService;
 import susussg.pengreenlive.vendor.dto.VendorSignupFormDTO;
 import susussg.pengreenlive.vendor.service.VendorAccountService;
 
 import java.util.Map;
-
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,6 +24,7 @@ public class VendorAccountController {
             accountService.createVendor(vendorSignupForm);
             return ResponseEntity.ok().body("success");
         } catch (Exception e) {
+            log.error("Error creating vendor account", e);
             return ResponseEntity.internalServerError().body("failed");
         }
     }
@@ -49,4 +44,17 @@ public class VendorAccountController {
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
 //        }
 //    }
+    @PostMapping("/check-business-number")
+    public ResponseEntity<?> checkBusinessNumber(@RequestBody Map<String, String> request) {
+        String businessNumber = request.get("businessNumber");
+        log.info("Checking business number: {}", businessNumber);
+        try {
+            Map<String, Object> validationResponse = accountService.validateBusinessNumber(businessNumber);
+            log.info("Validation response: {}", validationResponse);
+            return ResponseEntity.ok().body(validationResponse);
+        } catch (Exception e) {
+            log.error("Business number validation failed", e);
+            return ResponseEntity.status(500).body("조회 실패");
+        }
+    }
 }
