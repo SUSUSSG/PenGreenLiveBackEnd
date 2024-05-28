@@ -13,7 +13,7 @@ public interface ProductMapper {
 
   List<ProductDTO> findAllProducts();
 
-  List<VendorProductListDTO> findProductsByVendor(Long venderSeq);
+  List<VendorProductListDTO> findProductsByVendor(Long vendorSeq);
 
   void insertProduct(ProductDTO product);
 

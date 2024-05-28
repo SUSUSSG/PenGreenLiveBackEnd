@@ -22,7 +22,7 @@ public class ProductUpdateDTO {
   private String categoryCd;
   private String categoryNm;
   private int productStock;
-  private Long venderSeq;
+  private Long vendorSeq;
   private Long channelSeq;
 
 }

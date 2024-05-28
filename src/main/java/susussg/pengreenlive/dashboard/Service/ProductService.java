@@ -13,7 +13,7 @@ public interface ProductService {
 
   List<ProductDTO> getAllCategoryCodes();
 
-  List<VendorProductListDTO> findProductsByVendor(Long venderSeq);
+  List<VendorProductListDTO> findProductsByVendor(Long vendorSeq);
 
   void updateProduct(Long productSeq, ProductUpdateDTO productUpdateDTO);
 
