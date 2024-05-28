@@ -281,24 +281,24 @@ public class BroadcastStatisticsController {
     /**
      * 특정 방송의 좋아요를 토글합니다.
      * @param broadcastSeq 방송 시퀀스 ID
-     * @param userUuid 사용자 UUID
      * @return 응답 상태
      */
     @PatchMapping("/{broadcastSeq}/likes/toggle")
-    public ResponseEntity<Void> toggleLike(@PathVariable("broadcastSeq") Long broadcastSeq, @RequestParam("USER_UUID") String userUuid) {
-        broadcastStatisticsService.toggleLike(userUuid, broadcastSeq);
+    public ResponseEntity<Void> toggleLike(@PathVariable("broadcastSeq") Long broadcastSeq) {
+        String userUUID = securityService.getCurrentUserUuid();
+        broadcastStatisticsService.toggleLike(userUUID, broadcastSeq);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 특정 방송에 대해 사용자가 좋아요를 눌렀는지 확인합니다.
      * @param broadcastSeq 방송 시퀀스 ID
-     * @param userUuid 사용자 UUID
      * @return 좋아요 여부
      */
     @GetMapping("/{broadcastSeq}/likes/check")
-    public ResponseEntity<Boolean> checkLike(@PathVariable("broadcastSeq") Long broadcastSeq, @RequestParam("USER_UUID") String userUuid) {
-        boolean isLiked = broadcastStatisticsService.isLikedByUser(userUuid, broadcastSeq);
+    public ResponseEntity<Boolean> checkLike(@PathVariable("broadcastSeq") Long broadcastSeq) {
+        String userUUID = securityService.getCurrentUserUuid();
+        boolean isLiked = broadcastStatisticsService.isLikedByUser(userUUID, broadcastSeq);
         return ResponseEntity.ok(isLiked);
     }
 }
