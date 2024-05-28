@@ -53,6 +53,7 @@ public class BrokerController {
         Long vendorSeq = securityService.getCurrentVendorSeq();
         String sessionId = accessor.getSessionId();
 
+        log.info("로그인한 사용자입니다 {}", userNm);
 
         if (userUUID == null && vendorSeq == null) {
             userNm = (String) redisTemplate.opsForHash().get(sessionId, "userNm");
@@ -84,9 +85,10 @@ public class BrokerController {
                 redisTemplate.opsForHash().put(sessionId, "userNm", userNm);
             }
         }
+
         if (vendorSeq != null) {
             String channelNm = userService.getChannelNmByVendorSeq(vendorSeq);
-            redisTemplate.opsForHash().put(sessionId, "channelNm", userNm);
+            redisTemplate.opsForHash().put(sessionId, "channelNm", channelNm);
             message.setWriter(channelNm);
         } else {
             message.setWriter(userNm);
