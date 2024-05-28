@@ -1,7 +1,9 @@
 package susussg.pengreenlive.login.dto;
 
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class VendorDTO {
     private Long vendorSeq;

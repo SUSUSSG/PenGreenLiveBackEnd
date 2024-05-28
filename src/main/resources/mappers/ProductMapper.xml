@@ -35,7 +35,7 @@
         LEFT JOIN TB_PRODUCT_STOCK s ON p.PRODUCT_SEQ = s.PRODUCT_SEQ
         INNER JOIN TB_CHANNEL_SALES_PRODUCT csp ON p.PRODUCT_SEQ = csp.PRODUCT_SEQ
     WHERE
-      csp.VENDOR_SEQ = #{venderSeq}
+      csp.VENDOR_SEQ = #{vendorSeq}
   </select>
 
   <insert id="insertProduct" parameterType="susussg.pengreenlive.dashboard.DTO.ProductDTO" useGeneratedKeys="true" keyProperty="productSeq">

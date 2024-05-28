@@ -26,17 +26,24 @@ public class CustomVendorAuthenticationFilter extends UsernamePasswordAuthentica
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        log.info("CustomVendorAuthenticationFilter: Request Parameter Map: {}", request.getParameterMap());
-        request.getParameterMap().forEach((key, value) -> {
-            log.info("Request Parameter: {} = {}", key, String.join(", ", value));
-        });
 
         try {
+            log.info("요청 메서드 {}", request.getMethod());
+
+            if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
+                log.info("OPTIONS 요청 무시");
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+                response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+                response.setHeader("Access-Control-Allow-Credentials", "true");
+                return null;
+            }
+
             Map<String, String> credentials = objectMapper.readValue(request.getInputStream(), Map.class);
             String username = credentials.get("username");
             String password = credentials.get("password");
             log.info("로그인 정보 {} {}", username, password );
-
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
             return getAuthenticationManager().authenticate(authenticationToken);
@@ -55,6 +62,7 @@ public class CustomVendorAuthenticationFilter extends UsernamePasswordAuthentica
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("id", member.getUsername());
         userInfo.put("name", member.getUserNm());
+        userInfo.put("vendorSeq", member.getVendorSeq());
         userInfo.put("role", member.getAuthorities().toString());
 
         // SecurityContext에 Member 객체 저장

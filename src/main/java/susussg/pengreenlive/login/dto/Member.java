@@ -17,10 +17,12 @@ public class Member extends User implements Serializable {
 
     private String userUuid;    // uuid
     private String userNm;      // 이름
+    private Long vendorSeq;
 
-    public Member(String username, String password, Collection<? extends GrantedAuthority> authorities, String userNm, String userUuid) {
+    public Member(String username, String password, Collection<? extends GrantedAuthority> authorities, String userNm, String userUuid, Long vendorSeq) {
         super(username, password, authorities);
         this.userUuid = userUuid;
         this.userNm = userNm;
+        this.vendorSeq = vendorSeq;
     }
 }

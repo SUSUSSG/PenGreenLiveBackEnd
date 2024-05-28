@@ -47,19 +47,18 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
                 Map<?, ?> principalMap = (Map<?, ?>) authenticationMap.get("principal");
                 String username = (String) principalMap.get("username");
                 String userNm = (String) principalMap.get("userNm");
-
-                // userUuid가 존재하는지 확인하여 user와 vendor를 구분
+                Integer vendorSeqStr = (Integer) principalMap.get("vendorSeq");
                 String userUuid = (String) principalMap.get("userUuid");
+                Long vendorSeq = Long.parseLong(String.valueOf(vendorSeqStr));
 
                 Member member;
                 if (userUuid != null) {
                     // User의 경우
-                    member = new Member(username, "", authorities, userNm, userUuid);
+                    member = new Member(username, "", authorities, userNm, userUuid, null);
                 } else {
                     // Vendor의 경우
-                    member = new Member(username, "", authorities, userNm, null); // userUuid를 null로 설정
+                    member = new Member(username, "", authorities, userNm, null, vendorSeq); // userUuid를 null로 설정
                 }
-
                 Authentication newAuth = new UsernamePasswordAuthenticationToken(member, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(newAuth);
 
