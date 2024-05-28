@@ -51,8 +51,8 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
             log.info("Authentication principal: {}", authentication.getPrincipal());
         } else {
             log.info("Authentication is null");
+            return;
         }
-
         filterChain.doFilter(request, response);
     }
 
