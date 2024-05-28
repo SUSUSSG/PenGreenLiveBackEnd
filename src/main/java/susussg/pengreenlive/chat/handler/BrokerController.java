@@ -54,6 +54,7 @@ public class BrokerController {
         String sessionId = accessor.getSessionId();
 
         log.info("채팅 사용자 세션 아이디 {}", sessionId);
+        log.info("가져온 세션 아이디 {}", redisTemplate.opsForHash().get("stomp:session:sessions:" + sessionId, "session"));
 
         if (userUUID == null && vendorSeq == null) {
             userNm = (String) redisTemplate.opsForHash().get(sessionId, "userNm");
