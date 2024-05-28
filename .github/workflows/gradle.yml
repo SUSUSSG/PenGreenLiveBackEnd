@@ -76,7 +76,9 @@ jobs:
           echo "spring.session.redis.cleanup-cron=60 * * * * *" >> ./src/main/resources/application-secret.properties
           echo "server.servlet.session.persistent=false" >> ./src/main/resources/application-secret.properties
           echo "spring.session.redis.repository-type=default" >> ./src/main/resources/application-secret.properties
-
+          echo "saupja.api.key=${{secrets.SAUPJA_API_KEY}}" >> ./src/main/resources/application-secret.properties
+          
+          
           
           
           ./gradlew build -x test
