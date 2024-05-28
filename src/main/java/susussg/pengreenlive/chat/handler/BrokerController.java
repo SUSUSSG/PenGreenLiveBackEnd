@@ -6,11 +6,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -18,7 +16,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import susussg.pengreenlive.chat.dto.MessageDto;
-import susussg.pengreenlive.login.service.SecurityService;
 import susussg.pengreenlive.user.service.UserService;
 import susussg.pengreenlive.user.service.UserServiceImpl;
 import susussg.pengreenlive.util.DTO.BanwordValidationResultDTO;
@@ -32,8 +29,6 @@ public class BrokerController {
     private final SimpMessagingTemplate template;
     private final UserService userService;
     private final BanwordService banwordService;
-    private final SecurityService securityService;
-    private final RedisTemplate<String, Object> redisTemplate;
 
 
     @MessageMapping("/test")
@@ -46,19 +41,18 @@ public class BrokerController {
 
     @MessageMapping("/room/{roomId}")
     public void sendMessage(@DestinationVariable(value = "roomId") String roomId,
-        MessageDto message, SimpMessageHeaderAccessor accessor) {
+                            MessageDto message, SimpMessageHeaderAccessor accessor) {
 
-        String userUUID = securityService.getCurrentUserUuid();
-        String userNm = securityService.getCurrentUserNm();
-        Long vendorSeq = securityService.getCurrentVendorSeq();
-        String sessionId = accessor.getSessionId();
+        // 세션에 하드코딩된 값 추가
+        // 테스트 시 주석처리 되지 않은 역할로 채팅 진입
+//        accessor.getSessionAttributes().put("userUUID", "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6"); // userUUID 추가
+//        accessor.getSessionAttributes().put("vendorSeq", 1); // vendorSeq 추가
 
-        log.info("채팅 사용자 세션 아이디 {}", sessionId);
-        log.info("가져온 세션 아이디 {}", redisTemplate.opsForHash().get("stomp:session:sessions:" + sessionId, "session"));
+        String userUUID = (String) accessor.getSessionAttributes().get("userUUID");
+        String userNm = (String) accessor.getSessionAttributes().get("userNm");
+        Long vendorSeq = (Long) accessor.getSessionAttributes().get("vendorSeq");
 
         if (userUUID == null && vendorSeq == null) {
-            userNm = (String) redisTemplate.opsForHash().get(sessionId, "userNm");
-
             if (userNm == null) {
                 // 사전에 설정한 닉네임 리스트
                 List<String> nicknameList = Arrays.asList("행복한펭귄", "심심한펭귄", "슬픈펭귄", "기쁜펭귄",
@@ -83,17 +77,20 @@ public class BrokerController {
 
                 // 닉네임과 숫자 조합하여 유저 이름 생성
                 userNm = randomNickname + "_" + String.format("%03d", randomNumber);
-                redisTemplate.opsForHash().put(sessionId, "userNm", userNm);
+
+                accessor.getSessionAttributes().put("userNm", userNm);
             }
+        } else if (userNm == null) {
+            userNm = userService.getUserNmByUUID(userUUID);
+            accessor.getSessionAttributes().put("userNm", userNm);
         }
 
         if (vendorSeq != null) {
             String channelNm = userService.getChannelNmByVendorSeq(vendorSeq);
-            redisTemplate.opsForHash().put(sessionId, "channelNm", channelNm);
+            accessor.getSessionAttributes().put("channelNm", channelNm);
             message.setWriter(channelNm);
         } else {
             message.setWriter(userNm);
-            log.info("내 이름이 뭐게 {}", userNm);
         }
 
         log.info("# roomId = {}", roomId);
@@ -118,7 +115,6 @@ public class BrokerController {
         log.info("# roomId = {}", roomId);
         log.info("# message = {}", message);
         message.setMessage(message.getWriter() + "님이 입장하셨습니다.");
-
 //        template.convertAndSend("/sub/room/" + roomId, message);  // MessageDto 객체 전체를 전송
     }
 
@@ -132,7 +128,7 @@ public class BrokerController {
     // BrokerController.java에 메시지 타입으로 NOTICE를 처리하는 메소드 추가
     @MessageMapping("/room/{roomId}/notice")
     public void broadcastNotice(@DestinationVariable(value = "roomId") String roomId,
-        MessageDto message) {
+                                MessageDto message) {
         log.info("# notice = {}", message);
         template.convertAndSend("/sub/room/" + roomId + "/notice", message);  // 모든 구독자에게 공지사항 전송
     }

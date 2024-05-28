@@ -13,24 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Log4j2
-@RequiredArgsConstructor
 public class MyHandler extends TextWebSocketHandler {
 
     private final Map<String, WebSocketSession> sessions = new HashMap<>();
-    private final RedisTemplate<String, Object> redisTemplate;
-
-    // 세션 저장
-    public void storeSession(String sessionId) {
-        String username = (String) sessions.get(sessionId).getAttributes().get("username");
-        if (username != null) {
-            redisTemplate.opsForHash().put("spring:session:sessions:" + username, "stompSessionId", sessionId);
-        }
-    }
-
-    // 세션 삭제
-    private void deleteSession(String sessionId) {
-        redisTemplate.delete(sessionId);
-    }
 
     //웹소켓 연결 시 발생하는 상태에 해당하는 메소드를 정의한다.
     //최초 연결 시
@@ -40,8 +25,6 @@ public class MyHandler extends TextWebSocketHandler {
         final String enteredMessage = String.format("{\"message\":\"%s님이 입장하셨습니다.\", \"writer\":\"System\"}", sessionId);
 
         sessions.put(sessionId, session);
-        storeSession(sessionId);
-
         //    sendMessage(sessionId, new TextMessage(enteredMessage));
     }
 
@@ -65,8 +48,6 @@ public class MyHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         final String sessionId = session.getId();
         final String leaveMessage = String.format("{\"message\":\"%s님이 퇴장하셨습니다.\", \"writer\":\"System\"}", sessionId);
-
-//        deleteSession(sessionId);
         sessions.remove(sessionId);
 //        sendMessage(sessionId, new TextMessage(leaveMessage));
     }
