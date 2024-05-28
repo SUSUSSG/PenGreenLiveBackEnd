@@ -103,6 +103,7 @@ public class SecurityService implements UserDetailsService {
 
     public String getCurrentUserNm() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("authentication {}", authentication);
         if (authentication == null || !authentication.isAuthenticated()) {
             return null;
         }
