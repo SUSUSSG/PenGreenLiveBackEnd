@@ -16,21 +16,21 @@ public interface BroadcastStatisticsService {
     void updateBroadcastStatistics(long broadcastId, BroadcastStatistics statistics);
     void incrementViewsCount(long broadcastSeq);
     List<BroadcastStatistics> getStatisticsByDateRange(String startDate, String endDate);
-    List<BroadcastStatistics> getStatisticsByVendorAndDateRange(long vendorSeq, LocalDateTime startDate, LocalDateTime endDate);
+    List<BroadcastStatistics> getStatisticsByVendorAndDateRange(Long vendorSeq, LocalDateTime startDate, LocalDateTime endDate);
 
-    int getAverageBroadcastDuration(long vendorSeq, LocalDate startDate, LocalDate endDate);
+    int getAverageBroadcastDuration(Long vendorSeq, LocalDate startDate, LocalDate endDate);
 
-    int getAverageViewerCount(long vendorSeq, LocalDate startDate, LocalDate endDate);
+    int getAverageViewerCount(Long vendorSeq, LocalDate startDate, LocalDate endDate);
 
-    int getAveragePurchaseQuantity(long vendorSeq, LocalDate startDate, LocalDate endDate);
+    int getAveragePurchaseQuantity(Long vendorSeq, LocalDate startDate, LocalDate endDate);
 
-    int getAverageProductClicks(long vendorSeq, LocalDate startDate, LocalDate endDate);
+    int getAverageProductClicks(Long vendorSeq, LocalDate startDate, LocalDate endDate);
 
-    int getAverageViewingTime(long vendorSeq, LocalDate startDate, LocalDate endDate);
+    int getAverageViewingTime(Long vendorSeq, LocalDate startDate, LocalDate endDate);
 
-    int getAverageLikesCount(long vendorSeq, LocalDate startDate, LocalDate endDate);
+    int getAverageLikesCount(Long vendorSeq, LocalDate startDate, LocalDate endDate);
 
-    long getAveragePurchaseAmount(long vendorSeq, LocalDate startDate, LocalDate endDate);
+    long getAveragePurchaseAmount(Long vendorSeq, LocalDate startDate, LocalDate endDate);
 
     void toggleLike(String userUuid, Long broadcastSeq);
     boolean isLikedByUser(String userUuid, Long broadcastSeq);

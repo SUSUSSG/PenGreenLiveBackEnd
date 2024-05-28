@@ -30,36 +30,36 @@ public interface BroadcastStatisticsMapper {
     List<BroadcastStatistics> getStatisticsByDateRange(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
     List<BroadcastStatistics> getStatisticsByVendorAndDateRange(
-            @Param("vendorSeq") long vendorSeq,
+            @Param("vendorSeq") Long vendorSeq,
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate
     );
 
-    int getAverageBroadcastDuration(@Param("vendorSeq") long vendorSeq,
+    int getAverageBroadcastDuration(@Param("vendorSeq") Long vendorSeq,
                                     @Param("startDate") LocalDate startDate,
                                     @Param("endDate") LocalDate endDate);
 
-    int getAverageViewerCount(@Param("vendorSeq") long vendorSeq,
+    int getAverageViewerCount(@Param("vendorSeq") Long vendorSeq,
                               @Param("startDate") LocalDate startDate,
                               @Param("endDate") LocalDate endDate);
 
-    int getAveragePurchaseQuantity(@Param("vendorSeq") long vendorSeq,
+    int getAveragePurchaseQuantity(@Param("vendorSeq") Long vendorSeq,
                                    @Param("startDate") LocalDate startDate,
                                    @Param("endDate") LocalDate endDate);
 
-    int getAverageProductClicks(@Param("vendorSeq") long vendorSeq,
+    int getAverageProductClicks(@Param("vendorSeq") Long vendorSeq,
                                 @Param("startDate") LocalDate startDate,
                                 @Param("endDate") LocalDate endDate);
 
-    int getAverageViewingTime(@Param("vendorSeq") long vendorSeq,
+    int getAverageViewingTime(@Param("vendorSeq") Long vendorSeq,
                               @Param("startDate") LocalDate startDate,
                               @Param("endDate") LocalDate endDate);
 
-    int getAverageLikesCount(@Param("vendorSeq") long vendorSeq,
+    int getAverageLikesCount(@Param("vendorSeq") Long vendorSeq,
                              @Param("startDate") LocalDate startDate,
                              @Param("endDate") LocalDate endDate);
 
-    long getAveragePurchaseAmount(@Param("vendorSeq") long vendorSeq,
+    Long getAveragePurchaseAmount(@Param("vendorSeq") Long vendorSeq,
                                   @Param("startDate") LocalDate startDate,
                                   @Param("endDate") LocalDate endDate);
 
