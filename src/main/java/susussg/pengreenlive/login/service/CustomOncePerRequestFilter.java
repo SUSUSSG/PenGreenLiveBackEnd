@@ -38,32 +38,7 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
         if (contextObject instanceof LinkedHashMap) {
             LinkedHashMap<?, ?> contextMap = (LinkedHashMap<?, ?>) contextObject;
             try {
-                Map<?, ?> authenticationMap = (Map<?, ?>) contextMap.get("authentication");
-
-                List<SimpleGrantedAuthority> authorities = ((List<Map<String, String>>) authenticationMap.get("authorities")).stream()
-                        .map(auth -> new SimpleGrantedAuthority(auth.get("authority")))
-                        .collect(Collectors.toList());
-
-                Map<?, ?> principalMap = (Map<?, ?>) authenticationMap.get("principal");
-                String username = (String) principalMap.get("username");
-                String userNm = (String) principalMap.get("userNm");
-                Integer vendorSeqStr = (Integer) principalMap.get("vendorSeq");
-                String userUuid = (String) principalMap.get("userUuid");
-                Long vendorSeq = Long.parseLong(String.valueOf(vendorSeqStr));
-                Integer channelSeqStr = (Integer) principalMap.get("channelSeq");
-                Long channelSeq = Long.parseLong(String.valueOf(channelSeqStr));
-
-                Member member;
-                if (userUuid != null) {
-                    // User의 경우
-                    member = new Member(username, "", authorities, userNm, userUuid, null, null);
-                } else {
-                    // Vendor의 경우
-                    member = new Member(username, "", authorities, userNm, null, vendorSeq, channelSeq); // userUuid를 null로 설정
-                }
-                Authentication newAuth = new UsernamePasswordAuthenticationToken(member, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(newAuth);
-
+                processSecurityContext(contextMap);
             } catch (Exception e) {
                 log.error("LinkedHashMap 처리 중 오류 발생", e);
             }
@@ -73,11 +48,40 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            log.info("Authentication principal: {}", authentication);
+            log.info("Authentication principal: {}", authentication.getPrincipal());
         } else {
             log.info("Authentication is null");
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private void processSecurityContext(LinkedHashMap<?, ?> contextMap) {
+        Map<?, ?> authenticationMap = (Map<?, ?>) contextMap.get("authentication");
+
+        List<SimpleGrantedAuthority> authorities = ((List<Map<String, String>>) authenticationMap.get("authorities")).stream()
+                .map(auth -> new SimpleGrantedAuthority(auth.get("authority")))
+                .collect(Collectors.toList());
+
+        Map<?, ?> principalMap = (Map<?, ?>) authenticationMap.get("principal");
+        String username = (String) principalMap.get("username");
+        String userNm = (String) principalMap.get("userNm");
+        Integer vendorSeqStr = (Integer) principalMap.get("vendorSeq");
+        Integer channelSeqStr = (Integer) principalMap.get("channelSeq");
+        String userUuid = (String) principalMap.get("userUuid");
+
+        Long vendorSeq = vendorSeqStr != null ? Long.valueOf(vendorSeqStr) : null;
+        Long channelSeq = channelSeqStr != null ? Long.valueOf(channelSeqStr) : null;
+
+        Member member;
+        if (userUuid != null) {
+            // User
+            member = new Member(username, "", authorities, userNm, userUuid, null, null);
+        } else {
+            // Vendor
+            member = new Member(username, "", authorities, userNm, null, vendorSeq, channelSeq);
+        }
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(member, null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 }
