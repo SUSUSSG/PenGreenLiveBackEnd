@@ -23,15 +23,18 @@ import java.util.Map;
 
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
-    @Value("${FRONT.URL}")
-    private String frontUrl;
     private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
+//            if (!request.getContentType().equals("application/json")) {
+//                throw new RuntimeException("Content type is not application/json");
+//            }
+
+            log.info("확인 {} {}", request.getSession().getId(), request.getInputStream());
             Map<String, String> credentials = objectMapper.readValue(request.getInputStream(), Map.class);
+            log.info("확인2 {}", credentials);
+
             String username = credentials.get("username");
             String password = credentials.get("password");
 
@@ -65,7 +68,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         result.put("user", objectMapper.writeValueAsString(userInfo));
         response.setContentType("application/json");
-        response.setHeader("Access-Control-Allow-Origin", frontUrl);
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.getWriter().write(objectMapper.writeValueAsString(result));
     }
