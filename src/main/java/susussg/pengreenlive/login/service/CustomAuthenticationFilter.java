@@ -3,6 +3,8 @@ package susussg.pengreenlive.login.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -27,14 +29,18 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-//            if (!request.getContentType().equals("application/json")) {
-//                throw new RuntimeException("Content type is not application/json");
-//            }
+            log.info("요청 메서드 {}", request.getMethod());
 
-            log.info("확인 {} {}", request.getSession().getId(), request.getInputStream());
+            if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+                response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+                response.setHeader("Access-Control-Allow-Credentials", "true");
+                return null;
+            }
+
             Map<String, String> credentials = objectMapper.readValue(request.getInputStream(), Map.class);
-            log.info("확인2 {}", credentials);
-
             String username = credentials.get("username");
             String password = credentials.get("password");
 
@@ -58,7 +64,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         userInfo.put("uuid", member.getUserUuid());
         userInfo.put("role", member.getAuthorities().toString());
 
-        // SecurityContext에 Member 객체 저장
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(member, null, member.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
         log.info("생성된 세션 아이디 {}", request.getSession().getId());
