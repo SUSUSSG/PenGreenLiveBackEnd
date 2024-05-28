@@ -8,11 +8,9 @@ import susussg.pengreenlive.vendor.dto.VendorSignupFormDTO;
 @Mapper
 public interface VendorMapper {
     VendorDTO selectVendorInfoByBusinessId(String businessId);
-
     void insertVendor(VendorSignupFormDTO vendorSignupForm);
-
     void insertChannel(@Param("vendorSeq") Long vendorSeq);
-
     void updateChannelSeq(@Param("vendorSeq") Long vendorSeq);
+    Long selectChannelSeqByVendorSeq(@Param("vendorSeq") Long vendorSeq);
 
 }

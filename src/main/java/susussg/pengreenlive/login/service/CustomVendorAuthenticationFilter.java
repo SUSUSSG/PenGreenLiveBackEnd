@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -14,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import susussg.pengreenlive.login.dto.Member;
+import susussg.pengreenlive.vendor.service.VendorService;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,6 +25,8 @@ import java.util.Map;
 //@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class CustomVendorAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private VendorService vendorService;
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
@@ -59,11 +63,14 @@ public class CustomVendorAuthenticationFilter extends UsernamePasswordAuthentica
 
         Member member = (Member) authResult.getPrincipal();
 
+        Long channelSeq = vendorService.getChannelSeqByVendorSeq(member.getVendorSeq());
+
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("id", member.getUsername());
         userInfo.put("name", member.getUserNm());
         userInfo.put("vendorSeq", member.getVendorSeq());
         userInfo.put("role", member.getAuthorities().toString());
+        userInfo.put("channelSeq", channelSeq);
 
         // SecurityContext에 Member 객체 저장
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(member, null, member.getAuthorities());
