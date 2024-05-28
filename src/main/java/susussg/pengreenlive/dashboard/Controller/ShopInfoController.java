@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import susussg.pengreenlive.dashboard.DTO.ShopInfoDTO;
 import susussg.pengreenlive.dashboard.Service.ShopInfoService;
+import susussg.pengreenlive.login.service.SecurityService;
 
 @RestController
 @Log4j2
@@ -17,12 +18,16 @@ public class ShopInfoController {
   @Autowired
   private final ShopInfoService shopInfoService;
 
+  @Autowired
+  private SecurityService securityService;
+
   public ShopInfoController(ShopInfoService shopInfoService) {
     this.shopInfoService = shopInfoService;
   }
 
-  @GetMapping("/shop/{channelSeq}")
-  public ResponseEntity<?> getShopInfo(@PathVariable Long channelSeq) {
+  @GetMapping("/shop")
+  public ResponseEntity<?> getShopInfo() {
+    Long channelSeq = securityService.getCurrentChannelSeq();
     try {
       ShopInfoDTO shopInfo = shopInfoService.getShopInfo(channelSeq);
       if (shopInfo != null) {
@@ -35,9 +40,11 @@ public class ShopInfoController {
     }
   }
 
-  @PutMapping("/shop/{channelSeq}")
+  @PutMapping("/shop")
   public ResponseEntity<String> updateShopInfo(@RequestBody ShopInfoDTO shopInfoDTO) {
 
+    Long channelSeq = securityService.getCurrentChannelSeq();
+    shopInfoDTO.setChannelSeq(channelSeq);
     shopInfoService.updateShopInfo(shopInfoDTO);
     return ResponseEntity.ok().body("Shop info updated successfully.");
   }
