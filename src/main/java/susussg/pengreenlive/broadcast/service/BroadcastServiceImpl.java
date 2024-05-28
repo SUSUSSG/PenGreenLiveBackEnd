@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import susussg.pengreenlive.broadcast.dto.*;
 import susussg.pengreenlive.broadcast.mapper.BroadcastMapper;
+import susussg.pengreenlive.login.service.SecurityService;
 import susussg.pengreenlive.util.Service.ByteArrayMultipartFile;
 import susussg.pengreenlive.util.Service.ImageService;
 import susussg.pengreenlive.util.Service.S3Service;
@@ -23,7 +24,6 @@ import java.util.List;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-
 public class BroadcastServiceImpl implements BroadcastService {
 
     @Autowired
@@ -36,6 +36,9 @@ public class BroadcastServiceImpl implements BroadcastService {
 
     @Autowired
     S3Service s3Service;
+
+    @Autowired
+    private SecurityService securityService;
 
 
     @Override
@@ -51,8 +54,8 @@ public class BroadcastServiceImpl implements BroadcastService {
 
     @Override
     @Transactional
-    public void registerBroadcast(BroadcastRegistrationRequestDTO broadcastRegisterInfo, long vendorId) {
-        String channelName = getChannelName(vendorId); // 판매자 정보
+    public void registerBroadcast(BroadcastRegistrationRequestDTO broadcastRegisterInfo, Long vendorSeq) {
+        String channelName = getChannelName(vendorSeq); // 판매자 정보
 
         BroadcastDTO broadcastDTO = BroadcastDTO.builder()
                 .channelNm(channelName)
@@ -112,8 +115,8 @@ public class BroadcastServiceImpl implements BroadcastService {
         });
     }
 
-    private String getChannelName(long vendorId) {
-        String channelName = broadcastMapper.selectChannelName(vendorId);
+    private String getChannelName(Long vendorSeq) {
+        String channelName = broadcastMapper.selectChannelName(vendorSeq);
         if (channelName.isEmpty()) {
             throw new RuntimeException("channel name empty");
         } else {
@@ -172,8 +175,8 @@ public class BroadcastServiceImpl implements BroadcastService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ChannelSalesProductDTO> getChannelSalesProductAll(long vendorId) {
-        List<ChannelSalesProductDTO> productList = broadcastMapper.selectChannelSalesProduct(vendorId);
+    public List<ChannelSalesProductDTO> getChannelSalesProductAll(Long vendorSeq) {
+        List<ChannelSalesProductDTO> productList = broadcastMapper.selectChannelSalesProduct(vendorSeq);
         if (productList.isEmpty()) {
             throw new RuntimeException("product list empty");
         } else {
@@ -183,13 +186,13 @@ public class BroadcastServiceImpl implements BroadcastService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PrepareBroadcastInfoDTO> getUpcomingBroadcastInfo(long vendorId) {
-        return broadcastMapper.selectPrepareBroadcastInfo(vendorId);
+    public List<PrepareBroadcastInfoDTO> getUpcomingBroadcastInfo(Long vendorSeq) {
+        return broadcastMapper.selectPrepareBroadcastInfo(vendorSeq);
     }
 
     @Override
     @Transactional
-    public List<BroadcastDTO> getBroadcastsByVendorAndDateRange(long vendorSeq, LocalDateTime startDateTime, LocalDateTime endDateTime){
+    public List<BroadcastDTO> getBroadcastsByVendorAndDateRange(Long vendorSeq, LocalDateTime startDateTime, LocalDateTime endDateTime){
         return broadcastMapper.getBroadcastsByVendorAndDateRange(vendorSeq, startDateTime, endDateTime);
     }
 
