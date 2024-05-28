@@ -39,8 +39,9 @@ public class ProductController {
 
   @PostMapping("/products")
   @Operation(summary = "상품 등록", description = "녹색제품 ID를 인증하고 상품을 등록합니다.")
-  public ResponseEntity<String> registerProduct(@RequestBody ProductDTO productDTO, @RequestParam Long channelSeq) {
+  public ResponseEntity<String> registerProduct(@RequestBody ProductDTO productDTO) {
     Long vendorSeq = securityService.getCurrentVendorSeq();
+    Long channelSeq = securityService.getCurrentChannelSeq();
 
     try {
       if (productService.registerProduct(productDTO, vendorSeq, channelSeq)) {
