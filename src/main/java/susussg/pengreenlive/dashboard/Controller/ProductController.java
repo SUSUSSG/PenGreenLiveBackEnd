@@ -1,5 +1,6 @@
 package susussg.pengreenlive.dashboard.Controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class ProductController {
   }
 
   @PostMapping("/products")
+  @Operation(summary = "상품 등록", description = "녹색제품 ID를 인증하고 상품을 등록합니다.")
   public ResponseEntity<String> registerProduct(@RequestBody ProductDTO productDTO, @RequestParam Long vendorSeq, @RequestParam Long channelSeq) {
     try {
       if (productService.registerProduct(productDTO, vendorSeq, channelSeq)) {
@@ -65,7 +67,7 @@ public class ProductController {
     try {
       System.out.println("Updating product with productSeq: " + productSeq);
       productService.updateProduct(productSeq, productUpdateDTO);
-      return ResponseEntity.ok("Product successfully updated");
+      return ResponseEntity.ok("상품 정보가 수정되었습니다.");
     } catch (Exception e) {
       return ResponseEntity.status(500).body("Failed to update product: " + e.getMessage());
     }
