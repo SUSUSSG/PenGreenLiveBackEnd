@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -49,34 +50,30 @@ public class BrokerController {
         Long vendorSeq = securityService.getCurrentVendorSeq();
 
         if (userUUID == null && vendorSeq == null) {
-            if (userNm == null) {
-                // 사전에 설정한 닉네임 리스트
-                List<String> nicknameList = Arrays.asList("행복한펭귄", "심심한펭귄", "슬픈펭귄", "기쁜펭귄",
+
+            // 사전에 설정한 닉네임 리스트
+            List<String> nicknameList = Arrays.asList("행복한펭귄", "심심한펭귄", "슬픈펭귄", "기쁜펭귄",
                     "노래하는펭귄", "배부른펭귄", "물고기먹는펭귄", "슈슈슉펭귄", "잠자는펭귄", "헤엄치는펭귄", "황제펭귄", "날개짓하는펭귄",
                     "뛰어다니는펭귄", "눈사람만드는펭귄", "물고기잡는펭귄", "빙하위를걷는펭귄", "무지개색펭귄", "눈싸움하는펭귄", "코딩하는펭귄",
                     "졸린펭귄", "잠오는펭귄", "산책하는펭귄", "코노가는펭귄", "한강펭귄", "게으른펭귄", "물고기사냥하는펭귄", "햇살쨍쨍펭귄",
                     "하늘나는펭귄", "놀고있는펭귄", "나펭귄아니다", "갯벌사는펭귄", "커피마시는펭귄", "매킨토시펭귄");
 
-                // 랜덤으로 닉네임 선택
-                Random random = new Random();
-                int randomIndex = random.nextInt(nicknameList.size());
-                String randomNickname = nicknameList.get(randomIndex);
+            // 랜덤으로 닉네임 선택
+            Random random = new Random();
+            int randomIndex = random.nextInt(nicknameList.size());
+            String randomNickname = nicknameList.get(randomIndex);
 
-                // 사용 중이지 않은 숫자 생성
-                int randomNumber;
-                do {
-                    randomNumber = random.nextInt(1000);
-                } while (usedNumbers.contains(randomNumber));
+            // 사용 중이지 않은 숫자 생성
+            int randomNumber;
+            do {
+                randomNumber = random.nextInt(1000);
+            } while (usedNumbers.contains(randomNumber));
 
-                // 사용한 숫자 Set에 추가
-                usedNumbers.add(randomNumber);
+            // 사용한 숫자 Set에 추가
+            usedNumbers.add(randomNumber);
 
-                // 닉네임과 숫자 조합하여 유저 이름 생성
-                userNm = randomNickname + "_" + String.format("%03d", randomNumber);
-                accessor.getSessionAttributes().put("userNm", userNm);
-            }
-        } else if (userNm == null) {
-            userNm = userService.getUserNmByUUID(userUUID);
+            // 닉네임과 숫자 조합하여 유저 이름 생성
+            userNm = randomNickname + "_" + String.format("%03d", randomNumber);
             accessor.getSessionAttributes().put("userNm", userNm);
         }
 
@@ -110,6 +107,7 @@ public class BrokerController {
         log.info("# roomId = {}", roomId);
         log.info("# message = {}", message);
         message.setMessage(message.getWriter() + "님이 입장하셨습니다.");
+
 //        template.convertAndSend("/sub/room/" + roomId, message);  // MessageDto 객체 전체를 전송
     }
 
