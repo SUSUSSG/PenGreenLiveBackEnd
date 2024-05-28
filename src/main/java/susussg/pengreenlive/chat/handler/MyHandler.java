@@ -19,12 +19,12 @@ import susussg.pengreenlive.login.service.SecurityService;
 import susussg.pengreenlive.util.Service.BanwordService;
 
 @Log4j2
-@RequiredArgsConstructor
 public class MyHandler extends TextWebSocketHandler {
 
     private final Map<String, WebSocketSession> sessions = new HashMap<>();
 
-    private final RedisTemplate<String, Object> redisTemplate;
+
+    private RedisTemplate<String, Object> redisTemplate;
 
     // 세션 저장
     public void storeSession(String sessionId) {
