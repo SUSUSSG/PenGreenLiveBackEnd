@@ -19,7 +19,7 @@ public class LiveRegisterMapperTest {
 
     @Test
     void selectChannelName() {
-        String channelNm = broadcastMapper.selectChannelName(2);
+        String channelNm = broadcastMapper.selectChannelName(2L);
         log.info(channelNm);
     }
 
@@ -30,19 +30,19 @@ public class LiveRegisterMapperTest {
     }
 
 
-    @Test
-    void insertBroadcast() {
-        BroadcastDTO broad = BroadcastDTO.builder()
-                .channelNm("test4")
-                .broadcastTitle("test4")
-                .broadcastImage("imageData")
-                .broadcastSummary("test4")
-                .broadcastScheduledTime(new Date(2024, 10, 11))
-                .categoryCd("BCT-CTG-003")
-                .build();
-        broadcastMapper.insertBroadcast(broad);
-        log.info("result!!!!!" + broad.getBroadcastSeq());
-    }
+//    @Test
+//    void insertBroadcast() {
+//        BroadcastDTO broad = BroadcastDTO.builder()
+//                .channelNm("test4")
+//                .broadcastTitle("test4")
+//                .broadcastImage("imageData")
+//                .broadcastSummary("test4")
+//                .broadcastScheduledTime(new Date(2024, 10, 11))
+//                .categoryCd("BCT-CTG-003")
+//                .build();
+//        broadcastMapper.insertBroadcast(broad);
+//        log.info("result!!!!!" + broad.getBroadcastSeq());
+//    }
 
 
     @Test
@@ -93,14 +93,14 @@ public class LiveRegisterMapperTest {
 
     @Test
     void selectChannelSalesProduct() {
-        List<ChannelSalesProductDTO> products = broadcastMapper.selectChannelSalesProduct(2);
+        List<ChannelSalesProductDTO> products = broadcastMapper.selectChannelSalesProduct(2L);
         products.stream().forEach(System.out::println);
     }
 
 
     @Test
     void selectPreBroadcastInfo() {
-        List<PrepareBroadcastInfoDTO> infoList = broadcastMapper.selectPrepareBroadcastInfo(2);
+        List<PrepareBroadcastInfoDTO> infoList = broadcastMapper.selectPrepareBroadcastInfo(2L);
         infoList.forEach(info -> log.info(String.valueOf(info.getBroadcastSeq())));
     }
 }

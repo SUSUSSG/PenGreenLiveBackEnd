@@ -29,10 +29,10 @@
         SELECT P.PRODUCT_SEQ, PRODUCT_CD, PRODUCT_NM, PRODUCT_IMAGE, LIST_PRICE
         FROM TB_PRODUCT P
                  LEFT JOIN TB_CHANNEL_SALES_PRODUCT C ON P.PRODUCT_SEQ = C.PRODUCT_SEQ
-        WHERE VENDOR_SEQ = #{vendorId};
+        WHERE VENDOR_SEQ = #{vendorSeq};
     </select>
     <select id="selectChannelName" parameterType="long" resultType="java.lang.String">
-        SELECT CHANNEL_NM FROM TB_CHANNEL WHERE VENDOR_SEQ = #{vendorId};
+        SELECT CHANNEL_NM FROM TB_CHANNEL WHERE VENDOR_SEQ = #{vendorSeq};
     </select>
     <select id="selectPrepareBroadcastInfo" resultType="susussg.pengreenlive.broadcast.dto.PrepareBroadcastInfoDTO" parameterType="long">
         SELECT bp.BROADCAST_SEQ,
@@ -58,7 +58,7 @@
                                 WHERE BROADCAST_SEQ = bp.BROADCAST_SEQ
                                   AND DISCOUNT_PRICE = max_discount.MAX_DISCOUNT_PRICE)
           AND b.BROADCAST_YN = FALSE
-          AND c.VENDOR_SEQ = #{vendorId}
+          AND c.VENDOR_SEQ = #{vendorSeq}
     </select>
     <select id="getBroadcastsByVendorAndDateRange" resultType="susussg.pengreenlive.broadcast.dto.BroadcastDTO">
         SELECT B.BROADCAST_SEQ, C.VENDOR_SEQ, B.CHANNEL_NM, B.BROADCAST_TITLE,

@@ -5,7 +5,7 @@ import susussg.pengreenlive.user.dto.UpdateUserFormDTO;
 
 public interface UserService {
     String getUserNmByUUID(String uuid);
-    String getChannelNmByVendorSeq(int vendorSeq);
+    String getChannelNmByVendorSeq(Long vendorSeq);
     String getUserAddressByUUID(String uuid);
 
     void updateUserInfo(UpdateUserFormDTO user);
