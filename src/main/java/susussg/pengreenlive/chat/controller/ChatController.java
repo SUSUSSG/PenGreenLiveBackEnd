@@ -13,14 +13,14 @@ import susussg.pengreenlive.chat.model.ChatMessage;
 public class ChatController {
 
     private final SimpMessageSendingOperations messagingTemplate;
-    private final ObjectMapper objectMapper;  // ObjectMapper를 주입받습니다.
+    private final ObjectMapper objectMapper;
 
     @MessageMapping("/chat/message")
     public void message(ChatMessage message) throws JsonProcessingException {
         if (ChatMessage.MessageType.ENTER.equals(message.getType()))
             message.setMessage(message.getSender() + "님이 입장하셨습니다.");
 
-        String jsonMessage = objectMapper.writeValueAsString(message);  // ChatMessage 객체를 JSON 문자열로 변환
+        String jsonMessage = objectMapper.writeValueAsString(message);
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), jsonMessage);
     }
 }

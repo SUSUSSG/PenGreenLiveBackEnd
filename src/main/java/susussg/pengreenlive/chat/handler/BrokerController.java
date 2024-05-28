@@ -16,6 +16,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import susussg.pengreenlive.chat.dto.MessageDto;
+import susussg.pengreenlive.login.service.SecurityService;
 import susussg.pengreenlive.user.service.UserService;
 import susussg.pengreenlive.user.service.UserServiceImpl;
 import susussg.pengreenlive.util.DTO.BanwordValidationResultDTO;
@@ -30,6 +31,7 @@ public class BrokerController {
     private final UserService userService;
     private final BanwordService banwordService;
 
+    private final SecurityService securityService;
 
     @MessageMapping("/test")
     public void test(SimpMessageHeaderAccessor accessor) {
@@ -43,14 +45,9 @@ public class BrokerController {
     public void sendMessage(@DestinationVariable(value = "roomId") String roomId,
         MessageDto message, SimpMessageHeaderAccessor accessor) {
 
-        // 세션에 하드코딩된 값 추가
-        // 테스트 시 주석처리 되지 않은 역할로 채팅 진입
-//        accessor.getSessionAttributes().put("userUUID", "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6"); // userUUID 추가
-//        accessor.getSessionAttributes().put("vendorSeq", 1); // vendorSeq 추가
-
-        String userUUID = (String) accessor.getSessionAttributes().get("userUUID");
-        String userNm = (String) accessor.getSessionAttributes().get("userNm");
-        Integer vendorSeq = (Integer) accessor.getSessionAttributes().get("vendorSeq");
+        String userUUID = securityService.getCurrentUserUuid();
+        String userNm = securityService.getCurrentUserNm();
+        Long vendorSeq = securityService.getCurrentVendorSeq();
 
         if (userUUID == null && vendorSeq == null) {
             if (userNm == null) {
