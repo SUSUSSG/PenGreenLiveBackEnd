@@ -10,6 +10,7 @@ import susussg.pengreenlive.dashboard.DTO.ProductDTO;
 import susussg.pengreenlive.dashboard.DTO.ProductUpdateDTO;
 import susussg.pengreenlive.dashboard.DTO.VendorProductListDTO;
 import susussg.pengreenlive.dashboard.Service.ProductService;
+import susussg.pengreenlive.login.service.SecurityService;
 
 @RestController
 @Log4j2
@@ -18,6 +19,9 @@ public class ProductController {
 
   @Autowired
   private final ProductService productService;
+
+  @Autowired
+  private SecurityService securityService;
 
   public ProductController(ProductService productService) {
     this.productService = productService;
