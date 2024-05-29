@@ -2,6 +2,8 @@ package susussg.pengreenlive.broadcast.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -46,13 +48,18 @@ public class TranslationServiceImpl implements TranslationService {
             }
 
             String inputLine;
-            StringBuffer response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
             while ((inputLine = br.readLine()) != null) {
                 response.append(inputLine);
             }
             br.close();
 
-            return response.toString();
+            // Parse JSON response
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(response.toString());
+            String translatedText = rootNode.path("message").path("result").path("translatedText").asText();
+
+            return translatedText;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

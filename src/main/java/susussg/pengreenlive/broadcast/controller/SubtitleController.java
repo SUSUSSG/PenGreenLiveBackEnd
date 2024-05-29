@@ -1,7 +1,6 @@
 package susussg.pengreenlive.broadcast.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -19,14 +18,14 @@ public class SubtitleController {
     private final TranslationService translationService;
 
     @MessageMapping("/subtitles/{broadcastId}")
-    public void broadcastSubtitle(@DestinationVariable String broadcastId, Subtitle message) {
-        log.info("Received subtitle: {}", message);
+    public void broadcastSubtitle(@DestinationVariable String broadcastId, Subtitle subtitle) {
+        log.info("Received subtitle: {}", subtitle);
         try{
-            message.setTranslatedText(translationService.translateKoreanToEnglish(message.getText()));
+            subtitle.setTranslatedText(translationService.translateKoreanToEnglish(subtitle.getText()));
         }catch (Exception e){
             log.info(e.toString());
         }
-        template.convertAndSend("/sub/subtitles/" + broadcastId, message);
+        template.convertAndSend("/sub/subtitles/" + broadcastId, subtitle);
     }
 }
 
