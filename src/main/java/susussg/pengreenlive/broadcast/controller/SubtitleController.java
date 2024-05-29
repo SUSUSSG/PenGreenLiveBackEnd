@@ -21,7 +21,11 @@ public class SubtitleController {
     @MessageMapping("/subtitles/{broadcastId}")
     public void broadcastSubtitle(@DestinationVariable String broadcastId, Subtitle message) {
         log.info("Received subtitle: {}", message);
-        message.setTranslatedText(translationService.translateKoreanToEnglish(message.getText()));
+        try{
+            message.setTranslatedText(translationService.translateKoreanToEnglish(message.getText()));
+        }catch (Exception e){
+            log.info(e.toString());
+        }
         template.convertAndSend("/sub/subtitles/" + broadcastId, message);
     }
 }
