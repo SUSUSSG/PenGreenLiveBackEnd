@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.broadcast.dto.BroadcastStatistics;
@@ -243,8 +244,11 @@ public class BroadcastStatisticsController {
     public ResponseEntity<Integer> getAverageViewingTime(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
         Long vendorSeq = securityService.getCurrentVendorSeq();
         int avgViewingTime = broadcastStatisticsService.getAverageViewingTime(vendorSeq, startDate, endDate);
+        log.info("vendorSeq {} avgViewingTime {}",vendorSeq, avgViewingTime);
+
         return ResponseEntity.ok(avgViewingTime);
     }
 
@@ -286,6 +290,9 @@ public class BroadcastStatisticsController {
     @PatchMapping("/{broadcastSeq}/likes/toggle")
     public ResponseEntity<Void> toggleLike(@PathVariable("broadcastSeq") Long broadcastSeq) {
         String userUUID = securityService.getCurrentUserUuid();
+        if (userUUID==null) {
+            return ResponseEntity.status(HttpStatus.GONE).build();
+        }
         broadcastStatisticsService.toggleLike(userUUID, broadcastSeq);
         return ResponseEntity.ok().build();
     }
@@ -298,6 +305,9 @@ public class BroadcastStatisticsController {
     @GetMapping("/{broadcastSeq}/likes/check")
     public ResponseEntity<Boolean> checkLike(@PathVariable("broadcastSeq") Long broadcastSeq) {
         String userUUID = securityService.getCurrentUserUuid();
+        if (userUUID==null) {
+            return ResponseEntity.status(HttpStatus.GONE).body(false);
+        }
         boolean isLiked = broadcastStatisticsService.isLikedByUser(userUUID, broadcastSeq);
         return ResponseEntity.ok(isLiked);
     }
