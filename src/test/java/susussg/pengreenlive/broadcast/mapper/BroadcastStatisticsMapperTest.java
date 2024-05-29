@@ -159,7 +159,7 @@ public class BroadcastStatisticsMapperTest {
 
     @Test
     public void testGetAverageViewingTime() {
-        long vendorSeq = 1L;
+        long vendorSeq = 8L;
         LocalDate startDate = LocalDate.parse("2023-01-01");
         LocalDate endDate = LocalDate.parse("2023-12-31");
         int avgViewingTime = broadcastStatisticsMapper.getAverageViewingTime(vendorSeq, startDate, endDate);
