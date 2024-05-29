@@ -19,6 +19,6 @@ public class UpdateUserFormDTO {
     private String userAddress;
     private String userId;
     private String userPw;
-    private byte[] userProfileImgFile;
+    private String userProfileImgFile;
     private String userProfileImg;
 }

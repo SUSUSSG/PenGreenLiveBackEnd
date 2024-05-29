@@ -47,7 +47,7 @@
         USER_ADDRESS = COALESCE(NULLIF(#{userAddress}, USER_ADDRESS), USER_ADDRESS),
         USER_EMAIL = COALESCE(NULLIF(#{userEmail}, USER_EMAIL), USER_EMAIL),
         USER_PROFILE_IMG = COALESCE(NULLIF(#{userProfileImg}, USER_PROFILE_IMG), USER_PROFILE_IMG)
-    WHERE USER_UUID = #{userUUID}
+    WHERE USER_UUID = UUID_TO_BIN(#{userUUID})
   </update>
 
   <select id="selectUserInfoByUserUUID" parameterType="String" resultType="susussg.pengreenlive.user.dto.UpdateUserFormDTO">

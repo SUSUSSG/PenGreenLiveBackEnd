@@ -1,7 +1,9 @@
 package susussg.pengreenlive.login.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import susussg.pengreenlive.user.dto.UpdateUserFormDTO;
+import susussg.pengreenlive.user.service.UserService;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,6 +30,10 @@ import java.util.Map;
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    private UserService userService;
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
@@ -58,11 +66,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         Member member = (Member) authResult.getPrincipal();
 
+        UpdateUserFormDTO user = userService.getUserInfoByUserUUID(member.getUserUuid());
+
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("id", member.getUsername());
         userInfo.put("name", member.getUserNm());
         userInfo.put("uuid", member.getUserUuid());
         userInfo.put("role", member.getAuthorities().toString());
+        userInfo.put("profileImg", user.getUserProfileImg());
 
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(member, null, member.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);

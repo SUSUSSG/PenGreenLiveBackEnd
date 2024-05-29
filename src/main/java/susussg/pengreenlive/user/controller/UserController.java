@@ -15,6 +15,8 @@ import susussg.pengreenlive.login.service.SecurityService;
 import susussg.pengreenlive.user.dto.UpdateUserFormDTO;
 import susussg.pengreenlive.user.service.UserService;
 
+import java.util.Base64;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -44,7 +46,6 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> updateUserProfile() {
-
         try {
             String uuid = securityService.getCurrentUserUuid();
             UpdateUserFormDTO user = userService.getUserInfoByUserUUID(uuid);
@@ -57,20 +58,14 @@ public class UserController {
 
     @PatchMapping
     public ResponseEntity<?> updateUserProfile(@RequestBody UpdateUserFormDTO user) {
-        log.info("/update {}", user);
+        try {
+            String uuid = securityService.getCurrentUserUuid();
+            user.setUserUUID(uuid);
+            userService.updateUserInfo(user);
+            return ResponseEntity.ok().body("success");
 
-
-//        try {
-//            String uuid = securityService.getCurrentUserUuid();
-//            user.setUserUUID(uuid);
-//            userService.updateUserInfo(user);
-//
-//            return ResponseEntity.ok().body("success");
-//
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
-//        }
-
-        return ResponseEntity.ok().body("null");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+        }
     }
 }
