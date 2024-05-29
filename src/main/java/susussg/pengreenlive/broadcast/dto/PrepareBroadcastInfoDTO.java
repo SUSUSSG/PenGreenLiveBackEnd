@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class PrepareBroadcastInfoDTO {
     private long broadcastSeq;
     private String broadcastTitle;
     private String broadcastImage;
-    private Date broadcastScheduledTime;
+    private LocalDateTime broadcastScheduledTime;
     //상품
     private List<LiveBroadcastProductDTO> productList;
 
