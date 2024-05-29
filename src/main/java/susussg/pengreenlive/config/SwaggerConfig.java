@@ -1,4 +1,4 @@
-package susussg.pengreenlive.util.Controller;
+package susussg.pengreenlive.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
