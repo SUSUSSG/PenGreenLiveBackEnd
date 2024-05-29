@@ -27,6 +27,7 @@ public class SubtitleController {
         }catch (Exception e){
             log.info(e.toString());
         }
+        log.info("Parsing subtitle: {}", subtitle);
         template.convertAndSend("/sub/subtitles/" + broadcastId, subtitle);
     }
 }
