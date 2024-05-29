@@ -77,6 +77,8 @@ jobs:
           echo "server.servlet.session.persistent=false" >> ./src/main/resources/application-secret.properties
           echo "spring.session.redis.repository-type=default" >> ./src/main/resources/application-secret.properties
           echo "saupja.api.key=${{secrets.SAUPJA_API_KEY}}" >> ./src/main/resources/application-secret.properties
+          echo "papago.client.id=${{secrets.PAPAGO_CLIENT_ID}}" >> ./src/main/resources/application-secret.properties
+          echo "papago.client.secret=${{secrets.PAPAGO_CLIENT_SECRET}}" >> ./src/main/resources/application-secret.properties
           
           
           
