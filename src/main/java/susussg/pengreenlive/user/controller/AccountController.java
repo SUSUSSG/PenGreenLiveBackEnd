@@ -56,16 +56,17 @@ public class AccountController {
     @PostMapping("/sms/request-authcode")
     public ResponseEntity<?> sendAuthCode(@RequestParam("phoneNumber") String phoneNumber) {
         log.info("/sms/request-authcode {}", phoneNumber);
+        SingleMessageSentResponse response = null;
 
         try {
-            SingleMessageSentResponse response = accountService.sendVerificationCode(phoneNumber);
+            response = accountService.sendVerificationCode(phoneNumber);
             if (response.getStatusCode().equals("2000")) {
                 return ResponseEntity.ok("SMS 발송 성공.");
             } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SMS 발송 실패.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.getStatusCode());
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 에러" + response.getStatusCode());
         }
     }
 
