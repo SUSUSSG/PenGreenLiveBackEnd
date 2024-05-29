@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import susussg.pengreenlive.login.service.SecurityService;
 import susussg.pengreenlive.order.dto.OrderFormDTO;
 import susussg.pengreenlive.order.service.OrderService;
 
@@ -18,12 +19,14 @@ import susussg.pengreenlive.order.service.OrderService;
 public class OrderController {
 
     private final OrderService orderService;
+    private final SecurityService securityService;
     @PostMapping
     public ResponseEntity<?> create(@RequestBody OrderFormDTO orderForm) {
         log.info("OrderController {}", orderForm);
+        String userUUID = securityService.getCurrentUserUuid();
 
-        orderForm.setUserUUID("f23a72e0-1347-11ef-b085-f220affc9a21");
         try {
+            orderForm.setUserUUID(userUUID);
             Long orderSeq = orderService.persistOrder(orderForm);
             return ResponseEntity.ok().body(orderSeq);
         } catch (Exception e) {

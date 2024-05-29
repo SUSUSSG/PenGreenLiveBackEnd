@@ -59,6 +59,7 @@ public class BroadcastServiceImpl implements BroadcastService {
                 .broadcastSummary(broadcastRegisterInfo.getBroadcastSummary())
                 .broadcastScheduledTime(broadcastRegisterInfo.getBroadcastScheduledTime())
                 .categoryCd(broadcastRegisterInfo.getCategoryCd())
+                .channelSeq(broadcastRegisterInfo.getChannelSeq())
                 .build();
         try {
             if(broadcastRegisterInfo.getImage() != null) {

@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService{
             byte[] compressedImage = null;
 
             try {
-                compressedImage = imageService.compressAndResizeImage(imageBytes, 400, 1f);
+                compressedImage = imageService.compressAndResizeImage(imageBytes, 40, 0.8f);
                 MultipartFile multipartFile = new ByteArrayMultipartFile(compressedImage, "profile", user.getUserUUID()+".jpg", "image/jpeg");
                 log.info("multipartFile {}", multipartFile);
 
