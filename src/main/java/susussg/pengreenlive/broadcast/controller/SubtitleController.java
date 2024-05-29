@@ -21,7 +21,9 @@ public class SubtitleController {
     public void broadcastSubtitle(@DestinationVariable String broadcastId, Subtitle subtitle) {
         log.info("Received subtitle: {}", subtitle);
         try{
-            subtitle.setTranslatedText(translationService.translateKoreanToEnglish(subtitle.getText()));
+            String eng = translationService.translateKoreanToEnglish(subtitle.getText());
+            log.info(eng);
+            subtitle.setTranslatedText(eng);
         }catch (Exception e){
             log.info(e.toString());
         }
