@@ -18,7 +18,7 @@
     </resultMap>
 
     <!-- 특정 채널의 판매 상품 중 누적 주문 금액이 가장 높은 10개를 가져오는 쿼리 -->
-    <select id="findTop10ProductsByChannel" parameterType="long" resultType="susussg.pengreenlive.statistics.dto.ProductInChannelDTO">
+    <select id="findTop10ProductsByChannel" parameterType="Long" resultType="susussg.pengreenlive.statistics.dto.ProductInChannelDTO">
         SELECT
             P.PRODUCT_NM,
             P.PRODUCT_CD,
@@ -39,7 +39,7 @@
     </select>
 
     <!-- 채널에서 파는 모든 상품의 이름과 상품 코드, 누적 매출액 리스트를 가져오는 쿼리 -->
-    <select id="findAllProductsByChannelWithSales" parameterType="long"  resultType="susussg.pengreenlive.statistics.dto.ProductInChannelDTO">
+    <select id="findAllProductsByChannelWithSales" parameterType="Long"  resultType="susussg.pengreenlive.statistics.dto.ProductInChannelDTO">
         SELECT
             P.PRODUCT_NM,
             P.PRODUCT_CD,

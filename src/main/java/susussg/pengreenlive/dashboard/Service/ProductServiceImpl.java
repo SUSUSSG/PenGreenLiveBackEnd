@@ -113,8 +113,8 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public List<VendorProductListDTO> findProductsByVendor(Long venderSeq) {
-    return productMapper.findProductsByVendor(venderSeq);
+  public List<VendorProductListDTO> findProductsByVendor(Long vendorSeq) {
+    return productMapper.findProductsByVendor(vendorSeq);
   }
 
   @Override

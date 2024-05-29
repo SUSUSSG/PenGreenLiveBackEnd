@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public String getChannelNmByVendorSeq(int vendorSeq) {
+    public String getChannelNmByVendorSeq(Long vendorSeq) {
         return userMapper.selectChannelNmByVendorSeq(vendorSeq);
     }
 

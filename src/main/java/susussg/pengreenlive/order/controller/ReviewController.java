@@ -26,9 +26,10 @@ public class ReviewController {
     this.reviewService = reviewService;
   }
 
-  @GetMapping("/orders/{userUuid}")
-  public ResponseEntity<List<ReviewDTO>> getOrdersByUser(@PathVariable String userUuid) {
-    List<ReviewDTO> orders = reviewService.findOrdersByUser(userUuid);
+  @GetMapping("/orders")
+  public ResponseEntity<List<ReviewDTO>> getOrdersByUser() {
+    String userUUID = securityService.getCurrentUserUuid();
+    List<ReviewDTO> orders = reviewService.findOrdersByUser(userUUID);
     return ResponseEntity.ok(orders);
   }
 

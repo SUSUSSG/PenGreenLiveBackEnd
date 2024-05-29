@@ -41,7 +41,7 @@ public class BrokerController {
 
     @MessageMapping("/room/{roomId}")
     public void sendMessage(@DestinationVariable(value = "roomId") String roomId,
-        MessageDto message, SimpMessageHeaderAccessor accessor) {
+                            MessageDto message, SimpMessageHeaderAccessor accessor) {
 
         // 세션에 하드코딩된 값 추가
         // 테스트 시 주석처리 되지 않은 역할로 채팅 진입
@@ -50,16 +50,16 @@ public class BrokerController {
 
         String userUUID = (String) accessor.getSessionAttributes().get("userUUID");
         String userNm = (String) accessor.getSessionAttributes().get("userNm");
-        Integer vendorSeq = (Integer) accessor.getSessionAttributes().get("vendorSeq");
+        Long vendorSeq = (Long) accessor.getSessionAttributes().get("vendorSeq");
 
         if (userUUID == null && vendorSeq == null) {
             if (userNm == null) {
                 // 사전에 설정한 닉네임 리스트
                 List<String> nicknameList = Arrays.asList("행복한펭귄", "심심한펭귄", "슬픈펭귄", "기쁜펭귄",
-                    "노래하는펭귄", "배부른펭귄", "물고기먹는펭귄", "슈슈슉펭귄", "잠자는펭귄", "헤엄치는펭귄", "황제펭귄", "날개짓하는펭귄",
-                    "뛰어다니는펭귄", "눈사람만드는펭귄", "물고기잡는펭귄", "빙하위를걷는펭귄", "무지개색펭귄", "눈싸움하는펭귄", "코딩하는펭귄",
-                    "졸린펭귄", "잠오는펭귄", "산책하는펭귄", "코노가는펭귄", "한강펭귄", "게으른펭귄", "물고기사냥하는펭귄", "햇살쨍쨍펭귄",
-                    "하늘나는펭귄", "놀고있는펭귄", "나펭귄아니다", "갯벌사는펭귄", "커피마시는펭귄");
+                        "노래하는펭귄", "배부른펭귄", "물고기먹는펭귄", "슈슈슉펭귄", "잠자는펭귄", "헤엄치는펭귄", "황제펭귄", "날개짓하는펭귄",
+                        "뛰어다니는펭귄", "눈사람만드는펭귄", "물고기잡는펭귄", "빙하위를걷는펭귄", "무지개색펭귄", "눈싸움하는펭귄", "코딩하는펭귄",
+                        "졸린펭귄", "잠오는펭귄", "산책하는펭귄", "코노가는펭귄", "한강펭귄", "게으른펭귄", "물고기사냥하는펭귄", "햇살쨍쨍펭귄",
+                        "하늘나는펭귄", "놀고있는펭귄", "나펭귄아니다", "갯벌사는펭귄", "커피마시는펭귄", "매킨토시펭귄");
 
                 // 랜덤으로 닉네임 선택
                 Random random = new Random();
@@ -128,7 +128,7 @@ public class BrokerController {
     // BrokerController.java에 메시지 타입으로 NOTICE를 처리하는 메소드 추가
     @MessageMapping("/room/{roomId}/notice")
     public void broadcastNotice(@DestinationVariable(value = "roomId") String roomId,
-        MessageDto message) {
+                                MessageDto message) {
         log.info("# notice = {}", message);
         template.convertAndSend("/sub/room/" + roomId + "/notice", message);  // 모든 구독자에게 공지사항 전송
     }

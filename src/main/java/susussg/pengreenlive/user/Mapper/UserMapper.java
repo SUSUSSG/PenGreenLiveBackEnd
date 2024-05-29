@@ -9,7 +9,7 @@ import susussg.pengreenlive.user.dto.UpdateUserFormDTO;
 public interface UserMapper {
 
     String selectUserNmByUUID(String uuid);
-    String selectChannelNmByVendorSeq(int vendorSeq);
+    String selectChannelNmByVendorSeq(Long vendorSeq);
 
     void insertUser(SignupFormDTO signupForm);
 

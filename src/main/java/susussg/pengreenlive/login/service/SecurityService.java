@@ -33,17 +33,16 @@ public class SecurityService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("username = {}", username);
         if (isNumeric(username)) {
             VendorDTO vendor = vendorMapper.selectVendorInfoByBusinessId(username);
-            log.info("vendor = {}", vendor);
+            log.info("vendor login = {}", vendor);
 
             if (vendor != null) {
                 return buildVendorDetails(vendor);
             }
         } else {
             UserDTO user = userMapper.selectUserInfoByUserId(username);
-            log.info("user = {}", user);
+            log.info("user login = {}", user);
 
             if (user != null) {
                 return buildUserDetails(user);
@@ -57,17 +56,18 @@ public class SecurityService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
         if (!user.getAccountActive()) {
             authorities.add(new SimpleGrantedAuthority(MemberRole.DEACTIVE.getValue()));
-            return new Member(user.getUserId(), user.getUserPw(), authorities, user.getUserNm(), user.getUserUuid());
+            return new Member(user.getUserId(), user.getUserPw(), authorities, user.getUserNm(), user.getUserUuid(), null, null);
         }
         authorities.add(new SimpleGrantedAuthority(MemberRole.USER.getValue()));
-        return new Member(user.getUserId(), user.getUserPw(), authorities, user.getUserNm(), user.getUserUuid());
+        return new Member(user.getUserId(), user.getUserPw(), authorities, user.getUserNm(), user.getUserUuid(), null, null);
     }
 
     private UserDetails buildVendorDetails(VendorDTO vendor) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-
+        log.info("vendor info {}", vendor);
         authorities.add(new SimpleGrantedAuthority(MemberRole.VENDOR.getValue()));
-        return new Member(vendor.getBusinessId(), vendor.getVendorPw(), authorities, vendor.getVendorNm(), vendor.getBusinessId());
+        return new Member(vendor.getBusinessId(), vendor.getVendorPw(), authorities, vendor.getVendorNm(),
+                null, vendor.getVendorSeq(), vendor.getChannelSeq());
     }
 
     private boolean isNumeric(String str) {
@@ -76,8 +76,40 @@ public class SecurityService implements UserDetailsService {
 
     public String getCurrentUserUuid() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
         Member member = (Member) authentication.getPrincipal();
         return member.getUserUuid();
+    }
+
+    public Long getCurrentVendorSeq() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+        Member member = (Member) authentication.getPrincipal();
+        return member.getVendorSeq();
+    }
+
+    public Long getCurrentChannelSeq() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+        Member member = (Member) authentication.getPrincipal();
+        return member.getChannelSeq();
+    }
+
+    public String getCurrentUserNm() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("authentication {}", authentication);
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+        Member member = (Member) authentication.getPrincipal();
+        log.info("내 이름은 {} ", member.getUserNm());
+        return member.getUserNm();
     }
 
     public Authentication convertJsonToAuthentication(String json) {

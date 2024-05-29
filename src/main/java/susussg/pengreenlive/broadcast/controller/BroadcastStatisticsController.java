@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.broadcast.dto.BroadcastStatistics;
 import susussg.pengreenlive.broadcast.service.BroadcastStatisticsService;
+import susussg.pengreenlive.login.service.SecurityService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,6 +24,9 @@ public class BroadcastStatisticsController {
 
     @Autowired
     private BroadcastStatisticsService broadcastStatisticsService;
+
+    @Autowired
+    private SecurityService securityService;
 
     /**
      * 방송 통계를 생성합니다.
@@ -151,17 +155,16 @@ public class BroadcastStatisticsController {
 
     /**
      * 특정 판매자의 기간별 방송 통계를 조회합니다.
-     * @param vendorSeq 판매자 시퀀스 ID
      * @param startDate 시작 날짜
      * @param endDate 종료 날짜
      * @return 방송 통계 리스트
      */
-    @GetMapping("/vendor/{vendorSeq}")
+    @GetMapping("/vendor")
     public ResponseEntity<List<BroadcastStatistics>> getStatistics(
-            @PathVariable long vendorSeq,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String endDate) {
 
+        Long vendorSeq = securityService.getCurrentVendorSeq();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDateTime = LocalDateTime.parse(startDate + " 00:00:00", formatter);
         LocalDateTime endDateTime = LocalDateTime.parse(endDate + " 23:59:59", formatter);
@@ -172,112 +175,105 @@ public class BroadcastStatisticsController {
 
     /**
      * 평균 방송 진행 시간을 조회합니다.
-     * @param vendorSeq 판매자 시퀀스 ID
      * @param startDate 시작 날짜
      * @param endDate 종료 날짜
      * @return 평균 방송 진행 시간
      */
     @GetMapping("/average-broadcast-duration")
     public ResponseEntity<Integer> getAverageBroadcastDuration(
-            @RequestParam long vendorSeq,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        Long vendorSeq = securityService.getCurrentVendorSeq();
         int avgBroadcastDuration = broadcastStatisticsService.getAverageBroadcastDuration(vendorSeq, startDate, endDate);
         return ResponseEntity.ok(avgBroadcastDuration);
     }
 
     /**
      * 평균 시청자 수를 조회합니다.
-     * @param vendorSeq 판매자 시퀀스 ID
      * @param startDate 시작 날짜
      * @param endDate 종료 날짜
      * @return 평균 시청자 수
      */
     @GetMapping("/average-viewer-count")
     public ResponseEntity<Integer> getAverageViewerCount(
-            @RequestParam long vendorSeq,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        Long vendorSeq = securityService.getCurrentVendorSeq();
         int avgViewerCount = broadcastStatisticsService.getAverageViewerCount(vendorSeq, startDate, endDate);
         return ResponseEntity.ok(avgViewerCount);
     }
 
     /**
      * 평균 구매 개수를 조회합니다.
-     * @param vendorSeq 판매자 시퀀스 ID
      * @param startDate 시작 날짜
      * @param endDate 종료 날짜
      * @return 평균 구매 개수
      */
     @GetMapping("/average-purchase-quantity")
     public ResponseEntity<Integer> getAveragePurchaseQuantity(
-            @RequestParam long vendorSeq,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        Long vendorSeq = securityService.getCurrentVendorSeq();
         int avgPurchaseQuantity = broadcastStatisticsService.getAveragePurchaseQuantity(vendorSeq, startDate, endDate);
         return ResponseEntity.ok(avgPurchaseQuantity);
     }
 
     /**
      * 평균 상품 클릭 수를 조회합니다.
-     * @param vendorSeq 판매자 시퀀스 ID
      * @param startDate 시작 날짜
      * @param endDate 종료 날짜
      * @return 평균 상품 클릭 수
      */
     @GetMapping("/average-product-clicks")
     public ResponseEntity<Integer> getAverageProductClicks(
-            @RequestParam long vendorSeq,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        Long vendorSeq = securityService.getCurrentVendorSeq();
         int avgProductClicks = broadcastStatisticsService.getAverageProductClicks(vendorSeq, startDate, endDate);
         return ResponseEntity.ok(avgProductClicks);
     }
 
     /**
      * 평균 방송 시청 시간을 조회합니다.
-     * @param vendorSeq 판매자 시퀀스 ID
      * @param startDate 시작 날짜
      * @param endDate 종료 날짜
      * @return 평균 방송 시청 시간
      */
     @GetMapping("/average-viewing-time")
     public ResponseEntity<Integer> getAverageViewingTime(
-            @RequestParam long vendorSeq,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        Long vendorSeq = securityService.getCurrentVendorSeq();
         int avgViewingTime = broadcastStatisticsService.getAverageViewingTime(vendorSeq, startDate, endDate);
         return ResponseEntity.ok(avgViewingTime);
     }
 
     /**
      * 평균 좋아요 수를 조회합니다.
-     * @param vendorSeq 판매자 시퀀스 ID
      * @param startDate 시작 날짜
      * @param endDate 종료 날짜
      * @return 평균 좋아요 수
      */
     @GetMapping("/average-likes-count")
     public ResponseEntity<Integer> getAverageLikesCount(
-            @RequestParam long vendorSeq,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        Long vendorSeq = securityService.getCurrentVendorSeq();
         int avgLikesCount = broadcastStatisticsService.getAverageLikesCount(vendorSeq, startDate, endDate);
         return ResponseEntity.ok(avgLikesCount);
     }
 
     /**
      * 평균 구매 금액을 조회합니다.
-     * @param vendorSeq 판매자 시퀀스 ID
      * @param startDate 시작 날짜
      * @param endDate 종료 날짜
      * @return 평균 구매 금액
      */
     @GetMapping("/average-purchase-amount")
     public ResponseEntity<Long> getAveragePurchaseAmount(
-            @RequestParam long vendorSeq,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        Long vendorSeq = securityService.getCurrentVendorSeq();
         long avgPurchaseAmount = broadcastStatisticsService.getAveragePurchaseAmount(vendorSeq, startDate, endDate);
         return ResponseEntity.ok(avgPurchaseAmount);
     }
@@ -285,24 +281,24 @@ public class BroadcastStatisticsController {
     /**
      * 특정 방송의 좋아요를 토글합니다.
      * @param broadcastSeq 방송 시퀀스 ID
-     * @param userUuid 사용자 UUID
      * @return 응답 상태
      */
     @PatchMapping("/{broadcastSeq}/likes/toggle")
-    public ResponseEntity<Void> toggleLike(@PathVariable("broadcastSeq") Long broadcastSeq, @RequestParam("USER_UUID") String userUuid) {
-        broadcastStatisticsService.toggleLike(userUuid, broadcastSeq);
+    public ResponseEntity<Void> toggleLike(@PathVariable("broadcastSeq") Long broadcastSeq) {
+        String userUUID = securityService.getCurrentUserUuid();
+        broadcastStatisticsService.toggleLike(userUUID, broadcastSeq);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 특정 방송에 대해 사용자가 좋아요를 눌렀는지 확인합니다.
      * @param broadcastSeq 방송 시퀀스 ID
-     * @param userUuid 사용자 UUID
      * @return 좋아요 여부
      */
     @GetMapping("/{broadcastSeq}/likes/check")
-    public ResponseEntity<Boolean> checkLike(@PathVariable("broadcastSeq") Long broadcastSeq, @RequestParam("USER_UUID") String userUuid) {
-        boolean isLiked = broadcastStatisticsService.isLikedByUser(userUuid, broadcastSeq);
+    public ResponseEntity<Boolean> checkLike(@PathVariable("broadcastSeq") Long broadcastSeq) {
+        String userUUID = securityService.getCurrentUserUuid();
+        boolean isLiked = broadcastStatisticsService.isLikedByUser(userUUID, broadcastSeq);
         return ResponseEntity.ok(isLiked);
     }
 }

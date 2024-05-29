@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import susussg.pengreenlive.login.service.SecurityService;
 import susussg.pengreenlive.util.Service.ForbiddenWordService;
 
 
@@ -26,6 +28,8 @@ public class BroadcastController {
     @Autowired
     private final BroadcastService broadcastService;
 
+    @Autowired
+    private SecurityService securityService;
 
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
@@ -38,8 +42,6 @@ public class BroadcastController {
         this.broadcastService = broadcastService;
     }
 
-    //판매자 고유번호
-    long vendorId = 3;
     // 방송 카테고리 목록 불러오기
     @GetMapping("/broadcast-category")
     public ResponseEntity<List<BroadcastCategoryDTO>> fetchBroadcastCategory() {
@@ -50,7 +52,8 @@ public class BroadcastController {
     // 방송 등록
     @PostMapping(value = "/register-broadcast")
     public ResponseEntity<String> registerBroadcast(@RequestBody BroadcastRegistrationRequestDTO broadcastRegisterInfo) {
-        broadcastService.registerBroadcast(broadcastRegisterInfo, vendorId);
+        Long vendorSeq = securityService.getCurrentVendorSeq();
+        broadcastService.registerBroadcast(broadcastRegisterInfo, vendorSeq);
         return ResponseEntity.ok().body("방송 정보가 성공적으로 등록되었습니다.");
     }
 
@@ -58,7 +61,8 @@ public class BroadcastController {
     //채널별 상품 목록
     @GetMapping("/channel-sales-product")
     public ResponseEntity<List<ChannelSalesProductDTO>> fetchChannelSalesProduct() {
-        List<ChannelSalesProductDTO> channelSalesProducts = broadcastService.getChannelSalesProductAll(vendorId);
+        Long vendorSeq = securityService.getCurrentVendorSeq();
+        List<ChannelSalesProductDTO> channelSalesProducts = broadcastService.getChannelSalesProductAll(vendorSeq);
         return ResponseEntity.ok().body(channelSalesProducts);
     }
 
@@ -66,15 +70,16 @@ public class BroadcastController {
     @GetMapping("/prepare-broadcasts")
     public List<PrepareBroadcastInfoDTO> fetchUpcomingBroadcasts() {
         log.info("방송 준비 컨트롤러 호출");
-        return broadcastService.getUpcomingBroadcastInfo(vendorId);
+        Long vendorSeq = securityService.getCurrentVendorSeq();
+        return broadcastService.getUpcomingBroadcastInfo(vendorSeq);
     }
 
-    @GetMapping("/vendor/{vendorSeq}/broadcasts")
+    @GetMapping("/vendor/broadcasts")
     public ResponseEntity<List<BroadcastDTO>> getBroadcastsByVendorAndDateRange(
-            @PathVariable long vendorSeq,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String endDate) {
 
+        Long vendorSeq = securityService.getCurrentVendorSeq();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDateTime = LocalDateTime.parse(startDate + " 00:00:00", formatter);
         LocalDateTime endDateTime = LocalDateTime.parse(endDate + " 23:59:59", formatter);

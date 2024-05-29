@@ -20,10 +20,10 @@ public class VendorServiceImpl implements VendorService {
     VendorMapper vendorMapper;
 
 
-//    @Override
-//    public String getUserNmByUUID(String uuid) {
-//        return userMapper.selectUserNmByUUID(uuid); //세션의 유저 아이디값을 인자로 받음
-//    }
+    @Override
+    public Long getChannelSeqByVendorSeq(Long vendorSeq) {
+        return vendorMapper.selectChannelSeqByVendorSeq(vendorSeq);
+    }
 //
 //    @Override
 //    public String getChannelNmByVendorSeq(int vendorSeq) {

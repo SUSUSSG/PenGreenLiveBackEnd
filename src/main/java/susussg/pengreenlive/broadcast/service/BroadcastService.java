@@ -11,15 +11,15 @@ public interface BroadcastService {
     List<BroadcastCategoryDTO> getAllCategory();
 
     // 방송 정보 등록
-    void registerBroadcast(BroadcastRegistrationRequestDTO broadcastRegisterInfo, long vendorId);
+    void registerBroadcast(BroadcastRegistrationRequestDTO broadcastRegisterInfo, Long vendorSeq);
 
     // 채널별 판매 상품 목록
-    List<ChannelSalesProductDTO> getChannelSalesProductAll(long vendorId);
+    List<ChannelSalesProductDTO> getChannelSalesProductAll(Long vendorSeq);
 
     // 방송 예정 정보
-    List<PrepareBroadcastInfoDTO> getUpcomingBroadcastInfo(long vendorId);
+    List<PrepareBroadcastInfoDTO> getUpcomingBroadcastInfo(Long vendorSeq);
 
-    List<BroadcastDTO> getBroadcastsByVendorAndDateRange(long vendorSeq, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    List<BroadcastDTO> getBroadcastsByVendorAndDateRange(Long vendorSeq, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     void startBroadcast(BroadcastTimeDTO broadcastTimeDTO);
 

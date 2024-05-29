@@ -34,5 +34,11 @@
         WHERE VENDOR_SEQ = #{vendorSeq}
     </update>
 
+    <select id="selectChannelSeqByVendorSeq" parameterType="Long" resultType="Long">
+        SELECT CHANNEL_SEQ
+        FROM TB_VENDOR
+        WHERE VENDOR_SEQ=#{vendorSeq}
+    </select>
+
 
 </mapper>

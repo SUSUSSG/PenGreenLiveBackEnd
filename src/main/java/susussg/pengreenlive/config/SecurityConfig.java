@@ -43,19 +43,16 @@ public class SecurityConfig  {
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
 
-
-    @PostConstruct
-    public void init() {
-        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL); // 부모 자식간의 쓰레드 공유
-    }
-
+//    @PostConstruct
+//    public void init() {
+//        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL); // 부모 자식간의 쓰레드 공유
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                    .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
                     .requestMatchers("/**").permitAll()
                     .anyRequest().authenticated()
             )
@@ -99,11 +96,26 @@ public class SecurityConfig  {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-                .requestMatchers("/static/**", "/scss/**", "/js/**", "/images/**", "/video/**", "/**");
+                .requestMatchers("/static/**", "/scss/**", "/js/**", "/images/**", "/video/**",
+                        "/**");
     }
 
     @Bean
     public SecurityContextRepository securityContextRepository() {
         return new HttpSessionSecurityContextRepository();
     }
+
+    /* 로컬용 cors filter
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+    */
 }

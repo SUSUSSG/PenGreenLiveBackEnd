@@ -10,17 +10,17 @@ import java.util.List;
 
 @Mapper
 public interface BroadcastMapper {
-    String selectChannelName(long vendorId);
+    String selectChannelName(Long vendorSeq);
     List<BroadcastCategoryDTO> selectAllCategory();
     int insertBroadcast(BroadcastDTO broadcastDTO);
     int insertBroadcastProduct(BroadcastProductDTO broadcastProductDTO);
     int insertNotice(NoticeDTO noticeDTO);
     int insertFaq(FaqDTO faqDTO);
     int insertBenefit(BenefitDTO BenefitDTO);
-    List<ChannelSalesProductDTO> selectChannelSalesProduct(long vendorId);
+    List<ChannelSalesProductDTO> selectChannelSalesProduct(Long vendorSeq);
 
     // 방송 예정 정보
-    List<PrepareBroadcastInfoDTO> selectPrepareBroadcastInfo(long vendorId);
+    List<PrepareBroadcastInfoDTO> selectPrepareBroadcastInfo(Long vendorSeq);
     List<BroadcastDTO> getBroadcastsByVendorAndDateRange(@Param("vendorSeq") long vendorSeq,
                                                          @Param("startDateTime") LocalDateTime startDateTime,
                                                          @Param("endDateTime") LocalDateTime endDateTime);

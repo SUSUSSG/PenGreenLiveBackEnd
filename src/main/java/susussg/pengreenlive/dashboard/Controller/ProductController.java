@@ -2,6 +2,8 @@ package susussg.pengreenlive.dashboard.Controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,18 +17,12 @@ import susussg.pengreenlive.login.service.SecurityService;
 
 @RestController
 @Log4j2
+@RequiredArgsConstructor
 @RequestMapping("/api")
 public class ProductController {
 
-  @Autowired
   private final ProductService productService;
-
-  @Autowired
-  private SecurityService securityService;
-
-  public ProductController(ProductService productService) {
-    this.productService = productService;
-  }
+  private final SecurityService securityService;
 
   @GetMapping("/product-list")
   public ResponseEntity<List<ProductDTO>> getAllProducts() {
@@ -34,15 +30,19 @@ public class ProductController {
     return ResponseEntity.ok(products);
   }
 
-  @GetMapping("/product-list/{vendorSeq}")
-  public ResponseEntity<List<VendorProductListDTO>> getProductsByVendor(@PathVariable Long vendorSeq) {
+  @GetMapping("/product-list/vendor")
+  public ResponseEntity<List<VendorProductListDTO>> getProductsByVendor() {
+    Long vendorSeq = securityService.getCurrentVendorSeq();
     List<VendorProductListDTO> products = productService.findProductsByVendor(vendorSeq);
     return ResponseEntity.ok(products);
   }
 
   @PostMapping("/products")
   @Operation(summary = "상품 등록", description = "녹색제품 ID를 인증하고 상품을 등록합니다.")
-  public ResponseEntity<String> registerProduct(@RequestBody ProductDTO productDTO, @RequestParam Long vendorSeq, @RequestParam Long channelSeq) {
+  public ResponseEntity<String> registerProduct(@RequestBody ProductDTO productDTO) {
+    Long vendorSeq = securityService.getCurrentVendorSeq();
+    Long channelSeq = securityService.getCurrentChannelSeq();
+
     try {
       if (productService.registerProduct(productDTO, vendorSeq, channelSeq)) {
         log.info("vendorSeq" + vendorSeq);
@@ -77,8 +77,9 @@ public class ProductController {
     }
   }
 
-  @DeleteMapping("/product/{vendorSeq}/{productSeq}")
-  public ResponseEntity<String> deleteProduct(@PathVariable Long vendorSeq, @PathVariable Long productSeq) {
+  @DeleteMapping("/product/{productSeq}")
+  public ResponseEntity<String> deleteProduct(@PathVariable Long productSeq) {
+    Long vendorSeq = securityService.getCurrentVendorSeq();
     try {
       productService.deleteProduct(vendorSeq, productSeq);
       return ResponseEntity.ok("상품삭제에 성공했습니다.");
@@ -88,7 +89,8 @@ public class ProductController {
   }
 
   @GetMapping("/product-list-label")
-  public List<ProductDTO> getAllProductsWithLabels(@RequestParam Long vendorSeq) {
+  public List<ProductDTO> getAllProductsWithLabels() {
+    Long vendorSeq = securityService.getCurrentVendorSeq();
     return productService.getAllProductsWithLabels(vendorSeq);
   }
 
