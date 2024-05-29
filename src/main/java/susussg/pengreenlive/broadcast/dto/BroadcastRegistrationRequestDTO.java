@@ -24,4 +24,5 @@ public class BroadcastRegistrationRequestDTO {
     private List<FaqDTO> qa;
     private List<String> benefits;
     private String image;
+    private Long channelSeq;
 }
