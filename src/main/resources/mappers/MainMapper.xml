@@ -73,7 +73,7 @@
     <if test="categoryCd != null and categoryCd != ''">
       AND BCT.CATEGORY_CD LIKE #{categoryCd}
     </if>
-    AND BC.BROADCAST_SCHEDULED_TIME >= NOW() - INTERVAL 1 HOUR
+    AND BC.BROADCAST_SCHEDULED_TIME >= NOW()
     AND BC.BROADCAST_END_TIME IS NULL
     )
     SELECT DISTINCT
