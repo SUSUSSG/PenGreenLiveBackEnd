@@ -80,6 +80,8 @@ public class BroadcastController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String endDate) {
 
         Long vendorSeq = securityService.getCurrentVendorSeq();
+
+        log.info("/vendor/broadcasts vendorSeq {}", vendorSeq);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDateTime = LocalDateTime.parse(startDate + " 00:00:00", formatter);
         LocalDateTime endDateTime = LocalDateTime.parse(endDate + " 23:59:59", formatter);
