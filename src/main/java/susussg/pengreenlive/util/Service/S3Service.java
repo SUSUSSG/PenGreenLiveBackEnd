@@ -2,6 +2,7 @@ package susussg.pengreenlive.util.Service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,8 +31,11 @@ public class S3Service {
         String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
         String fullPath = folderName + "/" + uniqueFileName;
 
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+
         try (InputStream inputStream = file.getInputStream()) {
-            amazonS3.putObject(new PutObjectRequest(bucketName, fullPath, inputStream, null)
+            amazonS3.putObject(new PutObjectRequest(bucketName, fullPath, inputStream, metadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         }
 
