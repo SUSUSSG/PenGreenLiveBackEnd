@@ -13,6 +13,6 @@ public class Subtitle {
     private String broadcastId;
     private String text;
     private long timestamp;
-    private boolean isTranslate;
+    private String translatedText;
 }
 
