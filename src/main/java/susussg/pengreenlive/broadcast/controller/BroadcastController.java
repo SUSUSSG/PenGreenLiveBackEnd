@@ -52,7 +52,9 @@ public class BroadcastController {
     // 방송 등록
     @PostMapping(value = "/register-broadcast")
     public ResponseEntity<String> registerBroadcast(@RequestBody BroadcastRegistrationRequestDTO broadcastRegisterInfo) {
+        Long channelSeq = securityService.getCurrentChannelSeq();
         Long vendorSeq = securityService.getCurrentVendorSeq();
+        broadcastRegisterInfo.setChannelSeq(channelSeq);
         broadcastService.registerBroadcast(broadcastRegisterInfo, vendorSeq);
         return ResponseEntity.ok().body("방송 정보가 성공적으로 등록되었습니다.");
     }
@@ -80,6 +82,7 @@ public class BroadcastController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String endDate) {
 
         Long vendorSeq = securityService.getCurrentVendorSeq();
+        log.info("/vendor/broadcasts vendorSeq {}", vendorSeq);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDateTime = LocalDateTime.parse(startDate + " 00:00:00", formatter);
         LocalDateTime endDateTime = LocalDateTime.parse(endDate + " 23:59:59", formatter);

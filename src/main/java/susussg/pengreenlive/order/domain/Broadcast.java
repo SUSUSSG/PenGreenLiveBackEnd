@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class Broadcast {
     @Id
     @Column(name = "BROADCAST_SEQ")
-    private long broadcastSeq;
+    private Long broadcastSeq;
 
     @Column(name = "CHANNEL_NM")
     private String channelNm;
@@ -41,16 +41,16 @@ public class Broadcast {
     private LocalDateTime broadcastEndTime;
 
     @Column(name = "LIKES_COUNT")
-    private int likesCount;
+    private Integer likesCount;
 
     @Column(name = "VIEW_COUNT")
-    private int viewCount;
+    private Integer viewCount;
 
     @Column(name = "SCRIPT")
     private String script;
 
     @Column(name = "BROADCAST_YN")
-    private boolean broadcastYn;
+    private Boolean broadcastYn;
 
     @Column(name = "BROADCAST_SOURCE_INFO")
     private String broadcastSourceInfo;
@@ -59,5 +59,5 @@ public class Broadcast {
     private String categoryCd;
 
     @Column(name = "CHANNEL_SEQ")
-    private long channelSeq;
+    private Long channelSeq;
 }

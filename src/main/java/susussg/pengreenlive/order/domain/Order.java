@@ -16,7 +16,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ORDER_SEQ")
-    private long id;
+    private Long id;
 
     @Convert(converter = UUIDConverter.class)
     @Column(name = "USER_UUID", columnDefinition = "BINARY(16)")
@@ -27,7 +27,7 @@ public class Order {
     private Product product;
 
     @Column(name = "ORDER_QTY")
-    private int orderQty;
+    private Integer orderQty;
 
     @Column(name = "ORDER_PAYMENT")
     private String orderPayment;
@@ -49,10 +49,10 @@ public class Order {
     private String deliveryStatus;
 
     @Column(name = "REVIEW_YN")
-    private boolean reviewYn;
+    private Boolean reviewYn;
 
     @Column(name = "VENDOR_SEQ")
-    private long vendorSeq;
+    private Long vendorSeq;
 
     @OneToOne
     @JoinColumn(name = "CHANNEL_SEQ")

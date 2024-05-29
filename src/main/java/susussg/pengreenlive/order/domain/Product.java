@@ -13,7 +13,7 @@ public class Product {
 
     @Id
     @Column(name = "PRODUCT_SEQ")
-    private long productSeq;
+    private Long productSeq;
 
     @Column(name = "PRODUCT_CD")
     private String productCd;

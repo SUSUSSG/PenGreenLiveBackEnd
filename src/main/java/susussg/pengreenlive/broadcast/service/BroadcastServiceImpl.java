@@ -37,10 +37,6 @@ public class BroadcastServiceImpl implements BroadcastService {
     @Autowired
     S3Service s3Service;
 
-    @Autowired
-    private SecurityService securityService;
-
-
     @Override
     @Transactional
     public List<BroadcastCategoryDTO> getAllCategory() {

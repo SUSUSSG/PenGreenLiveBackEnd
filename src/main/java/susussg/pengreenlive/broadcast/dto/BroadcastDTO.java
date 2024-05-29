@@ -23,4 +23,5 @@ public class BroadcastDTO {
     private String broadcastSummary;
     private LocalDateTime broadcastScheduledTime;
     private String categoryCd;
+    private Long channelSeq;
 }
