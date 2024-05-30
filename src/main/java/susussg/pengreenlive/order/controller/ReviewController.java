@@ -1,5 +1,6 @@
 package susussg.pengreenlive.order.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
@@ -33,6 +34,7 @@ public class ReviewController {
     return ResponseEntity.ok(orders);
   }
 
+  @Operation(summary = "리뷰 작성 안된 주문건 조회", description = "주문내역 중 리뷰가 작성되지 않은 주문건을 조회합니다.")
   @GetMapping("/unreviewed-orders")
   public ResponseEntity<List<ReviewDTO>> getUnreviewedOrdersByUser() {
     String userUuid = securityService.getCurrentUserUuid();
@@ -40,6 +42,7 @@ public class ReviewController {
     return ResponseEntity.ok(orders);
   }
 
+  @Operation(summary = "리뷰 작성이 완료된 주문건 조회", description = "주문내역 중 리뷰가 작성된 주문건을 조회합니다.")
   @GetMapping("/reviewed-orders")
   public ResponseEntity<List<ReviewDTO>> getReviewedOrdersByUser() {
     String userUuid = securityService.getCurrentUserUuid();
@@ -47,6 +50,7 @@ public class ReviewController {
     return ResponseEntity.ok(orders);
   }
 
+  @Operation(summary = "리뷰 삭제", description = "리뷰를 삭제합니다.")
   @DeleteMapping("/reviews/{reviewSeq}")
   public ResponseEntity<String> deleteReview(@PathVariable long reviewSeq
           , @RequestParam("productSeq") long productSeq, @RequestParam("orderSeq") long orderSeq) {
@@ -60,6 +64,7 @@ public class ReviewController {
     }
   }
 
+  @Operation(summary = "리뷰 작성", description = "라뷰를 등록합니다.")
   @PostMapping("/reviews")
   public ResponseEntity<String> addReview(@RequestBody ReviewDTO review) {
     try {
