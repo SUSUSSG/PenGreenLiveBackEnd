@@ -1,5 +1,6 @@
 package susussg.pengreenlive.openai.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class OpenAIController {
     private OpenAIQueryService openAIQueryService;
 
     private final String userUuid = "f23a72e0-1347-11ef-b085-f220affc9a21"; //TODO 세션값으로 바꿔야함
-
+    @Operation(summary = "입장 알림을 위한 메시지를 전송합니다.", description = "챗봇 메시지 전송 및 응답을 처리합니다.")
     @PostMapping("/message")
     public ChatResponseDTO getChatbotResponse(@RequestBody ChatRequestDTO chatRequestDTO) {
         try {
@@ -43,16 +44,17 @@ public class OpenAIController {
             return new ChatResponseDTO(null);
         }
     }
-
+    @Operation(summary = "최근 주문 내역을 조회합니다.", description = "사용자의 최근 주문 내역을 받아와 챗봇에 표시합니다.")
     @GetMapping("/recent-orders")
     public List<RecentOrderDTO> getRecentOrders() {
         return openAIQueryService.getRecentOrders(userUuid);
     }
-
+    @Operation(summary = "키워드로 방송을 조회합니다.", description = "사용자가 입력한 키워드가 제목에 포함된 방송을 조회합니다.")
     @GetMapping("/broadcast-keyword")
     public List<ScheduledBroadcastDTO> getBroadcastsByKeyword(@RequestParam String keyword) {
         return openAIQueryService.getBroadcastsByKeyword(keyword);
     }
+    @Operation(summary = "프롬프트를 생성합니다.", description = "라이브보드에서 사용될 프롬프트를 생성합니다.")
     @GetMapping("/generate-prompt")
     public String getBroadcastDetailsBySeq(@RequestParam Long broadcastSeq) {
         AiBroadcastPromptDTO aiBroadcastPromptDTO = openAIQueryService.getBroadcastDetailsBySeq(broadcastSeq);
@@ -64,6 +66,7 @@ public class OpenAIController {
             return "프롬프트 생성 중 오류가 발생했습니다.";
         }
     }
+    @Operation(summary = "리뷰 유해성을 확인합니다.", description = "리뷰를 받아 유해성을 판별한 뒤, 유해성 유무를 반환합니다.")
     @PostMapping("/review-check")
     public String checkReviewForHarmfulness(@RequestBody String reviewContent) {
         try {
