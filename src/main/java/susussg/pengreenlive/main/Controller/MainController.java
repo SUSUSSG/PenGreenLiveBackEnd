@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import susussg.pengreenlive.config.aop.TimeTrace;
+import susussg.pengreenlive.login.service.SecurityService;
 import susussg.pengreenlive.main.DTO.LiveChanceCarouselDTO;
 import susussg.pengreenlive.main.DTO.MainCarouselDTO;
 import susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO;
@@ -22,9 +23,9 @@ public class MainController {
     @Autowired
     MainService mainService;
 
-    // 세션에 하드코딩된 값 추가
-    // 테스트 시 주석처리 되지 않은 역할로 채팅 진입
-    public String userUUID = "f23a72e0-1347-11ef-b085-f220affc9a21";
+    @Autowired
+    SecurityService securityService;
+
     @TimeTrace
     @GetMapping("/main-carousels")
     public List<MainCarouselDTO> getMainCarousels(){
@@ -61,6 +62,7 @@ public class MainController {
         @RequestParam("channelSeq") Long channelSeq) {
         log.info("call addNotificationChannel");
 
+        String userUUID = securityService.getCurrentUserUuid();
         boolean added = mainService.addNotificationChannel(userUUID, channelSeq);
         if (added) {
             return ResponseEntity.ok("구독 완료");
@@ -74,6 +76,7 @@ public class MainController {
         @RequestParam("channelSeq") Long channelSeq) {
         log.info("call removeNotificationChannel");
 
+        String userUUID = securityService.getCurrentUserUuid();
         boolean removed = mainService.removeNotificationChannel(userUUID, channelSeq);
         if (removed) {
             return ResponseEntity.ok("구독 취소 완료");
@@ -87,6 +90,7 @@ public class MainController {
         @RequestParam("channelSeq") Long channelSeq) {
         log.info("call checkNotificationChannelExists");
 
+        String userUUID = securityService.getCurrentUserUuid();
         boolean exists = mainService.checkNotificationChannelExists(userUUID, channelSeq);
         return ResponseEntity.ok(exists);
     }
@@ -95,6 +99,7 @@ public class MainController {
     public ResponseEntity<List<SubscribedChannelDTO>> getSubscribedChannels() {
         log.info("call getSubscribedChannels");
 
+        String userUUID = securityService.getCurrentUserUuid();
         List<SubscribedChannelDTO> channels = mainService.getSubscribedChannels(userUUID);
         if (channels.isEmpty()) {
             return ResponseEntity.noContent().build();

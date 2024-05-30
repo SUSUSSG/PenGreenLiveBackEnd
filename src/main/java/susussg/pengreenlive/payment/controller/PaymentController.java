@@ -1,5 +1,6 @@
 package susussg.pengreenlive.payment.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ public class PaymentController {
     @Value("${toss.secretKey}")
     private String secretKey;
 
+    @Operation(summary = "결제 검증", description = "임시 저장된 결제 금액이 일치하는지 여부를 반환합니다.")
     @PostMapping("/verify")
     public ResponseEntity<?> verifyPaymentRequest(@RequestBody verifyPaymentDTO paymentRequest, HttpSession session) {
         try {
@@ -46,9 +48,7 @@ public class PaymentController {
         }
     }
 
-    /*
-    * 결제 요청 전, 결제 정보 임시 저장
-    * */
+    @Operation(summary = "결제 정보 임시 저장", description = "결제 승인 요청 전, 결제 금액 검증을 위해 사전 결제 정보를 저장합니다.")
     @PostMapping("/hold-for-checkout")
     public ResponseEntity<?> holdPaymentInformation(@RequestBody verifyPaymentDTO paymentRequest, HttpSession session) {
         try {
@@ -59,6 +59,7 @@ public class PaymentController {
         }
     }
 
+    @Operation(summary = "일반 결제 승인 요청", description = "토스 일반 결제 시, 결제 승인 요청합니다.")
     @RequestMapping(value = "/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
 

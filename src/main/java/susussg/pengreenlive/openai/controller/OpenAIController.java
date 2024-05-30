@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import susussg.pengreenlive.login.service.SecurityService;
 import susussg.pengreenlive.main.DTO.ScheduledBroadcastDTO;
 import susussg.pengreenlive.openai.dto.AiBroadcastPromptDTO;
 import susussg.pengreenlive.openai.dto.ChatRequestDTO;
@@ -31,7 +33,9 @@ public class OpenAIController {
     @Autowired
     private OpenAIQueryService openAIQueryService;
 
-    private final String userUuid = "f23a72e0-1347-11ef-b085-f220affc9a21"; //TODO 세션값으로 바꿔야함
+    @Autowired
+    SecurityService securityService;
+  
     @Operation(summary = "입장 알림을 위한 메시지를 전송합니다.", description = "챗봇 메시지 전송 및 응답을 처리합니다.")
     @PostMapping("/message")
     public ChatResponseDTO getChatbotResponse(@RequestBody ChatRequestDTO chatRequestDTO) {
@@ -47,7 +51,8 @@ public class OpenAIController {
     @Operation(summary = "최근 주문 내역을 조회합니다.", description = "사용자의 최근 주문 내역을 받아와 챗봇에 표시합니다.")
     @GetMapping("/recent-orders")
     public List<RecentOrderDTO> getRecentOrders() {
-        return openAIQueryService.getRecentOrders(userUuid);
+        String userUUID = securityService.getCurrentUserUuid();
+        return openAIQueryService.getRecentOrders(userUUID);
     }
     @Operation(summary = "키워드로 방송을 조회합니다.", description = "사용자가 입력한 키워드가 제목에 포함된 방송을 조회합니다.")
     @GetMapping("/broadcast-keyword")

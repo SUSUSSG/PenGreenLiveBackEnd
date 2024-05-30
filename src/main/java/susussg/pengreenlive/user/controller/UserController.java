@@ -1,5 +1,6 @@
 package susussg.pengreenlive.user.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public class UserController {
     @Autowired
     private SecurityService securityService;
 
+    @Operation(summary = "회원 주소 정보", description = "주문 페이지 접속 시, 회원이 등록해놓은 배송 주소를 응답합니다.")
     @GetMapping("/address")
     public ResponseEntity<?> getUserAddress() {
 
@@ -44,6 +46,7 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "회원정보 조회", description = "회원이 자신의 정보를 조회합니다.")
     @GetMapping
     public ResponseEntity<?> updateUserProfile() {
         try {
@@ -56,6 +59,7 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "회원정보 수정", description = "회원 정보를 수정합니다.")
     @PatchMapping
     public ResponseEntity<?> updateUserProfile(@RequestBody UpdateUserFormDTO user) {
         try {
