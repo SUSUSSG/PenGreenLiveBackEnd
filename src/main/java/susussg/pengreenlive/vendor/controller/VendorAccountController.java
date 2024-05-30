@@ -1,5 +1,6 @@
 package susussg.pengreenlive.vendor.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ public class VendorAccountController {
 
     private final VendorAccountService accountService;
 
+    @Operation(summary = "판매자 회원가입", description = "판매자의 계정 정보를 생성합니다.")
     @PostMapping("/signup")
     public ResponseEntity<?> createVendorAccount(@RequestBody VendorSignupFormDTO vendorSignupForm) {
         log.info("signup form {}", vendorSignupForm);
@@ -29,21 +31,7 @@ public class VendorAccountController {
         }
     }
 
-//    @PostMapping("/check-id")
-//    public ResponseEntity<?> checkDuplicateUserId(@RequestBody Map<String, String> form) {
-//
-//        String userId = form.get("id");
-//        log.info("checj-id {}", userId);
-//        try {
-//            boolean isDuplicate = accountService.selectByUserId(userId);
-//            if (!isDuplicate)
-//                return ResponseEntity.ok().body("available");
-//            else
-//                return ResponseEntity.ok().body("duplicate");
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
-//        }
-//    }
+    @Operation(summary = "사업자번호 검증", description = "판매자의 사업자번호가 유효한지 검증합니다.")
     @PostMapping("/check-business-number")
     public ResponseEntity<?> checkBusinessNumber(@RequestBody Map<String, String> request) {
         String businessNumber = request.get("businessNumber");

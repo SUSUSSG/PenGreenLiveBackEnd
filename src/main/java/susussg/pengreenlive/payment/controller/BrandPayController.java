@@ -1,5 +1,6 @@
 package susussg.pengreenlive.payment.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -37,6 +38,7 @@ public class BrandPayController {
     @Autowired
     private SecurityService securityService;
 
+    @Operation(summary = "액세스 토큰 발급", description = "토스 브랜드페이 API로 부터 액세스 토큰을 발급받습니다.")
     @PostMapping("/access-token")
     public ResponseEntity<?> getAccessToken(@RequestBody Map<String, String> payload) {
         String customerKey = securityService.getCurrentUserUuid();
@@ -65,7 +67,8 @@ public class BrandPayController {
         log.info("access token {}", response);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
-//    @CrossOrigin(origins = {"http://localhost:5173", "${FRONT_URL}"}, allowCredentials = "true")
+
+    @Operation(summary = "액세스 토큰 발급", description = "토스 브랜드페이로 부터 콜백을 요청해서 액세스 토큰을 발급받습니다.")
     @GetMapping("/callback-auth")
     public ResponseEntity<String> callbackAuth(@RequestParam("code") String code,
                                                @RequestParam("customerKey") String customerKey) {
@@ -103,6 +106,7 @@ public class BrandPayController {
         }
     }
 
+    @Operation(summary = "브랜드페이 결제 승인", description = "토스 브랜드페이 결제 승인 요청")
     @PostMapping("/confirm")
     public ResponseEntity<JSONObject> confirmBrandpayPayment(@RequestBody String jsonBody) throws Exception {
         JSONParser parser = new JSONParser();

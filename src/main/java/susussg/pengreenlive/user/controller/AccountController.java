@@ -1,6 +1,7 @@
 package susussg.pengreenlive.user.controller;
 
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
@@ -25,10 +26,9 @@ public class AccountController {
 
     private final AccountService accountService;
 
+    @Operation(summary = "구매자 회원가입", description = "일반 회원 계정을 생성합니다.")
     @PostMapping("/signup")
     public ResponseEntity<?> createAccount(@RequestBody SignupFormDTO signupForm) {
-
-        log.info("signup form {}", signupForm);
         try {
             accountService.createLocalUser(signupForm);
             return ResponseEntity.ok().body("success");
@@ -37,6 +37,7 @@ public class AccountController {
         }
     }
 
+    @Operation(summary = "아이디 중복검사", description = "회원가입아이디의 사용 가능여부를 확인합니다.")
     @PostMapping("/check-id")
     public ResponseEntity<?> checkDuplicateUserId(@RequestBody Map<String, String> form) {
 
@@ -53,6 +54,7 @@ public class AccountController {
         }
     }
 
+    @Operation(summary = "인증 번호 발송", description = "휴대폰번호 인증을 위한 인증코드를 발송합니다.")
     @PostMapping("/sms/request-authcode")
     public ResponseEntity<?> sendAuthCode(@RequestParam("phoneNumber") String phoneNumber) {
         log.info("/sms/request-authcode {}", phoneNumber);
@@ -70,6 +72,7 @@ public class AccountController {
         }
     }
 
+    @Operation(summary = "휴대폰번호 인증 검사", description = "사용자가 입력한 인증코드의 일치 여부를 응답합니다.")
     @PostMapping("/sms/verify")
     public ResponseEntity<?> verifyCode(@RequestParam("phoneNumber") String phoneNumber, @RequestParam("code") String code) {
         log.info("/sms/verify {} {}", phoneNumber, code);
