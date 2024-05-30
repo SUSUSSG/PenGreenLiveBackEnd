@@ -24,12 +24,14 @@ public class ProductController {
   private final ProductService productService;
   private final SecurityService securityService;
 
+  @Operation(summary = "상품 목록 조회", description = "전체 상품을 조회합니다.")
   @GetMapping("/product-list")
   public ResponseEntity<List<ProductDTO>> getAllProducts() {
     List<ProductDTO> products = productService.findAllProducts();
     return ResponseEntity.ok(products);
   }
 
+  @Operation(summary = "판매자에 상품 목록 조회", description = "판매자에 따라 상품 목록을 조회합니다.")
   @GetMapping("/product-list/vendor")
   public ResponseEntity<List<VendorProductListDTO>> getProductsByVendor() {
     Long vendorSeq = securityService.getCurrentVendorSeq();
@@ -37,8 +39,8 @@ public class ProductController {
     return ResponseEntity.ok(products);
   }
 
-  @PostMapping("/products")
   @Operation(summary = "상품 등록", description = "녹색제품 ID를 인증하고 상품을 등록합니다.")
+  @PostMapping("/products")
   public ResponseEntity<String> registerProduct(@RequestBody ProductDTO productDTO) {
     Long vendorSeq = securityService.getCurrentVendorSeq();
     Long channelSeq = securityService.getCurrentChannelSeq();
@@ -60,12 +62,14 @@ public class ProductController {
     }
   }
 
+  @Operation(summary = "상품 카테고리 불러옴", description = "상품 카테고리를 가져옵니다.")
   @GetMapping("/categorycodes")
   public ResponseEntity<List<ProductDTO>> getCategoryCodes() {
     List<ProductDTO> productCategoryCodes = productService.getAllCategoryCodes();
     return ResponseEntity.ok(productCategoryCodes);
   }
 
+  @Operation(summary = "상품 정보 수정", description = "상품 정보를 수정합니다.")
   @PutMapping("/product/{productSeq}")
   public ResponseEntity<String> updateProduct(@PathVariable Long productSeq, @RequestBody ProductUpdateDTO productUpdateDTO) {
     try {
@@ -77,6 +81,7 @@ public class ProductController {
     }
   }
 
+  @Operation(summary = "상품 삭제", description = "상품을 삭제합니다.")
   @DeleteMapping("/product/{productSeq}")
   public ResponseEntity<String> deleteProduct(@PathVariable Long productSeq) {
     Long vendorSeq = securityService.getCurrentVendorSeq();
@@ -88,6 +93,7 @@ public class ProductController {
     }
   }
 
+  @Operation(summary = "녹색인증 이미지 포함 상품 조회", description = "판매자에 따라 인증받은 녹색ID에 따른 인증 이미지와 목록을 조회합니다.")
   @GetMapping("/product-list-label")
   public List<ProductDTO> getAllProductsWithLabels() {
     Long vendorSeq = securityService.getCurrentVendorSeq();

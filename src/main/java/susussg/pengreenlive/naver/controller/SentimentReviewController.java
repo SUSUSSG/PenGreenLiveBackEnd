@@ -1,5 +1,6 @@
 package susussg.pengreenlive.naver.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class SentimentReviewController {
     this.reviewSummaryService = reviewSummaryService;
   }
 
+  @Operation(summary = "상품별 리뷰 감정 분석", description = "상품별 리뷰의 감정을 분석합니다.")
   @PostMapping("/review/sentiment")
   public ResponseEntity<String> sentimentReviewsByProductSeq(@RequestParam Long productSeq) {
 
