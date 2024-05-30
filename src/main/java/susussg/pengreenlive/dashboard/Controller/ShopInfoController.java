@@ -1,5 +1,6 @@
 package susussg.pengreenlive.dashboard.Controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class ShopInfoController {
     this.shopInfoService = shopInfoService;
   }
 
+  @Operation(summary = "상점 정보 조회", description = "상점 정보를 조회합니다.")
   @GetMapping("/shop")
   public ResponseEntity<?> getShopInfo() {
     Long channelSeq = securityService.getCurrentChannelSeq();
@@ -40,6 +42,7 @@ public class ShopInfoController {
     }
   }
 
+  @Operation(summary = "상점 정보 수정", description = "상점 정보를 수정합니다.")
   @PutMapping("/shop")
   public ResponseEntity<String> updateShopInfo(@RequestBody ShopInfoDTO shopInfoDTO) {
 
