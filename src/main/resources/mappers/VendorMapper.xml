@@ -5,7 +5,7 @@
   <select id="selectVendorInfoByBusinessId" parameterType="String" resultType="susussg.pengreenlive.login.dto.VendorDTO">
     SELECT *
     FROM TB_VENDOR
-    WHERE TB_VENDOR.BUSINESS_ID=#{businessId}
+    WHERE BUSINESS_ID=#{businessId}
   </select>
 
     <insert id="insertVendor" parameterType="susussg.pengreenlive.vendor.dto.VendorSignupFormDTO"
