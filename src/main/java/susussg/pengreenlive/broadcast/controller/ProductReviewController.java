@@ -1,5 +1,6 @@
 package susussg.pengreenlive.broadcast.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ public class ProductReviewController {
     this.productReviewService = productReviewService;
   }
 
+  @Operation(summary = "구맺 페이지 내 리뷰 확인", description = "구매페이지 내 상품별 리뷰를 조회합니다.")
   @GetMapping("/broadcast/review")
   public List<ProductReviewDTO> getReviewsByProductSeq(@RequestParam Long productSeq) {
     return productReviewService.getReviewsByProductSeq(productSeq);
