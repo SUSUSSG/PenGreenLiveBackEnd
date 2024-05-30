@@ -1,6 +1,7 @@
 package susussg.pengreenlive.util.Controller;
 
 import com.amazonaws.services.s3.model.S3Object;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,27 +15,19 @@ import susussg.pengreenlive.util.Service.S3Service;
 @RequestMapping("/api/s3")
 public class S3Controller {
 
-//    본 컨트롤러는 평소에 사용되지 않습니다.
-//    이미지 업로드 소요시간 측정을 위해 사용합니다.
-//    S3Service 서비스 클래스를 호출해서 메소드를 사용해주세요.
-//
-//    사용법은 다음과 같습니다.
-//    String uploadedImgUrl = S3Service.uploadFile(실제 byte[] 파일 변수, "저장될 폴더명");
-//    ex)  S3Service.uploadFile(productImage, "product");
-//    이미지 업로드 전에 반드시 ImageService 내 compressAndResizeImage()를 사용해서 압축 후 사용해주세요.
-
     private final S3Service s3Service;
 
     public S3Controller(S3Service s3Service) {
         this.s3Service = s3Service;
     }
 
+    @Operation(summary = "이미지 파일을 업로드합니다.", description = "이미지 파일을 S3에 업로드 후, url을 리턴합니다.")
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, String folderName) throws IOException {
         String fileUrl = s3Service.uploadFile(file, folderName);
         return ResponseEntity.ok(fileUrl);
     }
-
+    @Operation(summary = "이미지를 다운로드합니다.", description = "이미지 파일을 S3에서 다운로드 후, byte[]로 리턴합니다.")
     @GetMapping("/download")
     public ResponseEntity<byte[]> downloadFile(@RequestParam("fileName") String fileName) throws IOException {
         S3Object s3Object = s3Service.downloadFile(fileName);
