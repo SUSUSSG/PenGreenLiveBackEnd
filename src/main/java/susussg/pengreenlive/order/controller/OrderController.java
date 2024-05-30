@@ -1,6 +1,7 @@
 package susussg.pengreenlive.order.controller;
 
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,9 @@ public class OrderController {
 
     private final OrderService orderService;
     private final SecurityService securityService;
+    @Operation(summary = "상품 주문", description = "주문한 내역을 저장합니다.")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody OrderFormDTO orderForm) {
-        log.info("OrderController {}", orderForm);
         String userUUID = securityService.getCurrentUserUuid();
 
         try {
@@ -30,7 +31,7 @@ public class OrderController {
             Long orderSeq = orderService.persistOrder(orderForm);
             return ResponseEntity.ok().body(orderSeq);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("order failed");
+            return ResponseEntity.internalServerError().body("failed");
         }
     }
 }
