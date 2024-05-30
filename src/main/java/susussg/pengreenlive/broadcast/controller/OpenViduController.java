@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 public class OpenViduController {
@@ -30,6 +31,7 @@ public class OpenViduController {
      * @param params The Session properties
      * @return The Session ID
      */
+    @Operation(summary = "세션을 초기화합니다.", description = "세션 속성을 받아 새로운 세션을 초기화합니다.")
     @PostMapping("/api/sessions")
     public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
@@ -43,6 +45,7 @@ public class OpenViduController {
      * @param params    The Connection properties
      * @return The Token associated to the Connection
      */
+    @Operation(summary = "연결을 생성합니다.", description = "세션 ID와 연결 속성을 받아 새로운 연결을 생성합니다.")
     @PostMapping("/api/sessions/{sessionId}/connections")
     public ResponseEntity<String> createConnection(@PathVariable("sessionId") String sessionId,
                                                    @RequestBody(required = false) Map<String, Object> params)
@@ -61,6 +64,7 @@ public class OpenViduController {
      * @param sessionId
      * @return
      */
+    @Operation(summary = "현재 시청자 수를 조회합니다.", description = "세션 ID를 통해 현재 시청자 수를 조회합니다.")
     @GetMapping("/api/sessions/{sessionId}/connections/count")
     public ResponseEntity<Integer> getConnectionCount(@PathVariable("sessionId") String sessionId) {
         try {
