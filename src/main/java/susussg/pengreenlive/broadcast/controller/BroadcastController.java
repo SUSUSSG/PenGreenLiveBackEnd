@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import susussg.pengreenlive.login.service.SecurityService;
 import susussg.pengreenlive.util.Service.ForbiddenWordService;
-
+//방송 컨트롤러
 
 @RestController
 @Log4j2
