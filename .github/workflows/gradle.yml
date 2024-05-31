@@ -106,12 +106,13 @@ jobs:
           scp ./src/main/resources/application-db.yml $SERVER_USER@$SERVER_HOST:/opt/susussg-backend/config/
           scp ./src/main/resources/application-secret.properties $SERVER_USER@$SERVER_HOST:/opt/susussg-backend/config/
 
-           ssh $SERVER_USER@$SERVER_HOST 'bash -s' << 'EOF'
+            # Restart the application with JVM options
+          ssh $SERVER_USER@$SERVER_HOST 'bash -s' << 'EOF'
             cat <<EOT > /opt/susussg-backend/run.sh
             #!/bin/bash
             JAVA_OPTS="-Xms2G -Xmx4G -XX:+UseG1GC -XX:ParallelGCThreads=8 -XX:ConcGCThreads=4"
             JAR_PATH=/opt/susussg-backend/$(ls /opt/susussg-backend | grep .jar)
-            nohup java \$JAVA_OPTS -jar \$JAR_PATH > /opt/susussg-backend/logs/application.log 2>&1 &
+            nohup java \$JAVA_OPTS -jar \$JAR_PATH &
             EOT
 
             chmod +x /opt/susussg-backend/run.sh
