@@ -16,6 +16,6 @@ import java.util.List;
 
 @Repository
 public interface BroadcastRepository extends JpaRepository<Broadcast, Long> {
-    @Query("SELECT b.broadcastSeq FROM TB_BROADCAST b WHERE DATE(b.broadcastScheduledTime) = :tomorrowDate")
-    List<Long> findAllByBroadcastScheduledTime(@Param("tomorrowDate") LocalDate tomorrowDate);
+    @Query("SELECT b.broadcastSeq FROM TB_BROADCAST b WHERE DATE(b.broadcastScheduledTime) = :today")
+    List<Long> findAllByBroadcastScheduledTime(@Param("today") LocalDate today);
 }
