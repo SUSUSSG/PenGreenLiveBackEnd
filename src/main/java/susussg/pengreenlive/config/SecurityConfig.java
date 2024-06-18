@@ -27,6 +27,7 @@ import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import susussg.pengreenlive.login.dto.Member;
+import susussg.pengreenlive.login.role.MemberRole;
 import susussg.pengreenlive.login.service.CustomAuthenticationFilter;
 import susussg.pengreenlive.login.service.CustomOncePerRequestFilter;
 import susussg.pengreenlive.login.service.CustomVendorAuthenticationFilter;
@@ -43,19 +44,20 @@ public class SecurityConfig  {
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
 
-//    @PostConstruct
-//    public void init() {
-//        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL); // 부모 자식간의 쓰레드 공유
-//    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                    .requestMatchers("/**").permitAll()
+                    .requestMatchers("/api/vendor/signup", "/api/signup").permitAll()
+                    .requestMatchers("/api/brandpay/*", "/api/payments/*").authenticated()
+                    .requestMatchers("/api/vendor/*").hasRole(MemberRole.VENDOR.getValue())
+                    .requestMatchers("/api/user/*").hasRole(MemberRole.USER.getValue())
                     .anyRequest().authenticated()
             )
+            .rememberMe(rememberMe -> rememberMe
+                    .key("uniqueAndSecret")
+                    .tokenValiditySeconds(1209600)) // 2주
             .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(customVendorAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(customOncePerRequestFilter(), CustomAuthenticationFilter.class);
