@@ -9,6 +9,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BroadcastStockDTO {
-    private long broadcastSeq;
+    private Long broadcastSeq;
     private LocalDateTime broadcastScheduledTime;
 }

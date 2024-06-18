@@ -9,6 +9,8 @@ import susussg.pengreenlive.order.domain.Product;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductStockDTO {
-    private Product Order;
+    private Long productSeq;
+    private Long broadcastSeq;
     private int productStock;
+
 }
