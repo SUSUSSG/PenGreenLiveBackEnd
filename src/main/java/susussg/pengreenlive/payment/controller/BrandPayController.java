@@ -20,6 +20,7 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,11 +41,19 @@ public class BrandPayController {
 
     @Operation(summary = "액세스 토큰 발급", description = "토스 브랜드페이 API로 부터 액세스 토큰을 발급받습니다.")
     @PostMapping("/access-token")
-    public ResponseEntity<?> getAccessToken(@RequestBody Map<String, String> payload) {
+    public ResponseEntity<?> getAccessToken() {
         String customerKey = securityService.getCurrentUserUuid();
 
-        log.info("access");
-        String code = payload.get("code");
+        log.info("액세스 토큰 발급");
+
+        String code;
+        try {
+            code = getAgreementCode();
+            log.info("동의 코드 {}", code);
+        } catch (Exception e) {
+            log.error("약관 동의 코드를 가져오는 중 오류 발생: {}", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         String url = "https://api.tosspayments.com/v1/brandpay/authorizations/access-token";
 
         RestTemplate restTemplate = new RestTemplate();
@@ -122,7 +131,8 @@ public class BrandPayController {
             amount = (String) requestData.get("amount");
         } catch (ParseException e) {
             throw new RuntimeException(e);
-        };
+        }
+        ;
         JSONObject obj = new JSONObject();
         obj.put("orderId", orderId);
         obj.put("amount", amount);
@@ -155,4 +165,41 @@ public class BrandPayController {
         return ResponseEntity.status(code).body(jsonObject);
 
     }
+
+
+    public String getAgreementCode() throws Exception {
+        JSONParser parser = new JSONParser();
+        String customerKey = securityService.getCurrentUserUuid();
+
+        JSONObject obj = new JSONObject();
+        obj.put("customerKey", customerKey);
+        obj.put("scope", Arrays.asList("REGISTER", "CARD"));
+        obj.put("termsId", Arrays.asList(1, 2, 3, 4, 5));
+
+        Base64.Encoder encoder = Base64.getEncoder();
+        byte[] encodedBytes = encoder.encode((secretKey + ":").getBytes(StandardCharsets.UTF_8));
+        String authorizations = "Basic " + new String(encodedBytes);
+
+        URL url = new URL("https://api.tosspayments.com/v1/brandpay/terms/agree");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestProperty("Authorization", authorizations);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write(obj.toString().getBytes("UTF-8"));
+
+        int code = connection.getResponseCode();
+        boolean isSuccess = code == 200;
+
+        InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
+
+        Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
+        JSONObject jsonObject = (JSONObject) parser.parse(reader);
+        responseStream.close();
+
+        return jsonObject.get("code").toString();
+    }
+
 }
