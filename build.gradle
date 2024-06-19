@@ -25,7 +25,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.session:spring-session-data-redis'
-	implementation 'org.redisson:redisson-spring-boot-starter:3.18.0'
+	implementation 'org.redisson:redisson:3.31.0'
+	implementation 'org.redisson:redisson-spring-boot-starter:3.31.0'
+
+	testImplementation 'org.testcontainers:testcontainers:1.19.0'
+	testImplementation 'org.testcontainers:junit-jupiter:1.19.0'
+	testImplementation 'org.testcontainers:redis:1.19.0'
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
