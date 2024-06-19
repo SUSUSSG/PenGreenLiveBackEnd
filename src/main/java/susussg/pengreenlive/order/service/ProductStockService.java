@@ -1,6 +1,5 @@
 package susussg.pengreenlive.order.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -97,6 +96,7 @@ public class ProductStockService {
         }
     }
 
+    // 재고 예약
     public boolean reserveStock(Long broadcastSeq, Long productSeq, String userUUID, int quantity) {
         String stockKey = "stock:reserved:" + productSeq;
         String redisKey = STOCK_KEY_PREFIX + broadcastSeq;
@@ -126,7 +126,7 @@ public class ProductStockService {
                     hashOps.put(redisKey, productSeq.toString(), availableStock);
                     hashOps.put(stockKey, userUUID, quantity);
                     return true;
-                    
+
                 } finally {
                     lock.unlock();
                 }
@@ -137,5 +137,46 @@ public class ProductStockService {
             Thread.currentThread().interrupt();
             return false;
         }
+    }
+
+    // 재고 해제
+    public void releaseReservedStock(Long broadcastSeq, Long productSeq, String userUUID) {
+        HashOperations<String, String, Integer> hashOps = redisTemplateJson.opsForHash();
+        String reservedKey = "stock:reserved:" + productSeq;
+        String redisKey = STOCK_KEY_PREFIX + broadcastSeq;
+        RLock lock = redissonClient.getLock("lock:" + productSeq);
+
+        try {
+            if (lock.tryLock(1, 3, TimeUnit.SECONDS)) {
+                try {
+                    Integer reservedQuantity = hashOps.get(reservedKey, userUUID);
+
+                    if (reservedQuantity != null) {
+                        Integer currentStock = hashOps.get(redisKey, productSeq.toString());
+                        if (currentStock != null) {
+                            hashOps.put(redisKey, productSeq.toString(), currentStock + reservedQuantity);
+                        } else {
+                            hashOps.put(redisKey, productSeq.toString(), reservedQuantity);
+                        }
+                        hashOps.delete(reservedKey, userUUID);
+                    }
+                } finally {
+                    lock.unlock();
+                }
+            } else {
+                throw new RuntimeException("lock 획득 실패");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Lock interrupted", e);
+        }
+    }
+
+    // 재고 확정
+    public void confirmStock(Long productSeq, String userUUID) {
+        HashOperations<String, String, Integer> hashOps = redisTemplateJson.opsForHash();
+        String stockKey = "stock:reserved:" + productSeq;
+
+        hashOps.delete(stockKey, userUUID);
     }
 }
