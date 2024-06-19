@@ -1,10 +1,12 @@
 package susussg.pengreenlive.order.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -13,6 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Slf4j
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class ProductStockServiceTest {
@@ -30,7 +33,7 @@ public class ProductStockServiceTest {
     }
 
     @Test
-    public void testReserveStock() throws InterruptedException {
+    public void 재고예약_동시성() throws InterruptedException {
         int numberOfUsers = 120;
         AtomicInteger successfulReservations = new AtomicInteger(0);
         AtomicInteger failedReservations = new AtomicInteger(0);
@@ -41,7 +44,7 @@ public class ProductStockServiceTest {
             final int userId = i;
             executorService.execute(() -> {
                 try {
-                    boolean result = productStockService.reserveStock(1L, 1L, "test-user-" + userId, 1);
+                    boolean result = productStockService.reserveStock(1L, 1L, "test-user-" + userId, 2);
                     if (result) {
                         successfulReservations.incrementAndGet();
                     } else {
@@ -54,9 +57,28 @@ public class ProductStockServiceTest {
         }
         latch.await();
 
-        System.out.println("성공 예약 수: " + successfulReservations.get());
-        System.out.println("실패 예약 수: " + failedReservations.get());
+        log.info("성공 예약 수: {}" + successfulReservations.get());
+        log.info("실패 예약 수: {}" + failedReservations.get());
 
         executorService.shutdown();
+    }
+
+    @Test
+    public void 재고해제() throws InterruptedException {
+        Long broadcastSeq = 1L;
+        Long productSeq = 1L;
+        String userUUID = "test-user-23";
+
+        HashOperations<String, String, Integer> hashOps = redisTemplateJson.opsForHash();
+        String reservedKey = "stock:reserved:" + productSeq;
+        String redisKey = "stock:broadcast:" + broadcastSeq;
+        hashOps.put(reservedKey, userUUID, 5);
+        productStockService.releaseReservedStock(broadcastSeq, productSeq, userUUID);
+
+        Integer reservedStock = hashOps.get(reservedKey, userUUID);
+        Integer availableStock = hashOps.get(redisKey, productSeq.toString());
+
+        log.info("예약 내역: {}", reservedStock);
+        log.info("가용 재고: {}", availableStock);
     }
 }
