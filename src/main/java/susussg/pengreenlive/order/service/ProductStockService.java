@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,10 @@ public class ProductStockService {
     private final ProductStockRepository productStockRepository;
     private final RedisTemplate<String, Object> redisTemplateJson;
     private final ModelMapper modelMapper;
+
+    @Autowired
+    private RedissonClient redissonClient;
+
     private static final String STOCK_KEY_PREFIX = "stock:broadcast:";
 
     public boolean isStockAvailable(Long broadcastSeq, Long productSeq, int quantity) {
@@ -91,31 +98,44 @@ public class ProductStockService {
     }
 
     public boolean reserveStock(Long broadcastSeq, Long productSeq, String userUUID, int quantity) {
-        HashOperations<String, String, Integer> hashOps = redisTemplateJson.opsForHash();
         String stockKey = "stock:reserved:" + productSeq;
         String redisKey = STOCK_KEY_PREFIX + broadcastSeq;
 
-        Integer availableStock = hashOps.get(redisKey, productSeq.toString());
-        if (availableStock == null || availableStock < quantity) {
+        RLock lock = redissonClient.getLock("lock:" + productSeq);
+        try {
+            if (lock.tryLock(1, 3, TimeUnit.SECONDS)) {
+                try {
+                    HashOperations<String, String, Integer> hashOps = redisTemplateJson.opsForHash();
+
+                    Integer availableStock = hashOps.get(redisKey, productSeq.toString());
+                    if (availableStock == null || availableStock < quantity) {
+                        return false;
+                    }
+
+                    Integer reservedStock = hashOps.get(stockKey, userUUID);
+                    if (reservedStock == null) {
+                        reservedStock = 0;
+                    }
+
+                    availableStock += reservedStock;
+                    if (availableStock < quantity) {
+                        return false;
+                    }
+                    availableStock -= quantity;
+
+                    hashOps.put(redisKey, productSeq.toString(), availableStock);
+                    hashOps.put(stockKey, userUUID, quantity);
+                    return true;
+                    
+                } finally {
+                    lock.unlock();
+                }
+            } else {
+                return false;
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             return false;
         }
-
-        Integer reservedStock = hashOps.get(stockKey, userUUID);
-        if (reservedStock == null) {
-            reservedStock = 0;
-        }
-
-        hashOps.put(redisKey, productSeq.toString(), availableStock + reservedStock);
-
-        availableStock = hashOps.get(stockKey, productSeq.toString());
-        if (availableStock == null || availableStock < quantity) {
-            return false;
-        }
-        hashOps.put(redisKey, productSeq.toString(), availableStock - quantity);
-
-        hashOps.put(stockKey, userUUID, quantity);
-        redisTemplateJson.opsForValue().set(userUUID, stockKey, 10, TimeUnit.MINUTES);
-
-        return true;
     }
 }
