@@ -64,7 +64,7 @@ public class ProductStockServiceTest {
     }
 
     @Test
-    public void 재고해제() throws InterruptedException {
+    public void 재고해제() {
         Long broadcastSeq = 1L;
         Long productSeq = 1L;
         String userUUID = "test-user-23";
@@ -80,5 +80,18 @@ public class ProductStockServiceTest {
 
         log.info("예약 내역: {}", reservedStock);
         log.info("가용 재고: {}", availableStock);
+    }
+
+    @Test
+    public void 재고확정() {
+        Long productSeq = 1L;
+        String userUUID = "test-user-23";
+        productStockService.confirmStock(productSeq, userUUID);
+
+        HashOperations<String, String, Integer> hashOps = redisTemplateJson.opsForHash();
+        String reservedKey = "stock:reserved:" + productSeq;
+        Integer reservedStock = hashOps.get(reservedKey, userUUID);
+
+        log.info("예약 내역: {}", reservedStock);
     }
 }
