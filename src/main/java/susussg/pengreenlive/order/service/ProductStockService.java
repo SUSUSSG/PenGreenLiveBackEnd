@@ -32,10 +32,20 @@ public class ProductStockService {
     private RedissonClient redissonClient;
 
     private static final String STOCK_KEY_PREFIX = "stock:broadcast:";
+    private static final String RESERVED_KEY_PREFIX = "stock:reserved:";
+    private static final String LOCK_KEY_PREFIX = "lock:";
+    private static final int LOCK_WAIT_TIME = 1; // seconds
+    private static final int LOCK_LEASE_TIME = 3; // seconds
+
+    private HashOperations<String, String, Integer> hashOps;
+
+    @Autowired
+    public void setHashOperations(RedisTemplate<String, Object> redisTemplateJson) {
+        this.hashOps = redisTemplateJson.opsForHash();
+    }
 
     public boolean isStockAvailable(Long broadcastSeq, Long productSeq, int quantity) {
-        HashOperations<String, String, Integer> hashOps = redisTemplateJson.opsForHash();
-        String redisKey = STOCK_KEY_PREFIX + broadcastSeq;
+        String redisKey = getStockKey(broadcastSeq);
         Integer stock = hashOps.get(redisKey, productSeq.toString());
         if (stock == null) {
             stock = loadStockFromDatabase(broadcastSeq, productSeq);
@@ -45,8 +55,7 @@ public class ProductStockService {
 
     @Transactional
     public void reduceStock(Long broadcastId, Long productId, int quantity) {
-        HashOperations<String, String, Integer> hashOps = redisTemplateJson.opsForHash();
-        String redisKey = STOCK_KEY_PREFIX + broadcastId;
+        String redisKey = getStockKey(broadcastId);
         Integer stock = hashOps.get(redisKey, productId.toString());
 
         if (stock == null || stock < quantity) {
@@ -61,8 +70,8 @@ public class ProductStockService {
         ProductStockDTO productStock = productStockRepository.findByProduct_ProductSeq(productId)
                 .orElseThrow(() -> new RuntimeException("Product stock not found"));
         int stock = productStock.getProductStock();
-        String redisKey = STOCK_KEY_PREFIX + broadcastId;
-        redisTemplateJson.opsForHash().put(redisKey, productId.toString(), stock);
+        String redisKey = getStockKey(broadcastId);
+        hashOps.put(redisKey, productId.toString(), stock);
         return stock;
     }
 
@@ -80,12 +89,11 @@ public class ProductStockService {
                 .collect(Collectors.groupingBy(ProductStockDTO::getBroadcastSeq));
 
         stocks.stream().forEach(stock-> log.info("stock {}", stock));
-        HashOperations<String, String, Integer> hashOps = redisTemplateJson.opsForHash();
 
         for (Map.Entry<Long, List<ProductStockDTO>> entry : groupedStocks.entrySet()) {
             Long broadcastSeq = entry.getKey();
             List<ProductStockDTO> stockList = entry.getValue();
-            String redisKey = STOCK_KEY_PREFIX + broadcastSeq;
+            String redisKey = getStockKey(broadcastSeq);
 
             Map<String, Integer> stockMap = stockList.stream()
                     .collect(Collectors.toMap(
@@ -98,15 +106,13 @@ public class ProductStockService {
 
     // 재고 예약
     public boolean reserveStock(Long broadcastSeq, Long productSeq, String userUUID, int quantity) {
-        String stockKey = "stock:reserved:" + productSeq;
-        String redisKey = STOCK_KEY_PREFIX + broadcastSeq;
+        String stockKey = getReservedKey(productSeq);
+        String redisKey = getStockKey(broadcastSeq);
 
-        RLock lock = redissonClient.getLock("lock:" + productSeq);
+        RLock lock = redissonClient.getLock(getLockKey(productSeq));
         try {
-            if (lock.tryLock(1, 3, TimeUnit.SECONDS)) {
+            if (lock.tryLock(LOCK_WAIT_TIME, LOCK_LEASE_TIME, TimeUnit.SECONDS)) {
                 try {
-                    HashOperations<String, String, Integer> hashOps = redisTemplateJson.opsForHash();
-
                     Integer availableStock = hashOps.get(redisKey, productSeq.toString());
                     if (availableStock == null || availableStock < quantity) {
                         return false;
@@ -125,6 +131,7 @@ public class ProductStockService {
 
                     hashOps.put(redisKey, productSeq.toString(), availableStock);
                     hashOps.put(stockKey, userUUID, quantity);
+
                     return true;
 
                 } finally {
@@ -141,13 +148,12 @@ public class ProductStockService {
 
     // 재고 해제
     public void releaseReservedStock(Long broadcastSeq, Long productSeq, String userUUID) {
-        HashOperations<String, String, Integer> hashOps = redisTemplateJson.opsForHash();
-        String reservedKey = "stock:reserved:" + productSeq;
-        String redisKey = STOCK_KEY_PREFIX + broadcastSeq;
-        RLock lock = redissonClient.getLock("lock:" + productSeq);
+        String reservedKey = getReservedKey(productSeq);
+        String redisKey = getStockKey(broadcastSeq);
+        RLock lock = redissonClient.getLock(getLockKey(productSeq));
 
         try {
-            if (lock.tryLock(1, 3, TimeUnit.SECONDS)) {
+            if (lock.tryLock(LOCK_WAIT_TIME, LOCK_LEASE_TIME, TimeUnit.SECONDS)) {
                 try {
                     Integer reservedQuantity = hashOps.get(reservedKey, userUUID);
 
@@ -174,9 +180,20 @@ public class ProductStockService {
 
     // 재고 확정
     public void confirmStock(Long productSeq, String userUUID) {
-        HashOperations<String, String, Integer> hashOps = redisTemplateJson.opsForHash();
-        String stockKey = "stock:reserved:" + productSeq;
+        String stockKey = getReservedKey(productSeq);
 
         hashOps.delete(stockKey, userUUID);
+    }
+
+    private String getStockKey(Long broadcastSeq) {
+        return STOCK_KEY_PREFIX + broadcastSeq;
+    }
+
+    private String getReservedKey(Long productSeq) {
+        return RESERVED_KEY_PREFIX + productSeq;
+    }
+
+    private String getLockKey(Long productSeq) {
+        return LOCK_KEY_PREFIX + productSeq;
     }
 }
